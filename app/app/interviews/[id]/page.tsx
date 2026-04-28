@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
-import { eq } from "drizzle-orm";
 import { Shell } from "@/components/brand/Shell";
-import { db, schema } from "@/db/client";
+import { db } from "@/db/client";
 import { getCurrentContext } from "@/lib/auth/devUser";
 import { getInterviewForOrg } from "@/lib/api/interviewAccess";
 import { HttpError } from "@/lib/api/errors";
 import { InterviewEditor } from "./InterviewEditor";
 import { SendPanel } from "./SendPanel";
+import { FinalizePanel } from "./FinalizePanel";
 
 export const dynamic = "force-dynamic";
 
@@ -22,23 +22,39 @@ export default async function InterviewPage({ params }: { params: Promise<{ id: 
     throw e;
   }
 
-  const liveLink = await db.query.shareLinks.findFirst({
-    where: (s, { and, eq, isNull, gt }) =>
-      and(
-        eq(s.interviewId, data.interview.id),
-        eq(s.kind, "candidate"),
-        isNull(s.revokedAt),
-        gt(s.expiresAt, new Date()),
-      ),
-    orderBy: (s, { desc }) => desc(s.createdAt),
-  });
+  const [candidateLink, reportLink, fitAnalysis, accepted] = await Promise.all([
+    db.query.shareLinks.findFirst({
+      where: (s, { and, eq, isNull, gt }) =>
+        and(
+          eq(s.interviewId, data.interview.id),
+          eq(s.kind, "candidate"),
+          isNull(s.revokedAt),
+          gt(s.expiresAt, new Date()),
+        ),
+      orderBy: (s, { desc }) => desc(s.createdAt),
+    }),
+    db.query.shareLinks.findFirst({
+      where: (s, { and, eq, isNull, gt }) =>
+        and(
+          eq(s.interviewId, data.interview.id),
+          eq(s.kind, "client_report"),
+          isNull(s.revokedAt),
+          gt(s.expiresAt, new Date()),
+        ),
+      orderBy: (s, { desc }) => desc(s.createdAt),
+    }),
+    db.query.fitAnalyses.findFirst({
+      where: (f, { eq }) => eq(f.interviewId, data.interview.id),
+    }),
+    db.query.candidateResponses.findMany({
+      where: (r, { and, eq }) =>
+        and(eq(r.interviewId, data.interview.id), eq(r.accepted, true)),
+    }),
+  ]);
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
-  const liveUrl = liveLink ? `${baseUrl}/i/${liveLink.token}` : null;
-
-  // Touch schema import so eslint doesn't strip it (used by db.query above for types).
-  void schema;
-  void eq;
+  const candidateUrl = candidateLink ? `${baseUrl}/i/${candidateLink.token}` : null;
+  const reportUrl = reportLink ? `${baseUrl}/r/${reportLink.token}` : null;
 
   return (
     <Shell variant="app">
@@ -61,13 +77,21 @@ export default async function InterviewPage({ params }: { params: Promise<{ id: 
           </span>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 space-y-4">
           <SendPanel
             interviewId={data.interview.id}
-            currentUrl={liveUrl}
-            currentExpiry={liveLink?.expiresAt ?? null}
+            currentUrl={candidateUrl}
+            currentExpiry={candidateLink?.expiresAt ?? null}
             locked={data.interview.lockedAt != null}
             questionCount={data.questions.length}
+          />
+          <FinalizePanel
+            interviewId={data.interview.id}
+            status={data.interview.status}
+            acceptedCount={accepted.length}
+            totalQuestions={data.questions.length}
+            existingReportUrl={reportUrl}
+            hasFitAnalysis={!!fitAnalysis}
           />
         </div>
 

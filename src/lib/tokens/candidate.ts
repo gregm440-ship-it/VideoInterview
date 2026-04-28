@@ -2,8 +2,14 @@ import { jwtVerify, SignJWT } from "jose";
 
 const ISSUER = "outsorcy-interview";
 const AUDIENCE = "candidate";
+const REPORT_AUDIENCE = "client-report";
 
 export type CandidatePayload = {
+  interviewId: string;
+  shareLinkId: string;
+};
+
+export type ReportPayload = {
   interviewId: string;
   shareLinkId: string;
 };
@@ -43,6 +49,32 @@ export async function verifyCandidateToken(token: string): Promise<CandidatePayl
   });
   if (typeof payload.interviewId !== "string" || typeof payload.shareLinkId !== "string") {
     throw new Error("Token payload is missing interviewId or shareLinkId.");
+  }
+  return { interviewId: payload.interviewId, shareLinkId: payload.shareLinkId };
+}
+
+export async function signReportToken(payload: ReportPayload, ttlDays = 30): Promise<{
+  token: string;
+  expiresAt: Date;
+}> {
+  const expiresAt = new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000);
+  const token = await new SignJWT({ ...payload })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuer(ISSUER)
+    .setAudience(REPORT_AUDIENCE)
+    .setIssuedAt()
+    .setExpirationTime(Math.floor(expiresAt.getTime() / 1000))
+    .sign(getSecret());
+  return { token, expiresAt };
+}
+
+export async function verifyReportToken(token: string): Promise<ReportPayload> {
+  const { payload } = await jwtVerify(token, getSecret(), {
+    issuer: ISSUER,
+    audience: REPORT_AUDIENCE,
+  });
+  if (typeof payload.interviewId !== "string" || typeof payload.shareLinkId !== "string") {
+    throw new Error("Report token payload is missing interviewId or shareLinkId.");
   }
   return { interviewId: payload.interviewId, shareLinkId: payload.shareLinkId };
 }
