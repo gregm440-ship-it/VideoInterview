@@ -82,15 +82,26 @@ type DeepgramResult = {
   metadata?: { duration?: number };
 };
 
-export async function transcribeFromUrl(args: { url: string }): Promise<TranscriptionResult> {
+export async function transcribeFromUrl(args: {
+  url: string;
+  timeoutMs?: number;
+}): Promise<TranscriptionResult> {
   const client = getClient();
   const model = process.env.DEEPGRAM_MODEL ?? "nova-3";
+  const timeoutMs = args.timeoutMs ?? 90_000;
 
-  // Deepgram fetches the URL itself and sniffs Content-Type from the response.
-  // R2 must return a clean "video/webm" — the upload pipeline strips any
-  // ";codecs=..." parameter before signing the PUT so Deepgram doesn't see
-  // a parameterized Content-Type that some parsers reject.
-  const raw = await client.listen.v1.media.transcribeUrl({
+  // Race the SDK call against an explicit timeout — the SDK's per-request
+  // timeout is unreliable on hung connections; this guarantees we surface
+  // an error within timeoutMs instead of leaving the route handler hanging.
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<never>((_, reject) => {
+    timer = setTimeout(
+      () => reject(new Error(`Deepgram request timed out after ${timeoutMs}ms`)),
+      timeoutMs,
+    );
+  });
+
+  const call = client.listen.v1.media.transcribeUrl({
     url: args.url,
     model,
     smart_format: true,
@@ -98,6 +109,13 @@ export async function transcribeFromUrl(args: { url: string }): Promise<Transcri
     paragraphs: true,
     utterances: true,
   });
+
+  let raw: unknown;
+  try {
+    raw = await Promise.race([call, timeout]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 
   const result = raw as unknown as DeepgramResult;
   const channel = result.results?.channels?.[0];

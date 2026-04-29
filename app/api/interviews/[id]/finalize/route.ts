@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { and, eq, gt, isNull } from "drizzle-orm";
+import { and, eq, gt, isNull, inArray } from "drizzle-orm";
 import { db, schema } from "@/db/client";
 import { getCurrentContext } from "@/lib/auth/devUser";
 import { getInterviewForOrg } from "@/lib/api/interviewAccess";
@@ -12,11 +12,28 @@ import { signReportToken } from "@/lib/tokens/candidate";
 
 export const maxDuration = 300; // up to 5 minutes for the inline pipeline
 
+// Statuses that mid-pipeline finalize errors can leave behind. On any failure
+// we roll back to the most appropriate pre-failure state so the recruiter can
+// retry without manual SQL — and the validator at the top still accepts the
+// retry from any of these.
+const STUCK_STATUSES = new Set(["transcribing", "scoring"]);
+
 export async function POST(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const t0 = Date.now();
+  const log = (msg: string, extra?: Record<string, unknown>) => {
+    const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+    console.log(`[finalize +${elapsed}s] ${msg}`, extra ?? "");
+  };
+
+  let interviewId: string | null = null;
+
   try {
     const { org, user } = await getCurrentContext();
     const { id } = await ctx.params;
+    interviewId = id;
     const { interview, profile, questions } = await getInterviewForOrg(id, org.id);
+
+    log("starting", { interviewId: id, status: interview.status, questions: questions.length });
 
     const finalizeable = new Set([
       "submitted",
@@ -38,7 +55,9 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
       ),
     });
     if (responses.length < questions.length) {
-      conflict(`Cannot finalize: only ${responses.length} of ${questions.length} responses accepted.`);
+      conflict(
+        `Cannot finalize: only ${responses.length} of ${questions.length} responses accepted.`,
+      );
     }
 
     // ---------- Phase 1: transcription ----------
@@ -48,11 +67,19 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
       .where(eq(schema.interviews.id, interview.id));
 
     const stub = isStubMode();
+    log(stub ? "transcription mode: STUB (DEEPGRAM_API_KEY missing)" : "transcription mode: deepgram");
+
     let transcribedCount = 0;
     for (const response of responses) {
-      if (response.transcript) continue; // idempotent — skip if already done
       const question = questions.find((q) => q.id === response.questionId);
-      if (!question) continue;
+      if (!question) {
+        log("skipping response — question not found", { responseId: response.id });
+        continue;
+      }
+      if (response.transcript) {
+        log("skipping already-transcribed response", { questionId: question.id, orderIndex: question.orderIndex });
+        continue;
+      }
 
       let result;
       if (stub) {
@@ -64,20 +91,40 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
         if (!response.videoKey) {
           throw new Error(`Response ${response.id} has no videoKey to transcribe.`);
         }
-        // 1 hour — Deepgram fetches the URL itself and we want headroom in case
-        // the analysis stage queues behind a slow run.
-        const url = await presignGet({ key: response.videoKey, expiresInSeconds: 60 * 60 });
+        log("transcribing", { questionId: question.id, orderIndex: question.orderIndex, videoKey: response.videoKey });
 
-        // Pre-flight HEAD so a 403/404 from R2 surfaces with a clear error
-        // before Deepgram returns the misleading "corrupt or unsupported data".
-        const head = await fetch(url, { method: "HEAD" });
+        // 1 hour — Deepgram fetches the URL itself and we want headroom.
+        const url = await presignGet({ key: response.videoKey, expiresInSeconds: 60 * 60 });
+        log("  presigned GET issued");
+
+        // Pre-flight HEAD against the presigned URL with its own timeout.
+        // Surfaces R2 access problems with a clear error before they get
+        // misreported by Deepgram as "corrupt or unsupported data".
+        const headCtl = new AbortController();
+        const headTimer = setTimeout(() => headCtl.abort(), 10_000);
+        let head: Response;
+        try {
+          head = await fetch(url, { method: "HEAD", signal: headCtl.signal });
+        } finally {
+          clearTimeout(headTimer);
+        }
+        log(`  R2 HEAD: ${head.status} ${head.statusText}`, {
+          contentType: head.headers.get("content-type"),
+          contentLength: head.headers.get("content-length"),
+        });
         if (!head.ok) {
           throw new Error(
             `Presigned URL not fetchable (${head.status} ${head.statusText}) — check R2 credentials and key '${response.videoKey}'.`,
           );
         }
 
-        result = await transcribeFromUrl({ url });
+        const tCall = Date.now();
+        result = await transcribeFromUrl({ url, timeoutMs: 90_000 });
+        log(`  deepgram returned in ${Date.now() - tCall}ms`, {
+          chars: result.document.fullText.length,
+          segments: result.document.segments.length,
+          duration: result.durationSeconds,
+        });
       }
 
       await db
@@ -101,6 +148,8 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
       transcribedCount++;
     }
 
+    log(`transcription phase done — ${transcribedCount} new, ${responses.length - transcribedCount} reused`);
+
     // Reload with transcripts
     const fresh = await db.query.candidateResponses.findMany({
       where: and(
@@ -115,6 +164,8 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
       .set({ status: "scoring", updatedAt: new Date() })
       .where(eq(schema.interviews.id, interview.id));
 
+    log("calling analyzeFit (Opus 4.7)");
+    const tAnalyze = Date.now();
     const { output, usage, model } = await analyzeFit({
       profile: {
         title: profile.title,
@@ -138,50 +189,43 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
         durationSeconds: r.durationSeconds,
       })),
     });
+    log(`analyzeFit returned in ${Date.now() - tAnalyze}ms`, {
+      score: output.overall_score,
+      rec: output.recommended_next_step,
+      inputTokens: usage.input,
+      outputTokens: usage.output,
+    });
 
-    // Upsert fit_analysis row (interview_id has a unique index).
+    // Upsert fit_analysis row.
     const existing = await db.query.fitAnalyses.findFirst({
       where: eq(schema.fitAnalyses.interviewId, interview.id),
     });
+    const fitValues = {
+      model,
+      overallScore: output.overall_score.toString(),
+      scoreRationale: output.score_rationale,
+      competencyScores: output.competency_scores.map((c) => ({
+        name: c.name,
+        score: c.score,
+        evidence: c.evidence,
+      })),
+      strengths: output.strengths,
+      weaknesses: output.weaknesses,
+      riskFlags: output.risk_flags,
+      recommendedNextStep: output.recommended_next_step,
+      headlineSummary: output.headline_summary,
+      promptTokens: usage.input,
+      completionTokens: usage.output,
+    };
     if (existing) {
       await db
         .update(schema.fitAnalyses)
-        .set({
-          model,
-          overallScore: output.overall_score.toString(),
-          scoreRationale: output.score_rationale,
-          competencyScores: output.competency_scores.map((c) => ({
-            name: c.name,
-            score: c.score,
-            evidence: c.evidence,
-          })),
-          strengths: output.strengths,
-          weaknesses: output.weaknesses,
-          riskFlags: output.risk_flags,
-          recommendedNextStep: output.recommended_next_step,
-          headlineSummary: output.headline_summary,
-          promptTokens: usage.input,
-          completionTokens: usage.output,
-        })
+        .set(fitValues)
         .where(eq(schema.fitAnalyses.interviewId, interview.id));
     } else {
       await db.insert(schema.fitAnalyses).values({
         interviewId: interview.id,
-        model,
-        overallScore: output.overall_score.toString(),
-        scoreRationale: output.score_rationale,
-        competencyScores: output.competency_scores.map((c) => ({
-          name: c.name,
-          score: c.score,
-          evidence: c.evidence,
-        })),
-        strengths: output.strengths,
-        weaknesses: output.weaknesses,
-        riskFlags: output.risk_flags,
-        recommendedNextStep: output.recommended_next_step,
-        headlineSummary: output.headline_summary,
-        promptTokens: usage.input,
-        completionTokens: usage.output,
+        ...fitValues,
       });
     }
 
@@ -230,6 +274,8 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
       .where(eq(schema.interviews.id, interview.id));
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    log(`done in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+
     return NextResponse.json({
       reportUrl: `${baseUrl}/r/${signed.token}`,
       expiresAt: signed.expiresAt,
@@ -241,6 +287,33 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
       },
     });
   } catch (err) {
+    // Roll back transient mid-pipeline statuses so the user can retry from
+    // the UI button without needing to touch SQL.
+    if (interviewId) {
+      try {
+        const current = await db.query.interviews.findFirst({
+          where: eq(schema.interviews.id, interviewId),
+        });
+        if (current && STUCK_STATUSES.has(current.status)) {
+          await db
+            .update(schema.interviews)
+            .set({ status: "submitted", updatedAt: new Date() })
+            .where(
+              and(
+                eq(schema.interviews.id, interviewId),
+                inArray(schema.interviews.status, ["transcribing", "scoring"]),
+              ),
+            );
+          log("rolled back stuck status to 'submitted'");
+        }
+      } catch (rollbackErr) {
+        console.error("[finalize] rollback failed:", rollbackErr);
+      }
+    }
+    log("FAILED", {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
     return handleApiError(err);
   }
 }
