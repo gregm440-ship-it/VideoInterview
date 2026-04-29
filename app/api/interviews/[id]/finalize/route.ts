@@ -5,7 +5,7 @@ import { getCurrentContext } from "@/lib/auth/devUser";
 import { getInterviewForOrg } from "@/lib/api/interviewAccess";
 import { handleApiError, conflict } from "@/lib/api/errors";
 import { isStubMode, stubTranscription, transcribeFromUrl } from "@/lib/transcription/deepgram";
-import { presignGet } from "@/lib/storage/r2";
+import { presignGet, presignHead } from "@/lib/storage/r2";
 import { analyzeFit } from "@/lib/ai/analyzeFit";
 import { recordAiUsage } from "@/lib/api/usage";
 import { signReportToken } from "@/lib/tokens/candidate";
@@ -93,18 +93,27 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
         }
         log("transcribing", { questionId: question.id, orderIndex: question.orderIndex, videoKey: response.videoKey });
 
-        // 1 hour — Deepgram fetches the URL itself and we want headroom.
+        // Two separate presigned URLs:
+        // - HEAD-signed for the pre-flight reachability check
+        // - GET-signed for the actual Deepgram fetch
+        // SigV4 includes the HTTP method in the canonical request, so a
+        // GET-signed URL won't validate against a HEAD request — R2 enforces
+        // this strictly and 403s on the mismatch.
+        const headUrl = await presignHead({ key: response.videoKey, expiresInSeconds: 60 * 5 });
         const url = await presignGet({ key: response.videoKey, expiresInSeconds: 60 * 60 });
-        log("  presigned GET issued");
+        log("  presigned URLs issued (head + get)");
+        // One-time debug log of the GET URL (not the secret access key —
+        // SigV4 query params are short-lived signatures, safe in dev logs).
+        // Curl this manually if Deepgram still rejects: `curl -v "$URL"`.
+        log("  GET url for manual curl:", { url });
 
-        // Pre-flight HEAD against the presigned URL with its own timeout.
-        // Surfaces R2 access problems with a clear error before they get
-        // misreported by Deepgram as "corrupt or unsupported data".
+        // Pre-flight HEAD with its own short timeout. Now that this is a
+        // HEAD-signed URL, R2 will respond 200 if creds + key are good.
         const headCtl = new AbortController();
         const headTimer = setTimeout(() => headCtl.abort(), 10_000);
         let head: Response;
         try {
-          head = await fetch(url, { method: "HEAD", signal: headCtl.signal });
+          head = await fetch(headUrl, { method: "HEAD", signal: headCtl.signal });
         } finally {
           clearTimeout(headTimer);
         }
@@ -114,7 +123,7 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
         });
         if (!head.ok) {
           throw new Error(
-            `Presigned URL not fetchable (${head.status} ${head.statusText}) — check R2 credentials and key '${response.videoKey}'.`,
+            `Presigned HEAD failed (${head.status} ${head.statusText}) — check R2 token has Object Read permission and key '${response.videoKey}' exists.`,
           );
         }
 

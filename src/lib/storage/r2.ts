@@ -77,6 +77,22 @@ export async function presignGet(args: {
   return getSignedUrl(client, cmd, { expiresIn: args.expiresInSeconds ?? 60 * 60 * 4 });
 }
 
+/**
+ * Presigned URL valid for HEAD requests. SigV4 includes the HTTP method in
+ * the canonical request, so a URL signed via GetObjectCommand is valid for
+ * GET only — Cloudflare R2 strictly enforces this and will 403 a HEAD on a
+ * GET-signed URL. Use this for pre-flight reachability checks where you
+ * don't want to download the body.
+ */
+export async function presignHead(args: {
+  key: string;
+  expiresInSeconds?: number;
+}): Promise<string> {
+  const { client, bucket } = getR2();
+  const cmd = new HeadObjectCommand({ Bucket: bucket, Key: args.key });
+  return getSignedUrl(client, cmd, { expiresIn: args.expiresInSeconds ?? 60 * 60 });
+}
+
 export async function objectExists(key: string): Promise<{ exists: boolean; size?: number }> {
   const { client, bucket } = getR2();
   try {
