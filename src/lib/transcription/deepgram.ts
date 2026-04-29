@@ -86,6 +86,10 @@ export async function transcribeFromUrl(args: { url: string }): Promise<Transcri
   const client = getClient();
   const model = process.env.DEEPGRAM_MODEL ?? "nova-3";
 
+  // Deepgram fetches the URL itself and sniffs Content-Type from the response.
+  // R2 must return a clean "video/webm" — the upload pipeline strips any
+  // ";codecs=..." parameter before signing the PUT so Deepgram doesn't see
+  // a parameterized Content-Type that some parsers reject.
   const raw = await client.listen.v1.media.transcribeUrl({
     url: args.url,
     model,

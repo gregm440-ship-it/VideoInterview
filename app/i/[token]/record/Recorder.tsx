@@ -23,9 +23,11 @@ type Stage =
 const PREP_SECONDS = 30;
 
 function pickMime(): string | null {
+  // Prefer VP8/Opus — Deepgram's prerecorded API parses VP8/Opus webm
+  // reliably; VP9 occasionally fails with "corrupt or unsupported data".
   const candidates = [
-    "video/webm;codecs=vp9,opus",
     "video/webm;codecs=vp8,opus",
+    "video/webm;codecs=vp9,opus",
     "video/webm",
   ];
   if (typeof MediaRecorder === "undefined") return null;
@@ -205,7 +207,15 @@ export function Recorder({
       if (!initRes.ok) throw new Error(initJson.error ?? "Could not start upload.");
 
       // PUT directly to R2 with progress reporting via XMLHttpRequest.
-      await xhrPut(initJson.uploadUrl, blob, blob.type, (pct) => setUploadProgress(pct));
+      // Use the Content-Type the server signed against — it strips the
+      // ";codecs=..." parameter; sending blob.type here would mismatch the
+      // SigV4 signature and 403.
+      await xhrPut(
+        initJson.uploadUrl,
+        blob,
+        initJson.contentType ?? "video/webm",
+        (pct) => setUploadProgress(pct),
+      );
 
       const completeRes = await fetch(`/api/i/${token}/responses/complete`, {
         method: "POST",

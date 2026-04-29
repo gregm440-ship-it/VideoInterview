@@ -51,9 +51,16 @@ export async function POST(req: Request, ctx: { params: Promise<{ token: string 
       })
       .returning();
 
+    // Strip the ";codecs=..." parameter — R2 stores whatever Content-Type
+    // the PUT sends, and Deepgram's URL transcription doesn't accept a
+    // parameterized Content-Type ("video/webm;codecs=vp9,opus" → "corrupt or
+    // unsupported data"). The browser must send the same stripped Content-Type
+    // when PUTting (otherwise the SigV4 signature breaks).
+    const storedContentType = contentType.split(";")[0].trim() || "video/webm";
+
     const uploadUrl = await presignPut({
       key,
-      contentType,
+      contentType: storedContentType,
       expiresInSeconds: 60 * 30,
     });
 
@@ -61,7 +68,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ token: string 
       responseId: response.id,
       uploadUrl,
       videoKey: key,
-      contentType,
+      contentType: storedContentType,
       attemptNumber,
     });
   } catch (err) {

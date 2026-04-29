@@ -192,8 +192,8 @@ export function DeviceCheck({ token }: { token: string }) {
 
 function pickMime(): string | null {
   const candidates = [
-    "video/webm;codecs=vp9,opus",
     "video/webm;codecs=vp8,opus",
+    "video/webm;codecs=vp9,opus",
     "video/webm",
   ];
   if (typeof MediaRecorder === "undefined") return null;

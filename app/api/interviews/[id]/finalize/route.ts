@@ -64,7 +64,19 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
         if (!response.videoKey) {
           throw new Error(`Response ${response.id} has no videoKey to transcribe.`);
         }
-        const url = await presignGet({ key: response.videoKey, expiresInSeconds: 60 * 30 });
+        // 1 hour — Deepgram fetches the URL itself and we want headroom in case
+        // the analysis stage queues behind a slow run.
+        const url = await presignGet({ key: response.videoKey, expiresInSeconds: 60 * 60 });
+
+        // Pre-flight HEAD so a 403/404 from R2 surfaces with a clear error
+        // before Deepgram returns the misleading "corrupt or unsupported data".
+        const head = await fetch(url, { method: "HEAD" });
+        if (!head.ok) {
+          throw new Error(
+            `Presigned URL not fetchable (${head.status} ${head.statusText}) — check R2 credentials and key '${response.videoKey}'.`,
+          );
+        }
+
         result = await transcribeFromUrl({ url });
       }
 
