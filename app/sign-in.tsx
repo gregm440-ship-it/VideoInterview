@@ -53,7 +53,7 @@ export default function SignInScreen() {
           <AppleAuthentication.AppleAuthenticationButton
             buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
             buttonStyle={
-              AppleAuthentication.AppleAuthenticationButtonStyle.WHITE
+              AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
             }
             cornerRadius={radius.md}
             style={styles.appleButton}

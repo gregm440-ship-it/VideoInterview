@@ -11,7 +11,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: "repandsip",
   version: "0.1.0",
   orientation: "portrait",
-  userInterfaceStyle: "automatic",
+  userInterfaceStyle: "light",
+  icon: "./assets/icon.png",
+  backgroundColor: "#F7F5F0",
+  splash: {
+    image: "./assets/splash-icon.png",
+    resizeMode: "contain",
+    backgroundColor: "#F7F5F0",
+  },
   newArchEnabled: true,
   ios: {
     supportsTablet: true,
@@ -27,7 +34,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     package: "io.emep.repandsip",
-    // Add ./assets/adaptive-icon.png + an adaptiveIcon block before building a binary.
+    adaptiveIcon: {
+      foregroundImage: "./assets/adaptive-icon.png",
+      backgroundColor: "#E0A92E",
+    },
     permissions: ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
     config: {
       googleMaps: {
@@ -38,6 +48,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   web: {
     bundler: "metro",
     output: "single",
+    favicon: "./assets/favicon.png",
   },
   plugins: [
     "expo-router",

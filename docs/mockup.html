@@ -6,21 +6,23 @@
 <title>Rep & Sip — Mockup</title>
 <style>
   :root{
-    --bg:#0E1116; --surface:#171B22; --surfaceAlt:#1F242D; --border:#2A313B;
-    --text:#F5F7FA; --muted:#9AA4B2; --primary:#E8B84B; --accent:#5BC0BE;
-    --danger:#E5484D; --inactive:#3A4250;
+    --bg:#F7F5F0; --surface:#FFFFFF; --surfaceAlt:#F0EDE6; --border:#E5E1D8;
+    --text:#1C2533; --muted:#6E7683; --primary:#E0A92E; --onPrimary:#2A1F00;
+    --accent:#1FA39A; --danger:#D64045; --inactive:#D9D4C8;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{
-    margin:0;background:#06080c;color:var(--text);
+    margin:0;background:#DCD7CD;color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     padding:32px 16px 64px;
   }
   .page-head{max-width:1200px;margin:0 auto 28px;text-align:center}
-  .page-head h1{font-size:30px;margin:0 0 6px;font-weight:800;letter-spacing:-.5px}
+  .brand-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:6px}
+  .logo{border-radius:14px;box-shadow:0 6px 16px rgba(28,37,51,.18)}
+  .page-head h1{font-size:30px;margin:0;font-weight:800;letter-spacing:-.5px}
   .page-head .sub{color:var(--muted);font-size:15px}
   .page-head .legend{margin-top:14px;display:inline-flex;gap:18px;flex-wrap:wrap;justify-content:center;
-    font-size:13px;color:var(--muted);background:#0E1116;border:1px solid var(--border);
+    font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);
     padding:10px 18px;border-radius:999px}
   .grid{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:34px 30px;justify-content:center}
   .frame-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
@@ -51,9 +53,9 @@
   .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--muted)}
   .tab.active{color:var(--primary)}
   .tab .ic{font-size:19px;line-height:1}
-  .addbtn{width:54px;height:54px;border-radius:999px;background:var(--primary);color:#0E1116;
+  .addbtn{width:54px;height:54px;border-radius:999px;background:var(--primary);color:var(--onPrimary);
     display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:300;
-    margin-top:-26px;box-shadow:0 6px 16px rgba(232,184,75,.45)}
+    margin-top:-26px;box-shadow:0 6px 16px rgba(224,169,46,.45)}
 
   /* search */
   .locbar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);
@@ -61,7 +63,7 @@
   .toggle{display:flex;background:var(--surfaceAlt);border:1px solid var(--border);border-radius:12px;
     padding:3px;margin-bottom:14px;font-size:13px;font-weight:600}
   .toggle div{flex:1;text-align:center;padding:7px;border-radius:9px;color:var(--muted)}
-  .toggle div.on{background:var(--primary);color:#0E1116}
+  .toggle div.on{background:var(--primary);color:var(--onPrimary)}
 
   .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:14px}
   .card .hero{height:96px;background-size:cover;background-position:center;position:relative}
@@ -89,14 +91,14 @@
   .bigscore .val span{font-size:12px;color:var(--muted);font-weight:600}
   .bigscore .lab{font-size:11px;color:var(--muted);margin-top:1px;text-transform:uppercase;letter-spacing:.5px}
   .minimap{height:88px;border-radius:14px;margin:12px 0;background:
-    linear-gradient(135deg,#1b2430,#243140);border:1px solid var(--border);position:relative;overflow:hidden}
+    linear-gradient(135deg,#EAF0F0,#DCE6E6);border:1px solid var(--border);position:relative;overflow:hidden}
   .minimap .pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-100%);font-size:22px}
   .minimap .roads{position:absolute;inset:0;opacity:.25;background-image:
     linear-gradient(var(--muted) 1px,transparent 1px),linear-gradient(90deg,var(--muted) 1px,transparent 1px);
     background-size:26px 26px}
   .cta{display:flex;gap:10px;margin:6px 0 14px}
   .btn{flex:1;text-align:center;padding:13px;border-radius:14px;font-weight:700;font-size:14px}
-  .btn.primary{background:var(--primary);color:#0E1116}
+  .btn.primary{background:var(--primary);color:var(--onPrimary)}
   .btn.secondary{background:var(--surfaceAlt);border:1px solid var(--border);color:var(--text)}
   .section-h{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;
     margin:14px 0 9px}
@@ -123,7 +125,7 @@
   .iconrow{display:flex;justify-content:space-between;gap:6px}
   .iconrow .pip{flex:1;height:50px;border-radius:12px;background:var(--surface);border:1px solid var(--border);
     display:flex;align-items:center;justify-content:center;font-size:24px}
-  .iconrow .pip.on{background:rgba(232,184,75,.16);border-color:var(--primary)}
+  .iconrow .pip.on{background:rgba(224,169,46,.16);border-color:var(--primary)}
   .iconrow .pip.off{filter:grayscale(1);opacity:.35}
   .expander{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;
     margin-top:12px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
@@ -131,9 +133,9 @@
   .privacy{display:flex;gap:8px;margin-top:14px}
   .privacy .opt{flex:1;border:1px solid var(--border);border-radius:13px;padding:10px;text-align:center;font-size:12px;
     background:var(--surface);color:var(--muted)}
-  .privacy .opt.sel{border-color:var(--accent);background:rgba(91,192,190,.12);color:var(--text);font-weight:700}
-  .submit{margin-top:16px;background:var(--primary);color:#0E1116;text-align:center;padding:15px;
-    border-radius:16px;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(232,184,75,.35)}
+  .privacy .opt.sel{border-color:var(--accent);background:rgba(31,163,154,.12);color:var(--text);font-weight:700}
+  .submit{margin-top:16px;background:var(--primary);color:var(--onPrimary);text-align:center;padding:15px;
+    border-radius:16px;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(224,169,46,.35)}
   .timer{text-align:center;font-size:11px;color:var(--accent);margin-top:9px}
 
   /* sign in */
@@ -142,7 +144,7 @@
   .si .tag{color:var(--muted);font-size:15px;line-height:1.4;margin-bottom:28px}
   .si .authbtn{padding:14px;border-radius:14px;font-weight:700;font-size:15px;text-align:center;margin-bottom:12px;
     display:flex;align-items:center;justify-content:center;gap:8px}
-  .si .apple{background:#fff;color:#000}
+  .si .apple{background:#000;color:#fff}
   .si .google{background:var(--surfaceAlt);border:1px solid var(--border);color:var(--text)}
   .si .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:6px 0 12px}
   .si .or .line{flex:1;height:1px;background:var(--border)}
@@ -150,7 +152,7 @@
     color:var(--muted);font-size:14px;margin-bottom:10px}
   .si .ghost{text-align:center;color:var(--muted);font-size:14px;padding:12px}
   .si .guest{margin-top:auto;text-align:center}
-  .si .guestbtn{color:var(--primary);font-weight:700;font-size:15px;padding:12px}
+  .si .guestbtn{color:var(--accent);font-weight:700;font-size:15px;padding:12px}
   .si .guestnote{color:var(--muted);font-size:12px;margin-top:2px}
 
   /* my log / profile */
@@ -179,7 +181,21 @@
 </head>
 <body>
   <div class="page-head">
-    <h1>Rep & Sip</h1>
+    <div class="brand-row">
+      <svg class="logo" viewBox="0 0 1024 1024" width="58" height="58" aria-label="Rep & Sip logo">
+        <defs><linearGradient id="lg" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
+          <stop offset="0" stop-color="#F4C44E"/><stop offset="1" stop-color="#DB9824"/></linearGradient></defs>
+        <rect width="1024" height="1024" rx="190" fill="url(#lg)"/>
+        <path d="M512 248 C602 248 676 320 676 410 C676 502 562 602 512 676 C462 602 348 502 348 410 C348 320 422 248 512 248 Z" fill="#fff"/>
+        <path d="M450 356 L574 356 L512 434 Z" fill="url(#lg)"/>
+        <rect x="505" y="430" width="14" height="48" fill="url(#lg)"/>
+        <rect x="474" y="476" width="76" height="15" rx="7" fill="url(#lg)"/>
+        <g fill="#fff"><rect x="402" y="732" width="220" height="18" rx="9"/>
+          <rect x="388" y="712" width="26" height="58" rx="7"/><rect x="610" y="712" width="26" height="58" rx="7"/>
+          <rect x="358" y="724" width="20" height="36" rx="6"/><rect x="646" y="724" width="20" height="36" rx="6"/></g>
+      </svg>
+      <h1>Rep & Sip</h1>
+    </div>
     <div class="sub">Find a hotel near you with a good gym and a good bar.</div>
     <div class="legend">
       <span>🏋️ Gym (1–5)</span><span>🍸 Bar (1–5)</span><span>⭐ Overall</span>

@@ -39,7 +39,7 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={variant === "primary" ? colors.bg : colors.text} />
+        <ActivityIndicator color={variant === "primary" ? colors.onPrimary : colors.text} />
       ) : (
         <Text style={[styles.label, variant === "primary" && styles.labelOnPrimary]}>
           {label}
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.8 },
   disabled: { opacity: 0.45 },
   label: { color: colors.text, fontSize: 16, fontWeight: "600" },
-  labelOnPrimary: { color: colors.bg },
+  labelOnPrimary: { color: colors.onPrimary },
 });
 
 const variantStyles = StyleSheet.create({

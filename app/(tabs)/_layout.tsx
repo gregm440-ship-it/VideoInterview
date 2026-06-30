@@ -21,7 +21,7 @@ function AddTabButton({
         onPress={onPress}
         style={({ pressed }) => [styles.addButton, pressed && styles.addPressed]}
       >
-        <Ionicons name="add" size={32} color={colors.bg} />
+        <Ionicons name="add" size={32} color={colors.onPrimary} />
       </Pressable>
     </View>
   );

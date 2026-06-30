@@ -219,7 +219,7 @@ function ReviewCard({
           <Ionicons
             name={review.votedByMe ? "thumbs-up" : "thumbs-up-outline"}
             size={13}
-            color={review.votedByMe ? colors.bg : colors.textMuted}
+            color={review.votedByMe ? colors.onPrimary : colors.textMuted}
           />
           <Text style={[styles.helpfulText, review.votedByMe && styles.helpfulTextOn]}>
             Helpful{review.helpfulCount > 0 ? ` · ${review.helpfulCount}` : ""}
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  avatarText: { color: "#06241f", fontSize: 11, fontWeight: "800" },
+  avatarText: { color: colors.onAccent, fontSize: 11, fontWeight: "800" },
   cardName: { color: colors.text, fontSize: 14, fontWeight: "700" },
   cardScores: { color: colors.text, fontSize: 13, fontWeight: "700", marginLeft: "auto" },
   cardNote: { color: colors.textMuted, fontSize: 13, lineHeight: 19, marginTop: spacing.sm },
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   },
   helpfulOn: { backgroundColor: colors.primary, borderColor: colors.primary },
   helpfulText: { color: colors.textMuted, fontSize: 12, fontWeight: "600" },
-  helpfulTextOn: { color: colors.bg },
+  helpfulTextOn: { color: colors.onPrimary },
   report: { marginLeft: "auto", padding: 6 },
   empty: { color: colors.textMuted, fontSize: 14 },
   lightbox: { flex: 1, backgroundColor: "rgba(0,0,0,0.92)", alignItems: "center", justifyContent: "center" },

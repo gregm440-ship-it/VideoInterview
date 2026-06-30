@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     alignItems: "center",
   },
-  privOptSel: { borderColor: colors.accent, backgroundColor: "rgba(91,192,190,0.12)" },
+  privOptSel: { borderColor: colors.accent, backgroundColor: colors.accentTint },
   privText: { color: colors.textMuted, fontSize: 13, textAlign: "center", fontWeight: "600" },
   privTextSel: { color: colors.text },
   foot: { color: colors.textMuted, fontSize: 12, textAlign: "center", marginTop: spacing.sm },

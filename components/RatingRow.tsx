@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   pipActive: {
-    backgroundColor: "rgba(232,184,75,0.16)",
+    backgroundColor: colors.primaryTint,
     borderColor: colors.primary,
   },
   pipPressed: { opacity: 0.7 },

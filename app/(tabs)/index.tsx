@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     overflow: "hidden",
   },
-  toggleItemOn: { backgroundColor: colors.primary, color: colors.bg },
+  toggleItemOn: { backgroundColor: colors.primary, color: colors.onPrimary },
   list: { padding: spacing.md, paddingBottom: spacing.xl },
   map: { flex: 1 },
   center: { flex: 1, alignItems: "center", justifyContent: "center", padding: spacing.lg, gap: spacing.sm },

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  chipOn: { borderColor: colors.accent, backgroundColor: "rgba(91,192,190,0.14)" },
+  chipOn: { borderColor: colors.accent, backgroundColor: colors.accentTint },
   chipPressed: { opacity: 0.7 },
   chipText: { color: colors.textMuted, fontSize: 13 },
   chipTextOn: { color: colors.text, fontWeight: "700" },
