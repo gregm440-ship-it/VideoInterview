@@ -14,6 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "../../components/Button";
 import { BigScores } from "../../components/BigScores";
+import { CommunityReviews } from "../../components/CommunityReviews";
 import { useAuth } from "../../hooks/useAuth";
 import { useHotelDetail } from "../../hooks/useHotels";
 import { saveToLog } from "../../lib/reviews";
@@ -122,13 +123,17 @@ export default function HotelDetailScreen() {
             />
           </View>
 
-          {/* Phase 2 slots in below: community reviews, photo strips, tag chips. */}
-          <View style={styles.phase2}>
-            <Ionicons name="chatbubbles-outline" size={22} color={colors.textMuted} />
-            <Text style={styles.phase2Text}>
-              Community reviews, gym/bar photos, and top tags appear here in Phase 2.
-            </Text>
-          </View>
+          {/* Community reviews, gym/bar photo strips, top tags, helpful votes. */}
+          {data.hotelId ? (
+            <CommunityReviews hotelId={data.hotelId} isAuthenticated={isAuthenticated} />
+          ) : (
+            <View style={styles.phase2}>
+              <Ionicons name="chatbubbles-outline" size={22} color={colors.textMuted} />
+              <Text style={styles.phase2Text}>
+                No reviews yet — be the first to rate this hotel.
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>

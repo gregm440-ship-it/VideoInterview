@@ -50,8 +50,8 @@ supabase/       schema.sql (tables + RLS + triggers + storage)
 ## Build phases
 
 - **Phase 0 — Foundation** ✅ project, env wiring, schema/RLS, auth, tabs.
-- **Phase 1 — Hotels & Search** Google Places, search + map, hotel detail.
-- **Phase 2 — Reviews & Travel Log** rating flow, My Log, aggregates, photos/tags.
+- **Phase 1 — Hotels & Search** ✅ Google Places, search + map, hotel detail.
+- **Phase 2 — Reviews & Travel Log** ✅ rating flow, My Log, aggregates, photos/tags.
 
 ## Non-negotiable UX rules
 
