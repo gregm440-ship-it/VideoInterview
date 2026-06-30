@@ -12,6 +12,7 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Screen } from "../../components/Screen";
 import { HotelCard } from "../../components/HotelCard";
+import { Logo } from "../../components/Logo";
 import { useLocation } from "../../hooks/useLocation";
 import { useHotelSearch } from "../../hooks/useHotels";
 import type { HotelCard as HotelCardData } from "../../lib/hotels";
@@ -48,7 +49,7 @@ export default function SearchScreen() {
   return (
     <Screen padded={false}>
       <View style={styles.header}>
-        <Text style={styles.title}>Search</Text>
+        <Logo size="sm" style={styles.brandHeader} />
 
         <View style={styles.searchBar}>
           <Ionicons name="search" size={18} color={colors.textMuted} />
@@ -154,7 +155,7 @@ export default function SearchScreen() {
 
 const styles = StyleSheet.create({
   header: { paddingHorizontal: spacing.md, paddingTop: spacing.sm },
-  title: { color: colors.text, fontSize: 24, fontWeight: "800", marginBottom: spacing.md },
+  brandHeader: { marginBottom: spacing.md },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",

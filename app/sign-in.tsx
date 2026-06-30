@@ -11,8 +11,8 @@ import * as AppleAuthentication from "expo-apple-authentication";
 import { router } from "expo-router";
 import { Screen } from "../components/Screen";
 import { Button } from "../components/Button";
+import { Logo } from "../components/Logo";
 import { useAuth } from "../hooks/useAuth";
-import { APP_NAME } from "../lib/constants";
 import { colors, radius, spacing, TAP_TARGET } from "../lib/theme";
 
 export default function SignInScreen() {
@@ -42,7 +42,7 @@ export default function SignInScreen() {
   return (
     <Screen>
       <View style={styles.header}>
-        <Text style={styles.brand}>{APP_NAME}</Text>
+        <Logo size="lg" layout="stacked" />
         <Text style={styles.tagline}>
           Rate the gym. Rate the bar. Help the next traveler.
         </Text>
@@ -124,9 +124,13 @@ export default function SignInScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { marginTop: spacing.xl, marginBottom: spacing.xl },
-  brand: { color: colors.text, fontSize: 34, fontWeight: "800" },
-  tagline: { color: colors.textMuted, fontSize: 16, marginTop: spacing.sm },
+  header: { marginTop: spacing.xl, marginBottom: spacing.xl, alignItems: "center" },
+  tagline: {
+    color: colors.textMuted,
+    fontSize: 16,
+    marginTop: spacing.md,
+    textAlign: "center",
+  },
   actions: { gap: spacing.md },
   appleButton: { height: TAP_TARGET, width: "100%" },
   divider: { flexDirection: "row", alignItems: "center", gap: spacing.sm },

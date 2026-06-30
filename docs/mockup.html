@@ -19,6 +19,11 @@
   .page-head{max-width:1200px;margin:0 auto 28px;text-align:center}
   .brand-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:6px}
   .logo{border-radius:14px;box-shadow:0 6px 16px rgba(28,37,51,.18)}
+  .amp{color:var(--primary)}
+  .lock{display:flex;align-items:center;gap:9px}
+  .lock.stacked{flex-direction:column;gap:12px}
+  .lock .mk{display:block;filter:drop-shadow(0 4px 8px rgba(28,37,51,.18))}
+  .lock .wm{font-weight:800;letter-spacing:-.4px;color:var(--text)}
   .page-head h1{font-size:30px;margin:0;font-weight:800;letter-spacing:-.5px}
   .page-head .sub{color:var(--muted);font-size:15px}
   .page-head .legend{margin-top:14px;display:inline-flex;gap:18px;flex-wrap:wrap;justify-content:center;
@@ -180,6 +185,21 @@
 </style>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="mark" viewBox="0 0 1024 1024">
+      <defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
+        <stop offset="0" stop-color="#F4C44E"/><stop offset="1" stop-color="#DB9824"/></linearGradient></defs>
+      <rect x="8" y="8" width="1008" height="1008" rx="232" fill="url(#mg)"/>
+      <path d="M512 248 C602 248 676 320 676 410 C676 502 562 602 512 676 C462 602 348 502 348 410 C348 320 422 248 512 248 Z" fill="#fff"/>
+      <path d="M450 356 L574 356 L512 434 Z" fill="url(#mg)"/>
+      <rect x="505" y="430" width="14" height="48" fill="url(#mg)"/>
+      <rect x="474" y="476" width="76" height="15" rx="7" fill="url(#mg)"/>
+      <g fill="#fff"><rect x="402" y="732" width="220" height="18" rx="9"/>
+        <rect x="388" y="712" width="26" height="58" rx="7"/><rect x="610" y="712" width="26" height="58" rx="7"/>
+        <rect x="358" y="724" width="20" height="36" rx="6"/><rect x="646" y="724" width="20" height="36" rx="6"/></g>
+    </symbol>
+  </svg>
+
   <div class="page-head">
     <div class="brand-row">
       <svg class="logo" viewBox="0 0 1024 1024" width="58" height="58" aria-label="Rep & Sip logo">
@@ -194,7 +214,7 @@
           <rect x="388" y="712" width="26" height="58" rx="7"/><rect x="610" y="712" width="26" height="58" rx="7"/>
           <rect x="358" y="724" width="20" height="36" rx="6"/><rect x="646" y="724" width="20" height="36" rx="6"/></g>
       </svg>
-      <h1>Rep & Sip</h1>
+      <h1>Rep <span class="amp">&amp;</span> Sip</h1>
     </div>
     <div class="sub">Find a hotel near you with a good gym and a good bar.</div>
     <div class="legend">
@@ -211,8 +231,11 @@
         <div class="notch"></div>
         <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
         <div class="screen"><div class="body"><div class="scroll si">
-          <div class="brand">Rep & Sip</div>
-          <div class="tag">Rate the gym. Rate the bar.<br/>Help the next traveler.</div>
+          <div class="lock stacked" style="margin-bottom:18px">
+            <svg class="mk" width="74" height="74"><use href="#mark"/></svg>
+            <div class="wm" style="font-size:32px">Rep <span class="amp">&amp;</span> Sip</div>
+          </div>
+          <div class="tag" style="text-align:center">Rate the gym. Rate the bar.<br/>Help the next traveler.</div>
           <div class="authbtn apple"> Sign in with Apple</div>
           <div class="authbtn google">G&nbsp; Continue with Google</div>
           <div class="or"><div class="line"></div>or<div class="line"></div></div>
@@ -234,7 +257,10 @@
         <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
         <div class="screen">
           <div class="body"><div class="scroll">
-            <h2 class="title">Search</h2>
+            <div class="lock" style="margin:6px 0 14px">
+              <svg class="mk" width="30" height="30"><use href="#mark"/></svg>
+              <div class="wm" style="font-size:21px">Rep <span class="amp">&amp;</span> Sip</div>
+            </div>
             <div class="locbar">📍 <span>Near me · Austin, TX</span></div>
             <div class="toggle"><div class="on">List</div><div>Map</div></div>
 
@@ -471,7 +497,10 @@
         <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
         <div class="screen">
           <div class="body"><div class="scroll">
-            <h2 class="title">Profile</h2>
+            <div class="lock" style="margin:6px 0 18px">
+              <svg class="mk" width="30" height="30"><use href="#mark"/></svg>
+              <div class="wm" style="font-size:21px">Rep <span class="amp">&amp;</span> Sip</div>
+            </div>
             <div class="prof-head">
               <div class="pa">G</div>
               <div>

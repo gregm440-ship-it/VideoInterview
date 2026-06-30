@@ -2,8 +2,8 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Screen } from "../../components/Screen";
 import { Button } from "../../components/Button";
+import { Logo } from "../../components/Logo";
 import { useAuth } from "../../hooks/useAuth";
-import { APP_NAME } from "../../lib/constants";
 import { colors, spacing } from "../../lib/theme";
 
 export default function ProfileScreen() {
@@ -21,7 +21,7 @@ export default function ProfileScreen() {
 
   return (
     <Screen>
-      <Text style={styles.brand}>{APP_NAME}</Text>
+      <Logo size="md" style={styles.brand} />
 
       {isAuthenticated ? (
         <View style={styles.block}>
@@ -50,7 +50,7 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
-  brand: { color: colors.text, fontSize: 28, fontWeight: "800", marginBottom: spacing.lg },
+  brand: { marginBottom: spacing.lg },
   block: { gap: spacing.md },
   label: { color: colors.textMuted, fontSize: 13, textTransform: "uppercase", letterSpacing: 1 },
   value: { color: colors.text, fontSize: 18, fontWeight: "600" },
