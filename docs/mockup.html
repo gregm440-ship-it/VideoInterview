@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rep & Sip — Mockup</title>
+<style>
+  :root{
+    --bg:#0E1116; --surface:#171B22; --surfaceAlt:#1F242D; --border:#2A313B;
+    --text:#F5F7FA; --muted:#9AA4B2; --primary:#E8B84B; --accent:#5BC0BE;
+    --danger:#E5484D; --inactive:#3A4250;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    margin:0;background:#06080c;color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:32px 16px 64px;
+  }
+  .page-head{max-width:1200px;margin:0 auto 28px;text-align:center}
+  .page-head h1{font-size:30px;margin:0 0 6px;font-weight:800;letter-spacing:-.5px}
+  .page-head .sub{color:var(--muted);font-size:15px}
+  .page-head .legend{margin-top:14px;display:inline-flex;gap:18px;flex-wrap:wrap;justify-content:center;
+    font-size:13px;color:var(--muted);background:#0E1116;border:1px solid var(--border);
+    padding:10px 18px;border-radius:999px}
+  .grid{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:34px 30px;justify-content:center}
+  .frame-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .frame-label{font-size:13px;color:var(--muted);font-weight:600}
+  .frame-label b{color:var(--accent);font-weight:700}
+
+  /* phone */
+  .phone{
+    width:300px;height:640px;background:var(--bg);border-radius:42px;
+    border:9px solid #20242c;position:relative;overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,.55);display:flex;flex-direction:column;
+  }
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:120px;height:24px;background:#20242c;border-radius:0 0 16px 16px;z-index:30}
+  .statusbar{height:30px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;font-size:12px;color:var(--text);font-weight:600;flex:0 0 auto}
+  .screen{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative}
+  .body{flex:1;overflow:hidden;padding:0 16px}
+  .scroll{height:100%}
+
+  h2.title{font-size:22px;font-weight:800;margin:6px 0 14px}
+  .muted{color:var(--muted)}
+  .small{font-size:12px}
+
+  /* tab bar */
+  .tabbar{height:60px;background:var(--surface);border-top:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-around;position:relative;flex:0 0 auto}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--muted)}
+  .tab.active{color:var(--primary)}
+  .tab .ic{font-size:19px;line-height:1}
+  .addbtn{width:54px;height:54px;border-radius:999px;background:var(--primary);color:#0E1116;
+    display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:300;
+    margin-top:-26px;box-shadow:0 6px 16px rgba(232,184,75,.45)}
+
+  /* search */
+  .locbar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;padding:11px 14px;font-size:14px;margin-bottom:12px}
+  .toggle{display:flex;background:var(--surfaceAlt);border:1px solid var(--border);border-radius:12px;
+    padding:3px;margin-bottom:14px;font-size:13px;font-weight:600}
+  .toggle div{flex:1;text-align:center;padding:7px;border-radius:9px;color:var(--muted)}
+  .toggle div.on{background:var(--primary);color:#0E1116}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:14px}
+  .card .hero{height:96px;background-size:cover;background-position:center;position:relative}
+  .card .dist{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+    font-size:11px;padding:4px 8px;border-radius:999px;color:#fff}
+  .card .info{padding:11px 13px 13px}
+  .card .hname{font-size:15px;font-weight:700;margin-bottom:2px}
+  .card .haddr{font-size:11px;color:var(--muted);margin-bottom:9px}
+  .scores{display:flex;gap:6px;flex-wrap:wrap}
+  .score{display:flex;align-items:center;gap:4px;background:var(--surfaceAlt);border:1px solid var(--border);
+    border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700}
+  .score .lab{color:var(--muted);font-weight:600}
+  .revcount{margin-left:auto;font-size:11px;color:var(--muted);align-self:center}
+
+  /* hotel detail */
+  .detail-hero{height:150px;margin:0 -16px 0;background-size:cover;background-position:center;position:relative}
+  .detail-hero .back{position:absolute;top:10px;left:12px;width:32px;height:32px;border-radius:999px;
+    background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:16px}
+  .detail-hero .grad{position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,17,22,0) 40%,var(--bg))}
+  .bigscores{display:flex;gap:8px;margin:14px 0 4px}
+  .bigscore{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:16px;
+    padding:12px 6px;text-align:center}
+  .bigscore .ic{font-size:22px}
+  .bigscore .val{font-size:22px;font-weight:800;margin-top:2px}
+  .bigscore .val span{font-size:12px;color:var(--muted);font-weight:600}
+  .bigscore .lab{font-size:11px;color:var(--muted);margin-top:1px;text-transform:uppercase;letter-spacing:.5px}
+  .minimap{height:88px;border-radius:14px;margin:12px 0;background:
+    linear-gradient(135deg,#1b2430,#243140);border:1px solid var(--border);position:relative;overflow:hidden}
+  .minimap .pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-100%);font-size:22px}
+  .minimap .roads{position:absolute;inset:0;opacity:.25;background-image:
+    linear-gradient(var(--muted) 1px,transparent 1px),linear-gradient(90deg,var(--muted) 1px,transparent 1px);
+    background-size:26px 26px}
+  .cta{display:flex;gap:10px;margin:6px 0 14px}
+  .btn{flex:1;text-align:center;padding:13px;border-radius:14px;font-weight:700;font-size:14px}
+  .btn.primary{background:var(--primary);color:#0E1116}
+  .btn.secondary{background:var(--surfaceAlt);border:1px solid var(--border);color:var(--text)}
+  .section-h{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;
+    margin:14px 0 9px}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:6px}
+  .chip{background:var(--surfaceAlt);border:1px solid var(--border);border-radius:999px;padding:5px 11px;
+    font-size:11px;color:var(--text)}
+  .chip b{color:var(--accent)}
+  .photostrip{display:flex;gap:7px;overflow:hidden;margin-bottom:6px}
+  .photostrip .ph{width:78px;height:60px;border-radius:10px;background-size:cover;background-position:center;flex:0 0 auto}
+  .review{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}
+  .review .top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .avatar{width:26px;height:26px;border-radius:999px;background:var(--accent);color:#06241f;
+    display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+  .review .rname{font-size:13px;font-weight:700}
+  .review .rscores{margin-left:auto;font-size:12px;font-weight:700}
+  .review .rtext{font-size:12px;color:var(--muted);line-height:1.5}
+  .helpful{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:11px;color:var(--muted);
+    border:1px solid var(--border);border-radius:999px;padding:5px 10px}
+
+  /* submit review */
+  .ratingblock{margin-bottom:6px}
+  .ratingblock .rl{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;margin:14px 0 8px}
+  .ratingblock .rl .req{font-size:11px;color:var(--muted);font-weight:600;margin-left:auto}
+  .iconrow{display:flex;justify-content:space-between;gap:6px}
+  .iconrow .pip{flex:1;height:50px;border-radius:12px;background:var(--surface);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:24px}
+  .iconrow .pip.on{background:rgba(232,184,75,.16);border-color:var(--primary)}
+  .iconrow .pip.off{filter:grayscale(1);opacity:.35}
+  .expander{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;
+    margin-top:12px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+  .expander .plus{margin-left:auto;color:var(--muted);font-size:18px}
+  .privacy{display:flex;gap:8px;margin-top:14px}
+  .privacy .opt{flex:1;border:1px solid var(--border);border-radius:13px;padding:10px;text-align:center;font-size:12px;
+    background:var(--surface);color:var(--muted)}
+  .privacy .opt.sel{border-color:var(--accent);background:rgba(91,192,190,.12);color:var(--text);font-weight:700}
+  .submit{margin-top:16px;background:var(--primary);color:#0E1116;text-align:center;padding:15px;
+    border-radius:16px;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(232,184,75,.35)}
+  .timer{text-align:center;font-size:11px;color:var(--accent);margin-top:9px}
+
+  /* sign in */
+  .si{display:flex;flex-direction:column;height:100%;padding-top:18px}
+  .si .brand{font-size:34px;font-weight:800;margin-bottom:6px}
+  .si .tag{color:var(--muted);font-size:15px;line-height:1.4;margin-bottom:28px}
+  .si .authbtn{padding:14px;border-radius:14px;font-weight:700;font-size:15px;text-align:center;margin-bottom:12px;
+    display:flex;align-items:center;justify-content:center;gap:8px}
+  .si .apple{background:#fff;color:#000}
+  .si .google{background:var(--surfaceAlt);border:1px solid var(--border);color:var(--text)}
+  .si .or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:6px 0 12px}
+  .si .or .line{flex:1;height:1px;background:var(--border)}
+  .si .input{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;
+    color:var(--muted);font-size:14px;margin-bottom:10px}
+  .si .ghost{text-align:center;color:var(--muted);font-size:14px;padding:12px}
+  .si .guest{margin-top:auto;text-align:center}
+  .si .guestbtn{color:var(--primary);font-weight:700;font-size:15px;padding:12px}
+  .si .guestnote{color:var(--muted);font-size:12px;margin-top:2px}
+
+  /* my log / profile */
+  .searchin{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:11px 14px;
+    font-size:13px;color:var(--muted);margin-bottom:14px}
+  .logrow{display:flex;gap:11px;background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:10px;margin-bottom:11px;align-items:center}
+  .logrow .thumb{width:54px;height:54px;border-radius:11px;background-size:cover;background-position:center;flex:0 0 auto}
+  .logrow .ln{font-size:14px;font-weight:700}
+  .logrow .lm{font-size:11px;color:var(--muted);margin:2px 0 5px}
+  .logrow .priv{font-size:10px;color:var(--accent);border:1px solid var(--border);border-radius:999px;
+    padding:2px 7px;display:inline-block}
+  .prof-head{display:flex;align-items:center;gap:13px;margin:6px 0 22px}
+  .prof-head .pa{width:58px;height:58px;border-radius:999px;background:var(--accent);color:#06241f;
+    display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800}
+  .prof-head .pn{font-size:19px;font-weight:800}
+  .prof-head .pe{font-size:13px;color:var(--muted)}
+  .statline{display:flex;gap:10px;margin-bottom:20px}
+  .stat{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px;text-align:center}
+  .stat .n{font-size:21px;font-weight:800}
+  .stat .l{font-size:11px;color:var(--muted)}
+  .menu .mi{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--border);font-size:14px}
+  .menu .mi .ar{margin-left:auto;color:var(--muted)}
+  .signout{margin-top:18px;text-align:center;color:var(--danger);font-weight:700;font-size:14px;padding:12px}
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>Rep & Sip</h1>
+    <div class="sub">Find a hotel near you with a good gym and a good bar.</div>
+    <div class="legend">
+      <span>🏋️ Gym (1–5)</span><span>🍸 Bar (1–5)</span><span>⭐ Overall</span>
+      <span>· Rate in &lt;30s, ≤3 taps · Browse without an account</span>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- 1. SIGN IN -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen"><div class="body"><div class="scroll si">
+          <div class="brand">Rep & Sip</div>
+          <div class="tag">Rate the gym. Rate the bar.<br/>Help the next traveler.</div>
+          <div class="authbtn apple"> Sign in with Apple</div>
+          <div class="authbtn google">G&nbsp; Continue with Google</div>
+          <div class="or"><div class="line"></div>or<div class="line"></div></div>
+          <div class="input">you@email.com</div>
+          <div class="ghost">Email me a magic link</div>
+          <div class="guest">
+            <div class="guestbtn">Continue as guest</div>
+            <div class="guestnote">Browse and read freely.<br/>An account is only needed to post.</div>
+          </div>
+        </div></div></div>
+      </div>
+      <div class="frame-label"><b>Sign in</b> · Apple / Google / magic-link / guest</div>
+    </div>
+
+    <!-- 2. SEARCH -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen">
+          <div class="body"><div class="scroll">
+            <h2 class="title">Search</h2>
+            <div class="locbar">📍 <span>Near me · Austin, TX</span></div>
+            <div class="toggle"><div class="on">List</div><div>Map</div></div>
+
+            <div class="card">
+              <div class="hero" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600')">
+                <div class="dist">0.4 mi</div>
+              </div>
+              <div class="info">
+                <div class="hname">The Driskill</div>
+                <div class="haddr">604 Brazos St · Austin</div>
+                <div class="scores">
+                  <div class="score">🏋️ 4.6</div>
+                  <div class="score">🍸 4.8</div>
+                  <div class="score">⭐ 4.7</div>
+                  <div class="revcount">128 reviews</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="hero" style="background-image:url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600')">
+                <div class="dist">0.9 mi</div>
+              </div>
+              <div class="info">
+                <div class="hname">Fairmont Austin</div>
+                <div class="haddr">101 Red River St · Austin</div>
+                <div class="scores">
+                  <div class="score">🏋️ 4.9</div>
+                  <div class="score">🍸 4.2</div>
+                  <div class="score">⭐ 4.5</div>
+                  <div class="revcount">86 reviews</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="hero" style="background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600')">
+                <div class="dist">1.3 mi</div>
+              </div>
+              <div class="info">
+                <div class="hname">Hotel Van Zandt</div>
+                <div class="haddr">605 Davis St · Austin</div>
+                <div class="scores">
+                  <div class="score">🏋️ 3.8</div>
+                  <div class="score">🍸 4.9</div>
+                  <div class="score">⭐ 4.4</div>
+                  <div class="revcount">203 reviews</div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+          <div class="tabbar">
+            <div class="tab active"><div class="ic">🔍</div>Search</div>
+            <div class="tab"><div class="ic">📖</div>My Log</div>
+            <div class="addbtn">+</div>
+            <div class="tab"><div class="ic">👤</div>Profile</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-label"><b>Search</b> · near-me, both scores at a glance</div>
+    </div>
+
+    <!-- 3. HOTEL DETAIL -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen"><div class="body" style="padding-top:0">
+          <div class="detail-hero" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=700')">
+            <div class="back">‹</div><div class="grad"></div>
+          </div>
+          <div class="scroll">
+            <h2 class="title" style="margin-top:4px">The Driskill</h2>
+            <div class="muted small">604 Brazos St · Austin, TX · $$$</div>
+            <div class="bigscores">
+              <div class="bigscore"><div class="ic">🏋️</div><div class="val">4.6<span>/5</span></div><div class="lab">Gym</div></div>
+              <div class="bigscore"><div class="ic">🍸</div><div class="val">4.8<span>/5</span></div><div class="lab">Bar</div></div>
+              <div class="bigscore"><div class="ic">⭐</div><div class="val">4.7<span>/5</span></div><div class="lab">Overall</div></div>
+            </div>
+            <div class="muted small" style="text-align:center">128 community reviews</div>
+            <div class="minimap"><div class="roads"></div><div class="pin">📍</div></div>
+            <div class="cta">
+              <div class="btn primary">Rate this hotel</div>
+              <div class="btn secondary">＋ My log</div>
+            </div>
+
+            <div class="section-h">Most-applied tags</div>
+            <div class="chips">
+              <div class="chip">🏋️ <b>Squat rack</b></div>
+              <div class="chip">🏋️ Heavy dumbbells</div>
+              <div class="chip">🍸 <b>Quality cocktails</b></div>
+              <div class="chip">🍸 Open late</div>
+              <div class="chip">🍸 Rooftop view</div>
+            </div>
+
+            <div class="section-h">Gym photos</div>
+            <div class="photostrip">
+              <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300')"></div>
+              <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=300')"></div>
+              <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=300')"></div>
+            </div>
+            <div class="section-h">Bar photos</div>
+            <div class="photostrip">
+              <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=300')"></div>
+              <div class="ph" style="background-image:url('https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=300')"></div>
+            </div>
+
+            <div class="section-h">Community reviews</div>
+            <div class="review">
+              <div class="top">
+                <div class="avatar">MK</div><div class="rname">Marcus K.</div>
+                <div class="rscores">🏋️5 🍸4 ⭐5</div>
+              </div>
+              <div class="rtext">Squat rack + dumbbells to 80lb, open 24h. Bar does a proper Negroni and stays open past midnight. Ideal for a Tue–Thu trip.</div>
+              <div class="helpful">👍 Helpful · 24</div>
+            </div>
+            <div class="review">
+              <div class="top">
+                <div class="avatar">JT</div><div class="rname">Jess T.</div>
+                <div class="rscores">🏋️4 🍸5 ⭐5</div>
+              </div>
+              <div class="rtext">Rooftop bar is the move for client meetings. Gym smaller but clean, towels stocked.</div>
+              <div class="helpful">👍 Helpful · 11</div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+      <div class="frame-label"><b>Hotel detail</b> · three big scores, tags, photo strips</div>
+    </div>
+
+    <!-- 4. SUBMIT REVIEW -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen"><div class="body"><div class="scroll">
+          <h2 class="title">Rate The Driskill</h2>
+
+          <div class="ratingblock">
+            <div class="rl">🏋️ Gym <span class="req">tap to rate</span></div>
+            <div class="iconrow">
+              <div class="pip on">🏋️</div><div class="pip on">🏋️</div><div class="pip on">🏋️</div>
+              <div class="pip on">🏋️</div><div class="pip off">🏋️</div>
+            </div>
+          </div>
+          <div class="ratingblock">
+            <div class="rl">🍸 Bar <span class="req">tap to rate</span></div>
+            <div class="iconrow">
+              <div class="pip on">🍸</div><div class="pip on">🍸</div><div class="pip on">🍸</div>
+              <div class="pip on">🍸</div><div class="pip on">🍸</div>
+            </div>
+          </div>
+          <div class="ratingblock">
+            <div class="rl">⭐ Overall <span class="req">tap to rate</span></div>
+            <div class="iconrow">
+              <div class="pip on">⭐</div><div class="pip on">⭐</div><div class="pip on">⭐</div>
+              <div class="pip on">⭐</div><div class="pip off">⭐</div>
+            </div>
+          </div>
+
+          <div class="expander">📝 Add details <span class="muted small" style="font-weight:400">note + tags</span><span class="plus">＋</span></div>
+          <div class="expander">📷 Add photos <span class="muted small" style="font-weight:400">gym / bar, up to 3</span><span class="plus">＋</span></div>
+
+          <div class="privacy">
+            <div class="opt sel">🌍 Share with<br/>the community</div>
+            <div class="opt">🔒 Keep private<br/>to my log</div>
+          </div>
+
+          <div class="submit">Submit</div>
+          <div class="timer">⏱ 3 taps done · ~14s · details optional</div>
+        </div></div></div>
+      </div>
+      <div class="frame-label"><b>Submit review</b> · fast path: 3 icon-rows + submit</div>
+    </div>
+
+    <!-- 5. MY LOG -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen">
+          <div class="body"><div class="scroll">
+            <h2 class="title">My Log</h2>
+            <div class="searchin">🔍 Search my hotels…</div>
+
+            <div class="logrow">
+              <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=300')"></div>
+              <div>
+                <div class="ln">The Driskill</div>
+                <div class="lm">Austin · 🏋️4 · 🍸5 · ⭐5</div>
+                <div class="muted small">“24h gym, great Negroni.”</div>
+              </div>
+            </div>
+            <div class="logrow">
+              <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=300')"></div>
+              <div>
+                <div class="ln">Fairmont Austin</div>
+                <div class="lm">Austin · 🏋️5 · 🍸4 · ⭐4</div>
+                <div class="priv">🔒 Private</div>
+              </div>
+            </div>
+            <div class="logrow">
+              <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=300')"></div>
+              <div>
+                <div class="ln">1 Hotel Brooklyn</div>
+                <div class="lm">New York · 🏋️3 · 🍸5 · ⭐4</div>
+                <div class="muted small">“Bar &gt; gym here.”</div>
+              </div>
+            </div>
+            <div class="logrow">
+              <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1455587734955-081b22074882?w=300')"></div>
+              <div>
+                <div class="ln">Kimpton Gray</div>
+                <div class="lm">Chicago · 🏋️4 · 🍸4 · ⭐4</div>
+                <div class="muted small">Saved · not yet rated</div>
+              </div>
+            </div>
+          </div></div>
+          <div class="tabbar">
+            <div class="tab"><div class="ic">🔍</div>Search</div>
+            <div class="tab active"><div class="ic">📖</div>My Log</div>
+            <div class="addbtn">+</div>
+            <div class="tab"><div class="ic">👤</div>Profile</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-label"><b>My Log</b> · your scores + notes, private flagged</div>
+    </div>
+
+    <!-- 6. PROFILE -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen">
+          <div class="body"><div class="scroll">
+            <h2 class="title">Profile</h2>
+            <div class="prof-head">
+              <div class="pa">G</div>
+              <div>
+                <div class="pn">Greg M.</div>
+                <div class="pe">greg@emep.io · Frequent flyer</div>
+              </div>
+            </div>
+            <div class="statline">
+              <div class="stat"><div class="n">23</div><div class="l">Reviews</div></div>
+              <div class="stat"><div class="n">31</div><div class="l">Hotels logged</div></div>
+              <div class="stat"><div class="n">142</div><div class="l">Helpful votes</div></div>
+            </div>
+            <div class="menu">
+              <div class="mi">🏠 Home city · Austin <span class="ar">›</span></div>
+              <div class="mi">✈️ Traveler type · Frequent flyer <span class="ar">›</span></div>
+              <div class="mi">🔒 Privacy defaults <span class="ar">›</span></div>
+              <div class="mi">🚩 Reported content <span class="ar">›</span></div>
+              <div class="mi">❓ Help & feedback <span class="ar">›</span></div>
+            </div>
+            <div class="signout">Sign out</div>
+          </div></div>
+          <div class="tabbar">
+            <div class="tab"><div class="ic">🔍</div>Search</div>
+            <div class="tab"><div class="ic">📖</div>My Log</div>
+            <div class="addbtn">+</div>
+            <div class="tab active"><div class="ic">👤</div>Profile</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-label"><b>Profile</b> · account, stats, sign out</div>
+    </div>
+
+  </div>
+</body>
+</html>

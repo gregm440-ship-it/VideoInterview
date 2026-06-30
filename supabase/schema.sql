@@ -293,6 +293,27 @@ drop policy if exists helpful_votes_delete_own on helpful_votes;
 create policy helpful_votes_delete_own on helpful_votes
   for delete to authenticated using (auth.uid() = user_id);
 
+-- ---- Moderation safety valve: a report hides its target (Section 8.2) ------
+-- Runs as definer so any reporter can hide content pending review, without
+-- granting them update rights on other people's rows.
+
+create or replace function apply_report_hide()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  if new.review_id is not null then
+    update reviews set is_hidden = true where id = new.review_id;
+  end if;
+  if new.photo_id is not null then
+    update review_photos set is_hidden = true where id = new.photo_id;
+  end if;
+  return new;
+end; $$;
+
+drop trigger if exists trg_reports_hide on reports;
+create trigger trg_reports_hide
+after insert on reports
+for each row execute function apply_report_hide();
+
 -- ---- Storage: review-photos bucket (public read) ---------------------------
 
 insert into storage.buckets (id, name, public)
