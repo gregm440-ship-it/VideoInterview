@@ -44,6 +44,14 @@ export default function FeedScreen() {
     <Screen padded={false}>
       <View style={styles.header}>
         <Text style={styles.title}>Feed</Text>
+        <Pressable
+          style={styles.trophy}
+          onPress={() => router.push("/leaderboard")}
+          hitSlop={8}
+        >
+          <Ionicons name="trophy" size={16} color={colors.onPrimary} />
+          <Text style={styles.trophyText}>Leaderboard</Text>
+        </Pressable>
       </View>
       {isLoading ? (
         <View style={styles.center}>
@@ -116,8 +124,25 @@ function FeedRow({ item }: { item: FeedItem }) {
 }
 
 const styles = StyleSheet.create({
-  header: { paddingHorizontal: spacing.md, paddingTop: spacing.sm },
-  title: { color: colors.text, fontSize: 24, fontWeight: "800", marginBottom: spacing.md },
+  header: {
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    marginBottom: spacing.md,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  title: { color: colors.text, fontSize: 24, fontWeight: "800" },
+  trophy: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: colors.primary,
+    borderRadius: radius.pill,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+  },
+  trophyText: { color: colors.onPrimary, fontSize: 13, fontWeight: "700" },
   list: { padding: spacing.md, paddingTop: 0 },
   row: {
     flexDirection: "row",

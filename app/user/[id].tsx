@@ -9,8 +9,11 @@ import {
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Button } from "../../components/Button";
 import { Avatar } from "../../components/Avatar";
+import { TierPill, BadgeGrid } from "../../components/Badges";
 import { usePublicProfile, useFollow } from "../../hooks/useSocial";
+import { useUserStats } from "../../hooks/useStats";
 import { useAuth } from "../../hooks/useAuth";
+import { EMPTY_STATS } from "../../lib/badges";
 import type { PublicProfileReview } from "../../lib/social";
 import { ICONS } from "../../lib/constants";
 import { colors, radius, spacing } from "../../lib/theme";
@@ -20,6 +23,7 @@ export default function UserProfileScreen() {
   const { isAuthenticated } = useAuth();
   const { data, isLoading, isError } = usePublicProfile(id ?? "");
   const follow = useFollow(id ?? "");
+  const stats = useUserStats(id ?? "");
 
   if (isLoading) {
     return (
@@ -68,6 +72,12 @@ export default function UserProfileScreen() {
             style={styles.followBtn}
           />
         )}
+
+        <View style={styles.tierWrap}>
+          <TierPill stats={stats.data ?? EMPTY_STATS} />
+        </View>
+        <Text style={styles.section}>Badges</Text>
+        <BadgeGrid stats={stats.data ?? EMPTY_STATS} />
 
         <Text style={styles.section}>Reviews</Text>
         {data.reviews.length === 0 ? (
@@ -145,6 +155,7 @@ const styles = StyleSheet.create({
   statN: { color: colors.text, fontSize: 20, fontWeight: "800" },
   statL: { color: colors.textMuted, fontSize: 12 },
   followBtn: { marginTop: spacing.lg },
+  tierWrap: { marginTop: spacing.lg },
   section: { color: colors.text, fontSize: 18, fontWeight: "800", marginTop: spacing.xl, marginBottom: spacing.sm },
   muted: { color: colors.textMuted, fontSize: 15 },
   review: {

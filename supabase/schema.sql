@@ -348,6 +348,33 @@ drop policy if exists follows_delete_own on follows;
 create policy follows_delete_own on follows
   for delete to authenticated using (auth.uid() = follower_id);
 
+-- ---- Leaderboard: top reviewers (aggregates public content only) -----------
+-- Security definer so guests can read the board without per-table grants; it
+-- only exposes public-review-derived counts + public profile display fields.
+
+create or replace function get_top_reviewers(limit_count int default 25)
+returns table (
+  user_id uuid,
+  display_name text,
+  avatar_url text,
+  review_count bigint,
+  helpful_count bigint
+)
+language sql security definer set search_path = public as $$
+  select r.user_id, p.display_name, p.avatar_url,
+         count(distinct r.id) as review_count,
+         count(distinct hv.id) as helpful_count
+  from reviews r
+  join profiles p on p.id = r.user_id
+  left join helpful_votes hv on hv.review_id = r.id
+  where r.is_private_log = false and r.is_hidden = false
+  group by r.user_id, p.display_name, p.avatar_url
+  order by review_count desc, helpful_count desc
+  limit limit_count;
+$$;
+
+grant execute on function get_top_reviewers(int) to anon, authenticated;
+
 -- ---- Storage: review-photos bucket (public read) ---------------------------
 
 insert into storage.buckets (id, name, public)

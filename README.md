@@ -60,6 +60,8 @@ supabase/       schema.sql (tables + RLS + triggers + storage)
   affiliate booking hand-off.
 - **Phase 3 — Social** ✅ follow travelers, a feed of their reviews, public
   profiles, and "people you follow rated this" on hotel detail.
+- **Phase 3 — Badges & leaderboards** ✅ contributor tiers + achievement badges
+  on profiles; leaderboard for top hotels (gym/bar/overall) and top reviewers.
 
 ## Non-negotiable UX rules
 

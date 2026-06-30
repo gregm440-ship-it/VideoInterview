@@ -280,6 +280,23 @@
   .preview .ph{font-weight:700;font-size:14px}
   .preview .pm{color:var(--muted);font-size:12px}
   .preview .psc{margin-left:auto;font-weight:700;font-size:13px}
+  /* badges + leaderboard */
+  .tierpill{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--primary);border-radius:999px;
+    padding:5px 12px;background:var(--surface);font-weight:800;font-size:14px;color:var(--primary)}
+  .tiernext{color:var(--muted);font-size:12px;margin-left:8px}
+  .badgegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .badge{border:1px solid var(--border);border-radius:12px;padding:12px 4px;text-align:center;background:var(--surface)}
+  .badge.on{border-color:var(--primary)}
+  .badge.off{background:var(--surfaceAlt)}
+  .badge .be{font-size:24px}
+  .badge.off .be{opacity:.35}
+  .badge .bl{font-size:11px;font-weight:700;margin-top:2px}
+  .badge .bs{font-size:10px;color:var(--muted)}
+  .lbrow{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:11px;margin-bottom:9px}
+  .lbrank{font-size:16px;font-weight:800;min-width:24px;text-align:center}
+  .lbbody{flex:1}.lbn{font-weight:700;font-size:14px}.lbm{color:var(--muted);font-size:12px}
+  .lbsc{font-weight:800;font-size:14px}
 </style>
 </head>
 <body>
@@ -630,6 +647,18 @@
               <div class="stat"><div class="n">142</div><div class="l">Helpful votes</div></div>
             </div>
 
+            <div style="margin:6px 0 10px"><span class="tierpill">🥇 Gold</span><span class="tiernext">7 more reviews → 💎 Platinum</span></div>
+
+            <div class="section-h">Badges</div>
+            <div class="badgegrid" style="margin-bottom:6px">
+              <div class="badge on"><div class="be">✅</div><div class="bl">First Rep</div><div class="bs">Earned</div></div>
+              <div class="badge on"><div class="be">📸</div><div class="bl">Shutterbug</div><div class="bs">Earned</div></div>
+              <div class="badge on"><div class="be">🏋️</div><div class="bl">Gym Rat</div><div class="bs">Earned</div></div>
+              <div class="badge off"><div class="be">🧳</div><div class="bl">Road Warrior</div><div class="bs">23/25</div></div>
+              <div class="badge off"><div class="be">🌍</div><div class="bl">Globetrotter</div><div class="bs">4/5</div></div>
+              <div class="badge off"><div class="be">⭐</div><div class="bl">Influencer</div><div class="bs">18/25</div></div>
+            </div>
+
             <div class="section-h" style="margin-top:6px">Travel preferences</div>
             <div class="muted small" style="margin-bottom:10px">Optional · set your go-to brands</div>
             <div class="pref">✈️ <span class="pl">Airline</span><span class="pv">Delta Air Lines</span><span class="x">✕</span></div>
@@ -799,7 +828,10 @@
         <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
         <div class="screen">
           <div class="body"><div class="scroll">
-            <h2 class="title">Feed</h2>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <h2 class="title" style="margin:0">Feed</h2>
+              <div style="display:flex;align-items:center;gap:5px;background:var(--primary);color:var(--onPrimary);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700">🏆 Leaderboard</div>
+            </div>
 
             <div class="feedrow">
               <div class="av">MK</div>
@@ -877,6 +909,29 @@
         </div></div></div>
       </div>
       <div class="frame-label"><b>Traveler profile</b> · follow + their reviews</div>
+    </div>
+
+    <!-- 12. LEADERBOARD (Social) -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen"><div class="body" style="padding-top:14px"><div class="scroll">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <span class="muted" style="font-size:20px">‹</span>
+            <h2 class="title" style="margin:0">Leaderboard</h2>
+          </div>
+          <div class="seg" style="margin-bottom:8px"><div class="s on">🏨 Top hotels</div><div class="s">👤 Top reviewers</div></div>
+          <div class="seg" style="margin-bottom:14px"><div class="s on">Overall</div><div class="s">Best gym</div><div class="s">Best bar</div></div>
+
+          <div class="lbrow"><div class="lbrank">🥇</div><div class="lbbody"><div class="lbn">The Driskill</div><div class="lbm">Austin · 128 reviews</div></div><div class="lbsc">⭐ 4.7</div></div>
+          <div class="lbrow"><div class="lbrank">🥈</div><div class="lbbody"><div class="lbn">1 Hotel Brooklyn</div><div class="lbm">New York · 96 reviews</div></div><div class="lbsc">⭐ 4.6</div></div>
+          <div class="lbrow"><div class="lbrank">🥉</div><div class="lbbody"><div class="lbn">Fairmont Austin</div><div class="lbm">Austin · 86 reviews</div></div><div class="lbsc">⭐ 4.5</div></div>
+          <div class="lbrow"><div class="lbrank">4</div><div class="lbbody"><div class="lbn">Hotel Van Zandt</div><div class="lbm">Austin · 203 reviews</div></div><div class="lbsc">⭐ 4.4</div></div>
+          <div class="lbrow"><div class="lbrank">5</div><div class="lbbody"><div class="lbn">Kimpton Gray</div><div class="lbm">Chicago · 54 reviews</div></div><div class="lbsc">⭐ 4.4</div></div>
+        </div></div></div>
+      </div>
+      <div class="frame-label"><b>Leaderboard</b> · top hotels (gym/bar/overall) + top reviewers</div>
     </div>
 
   </div>
