@@ -9,10 +9,16 @@ import {
   attachAggregates,
   upsertHotel,
   getStoredHotel,
+  getTagsForHotels,
   type HotelCard,
 } from "../lib/hotels";
 import type { HotelAggregate } from "../lib/database.types";
 import { haversineMeters } from "../lib/distance";
+import {
+  applyFilters,
+  defaultFilters,
+  type SearchFilters,
+} from "../lib/filters";
 
 export function emptyAggregate(hotelId = ""): HotelAggregate {
   return {
@@ -35,23 +41,40 @@ function withDistance(cards: HotelCard[], from: LatLng): HotelCard[] {
   }));
 }
 
+const PLACES_MAX_RADIUS_M = 50000;
+
 /** Search hotels: empty query => "near me", otherwise text search biased nearby. */
-export function useHotelSearch(query: string, near: LatLng, enabled = true) {
+export function useHotelSearch(
+  query: string,
+  near: LatLng,
+  filters: SearchFilters = defaultFilters(),
+  enabled = true
+) {
   const trimmed = query.trim();
   const mode = trimmed.length > 0 ? "text" : "near";
   return useQuery({
-    queryKey: ["hotelSearch", mode, mode === "text" ? trimmed : near],
+    queryKey: ["hotelSearch", mode, mode === "text" ? trimmed : near, filters],
     enabled,
     queryFn: async () => {
+      const radiusM = Math.min(filters.radiusMi * 1609.34, PLACES_MAX_RADIUS_M);
       const places =
         mode === "text"
           ? await searchHotelsByText(trimmed, near)
-          : await searchHotelsNearby(near);
-      const cards = withDistance(await attachAggregates(places), near);
-      // Nearby is already distance-ranked; sort text results too.
-      return mode === "text"
-        ? cards.sort((a, b) => (a.distanceM ?? Infinity) - (b.distanceM ?? Infinity))
-        : cards;
+          : await searchHotelsNearby(near, radiusM);
+
+      let cards = withDistance(await attachAggregates(places), near);
+
+      // Only pay for the tag query when a tag filter is actually set.
+      if (filters.tags.length > 0) {
+        const ids = cards.map((c) => c.id).filter((id): id is string => Boolean(id));
+        const tagMap = await getTagsForHotels(ids);
+        cards = cards.map((c) => ({
+          ...c,
+          tagKeys: c.id ? [...(tagMap.get(c.id) ?? [])] : [],
+        }));
+      }
+
+      return applyFilters(cards, filters);
     },
   });
 }

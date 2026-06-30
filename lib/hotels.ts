@@ -7,6 +7,8 @@ export interface HotelCard extends PlaceResult {
   id: string | null;
   aggregate: HotelAggregate | null;
   distanceM?: number | null;
+  /** Distinct tag keys from this hotel's public reviews (for tag filters). */
+  tagKeys?: string[];
 }
 
 const EMPTY_AGG: Omit<HotelAggregate, "hotel_id"> = {
@@ -53,6 +55,35 @@ export async function attachAggregates(
       aggregate: match ? oneAgg(match.hotel_aggregates) : null,
     };
   });
+}
+
+/**
+ * Distinct public-review tag keys per hotel, for the given hotel ids. Used by
+ * search tag filters (only fetched when a tag filter is active).
+ */
+export async function getTagsForHotels(
+  hotelIds: string[]
+): Promise<Map<string, Set<string>>> {
+  const map = new Map<string, Set<string>>();
+  if (hotelIds.length === 0) return map;
+
+  const { data, error } = await supabase
+    .from("review_tags")
+    .select("tag_key, reviews!inner(hotel_id, is_private_log, is_hidden)")
+    .in("reviews.hotel_id", hotelIds)
+    .eq("reviews.is_private_log", false)
+    .eq("reviews.is_hidden", false);
+  if (error) throw error;
+
+  type Row = { tag_key: string; reviews: { hotel_id: string } | { hotel_id: string }[] };
+  ((data as unknown as Row[]) ?? []).forEach((r) => {
+    const rev = Array.isArray(r.reviews) ? r.reviews[0] : r.reviews;
+    if (!rev) return;
+    const set = map.get(rev.hotel_id) ?? new Set<string>();
+    set.add(r.tag_key);
+    map.set(rev.hotel_id, set);
+  });
+  return map;
 }
 
 /**

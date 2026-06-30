@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
+  Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -13,9 +15,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { Screen } from "../../components/Screen";
 import { HotelCard } from "../../components/HotelCard";
 import { Logo } from "../../components/Logo";
+import { FiltersSheet } from "../../components/FiltersSheet";
 import { useLocation } from "../../hooks/useLocation";
 import { useHotelSearch } from "../../hooks/useHotels";
 import type { HotelCard as HotelCardData } from "../../lib/hotels";
+import {
+  activeFilterCount,
+  defaultFilters,
+  SORT_LABELS,
+  type SearchFilters,
+} from "../../lib/filters";
+import { tagLabel } from "../../lib/tags";
 import { colors, radius, spacing, TAP_TARGET } from "../../lib/theme";
 
 type ViewMode = "list" | "map";
@@ -25,6 +35,8 @@ export default function SearchScreen() {
   const [query, setQuery] = useState("");
   const [debounced, setDebounced] = useState("");
   const [mode, setMode] = useState<ViewMode>("list");
+  const [filters, setFilters] = useState<SearchFilters>(defaultFilters());
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Debounce typing so we don't fire a Places call per keystroke.
   useEffect(() => {
@@ -34,8 +46,21 @@ export default function SearchScreen() {
 
   const { data, isLoading, isError, error, refetch, isFetching } = useHotelSearch(
     debounced,
-    location
+    location,
+    filters
   );
+
+  const filterCount = activeFilterCount(filters);
+  // Compact summary chips for what's active (sort always shown).
+  const summaryChips: string[] = [
+    `↕ ${SORT_LABELS[filters.sort]}`,
+    ...(filters.minGym ? [`🏋️ ≥${filters.minGym}`] : []),
+    ...(filters.minBar ? [`🍸 ≥${filters.minBar}`] : []),
+    ...(filters.minOverall ? [`⭐ ≥${filters.minOverall}`] : []),
+    ...filters.tags.map((t) => tagLabel(t)),
+    ...(filters.priceTiers.length ? [filters.priceTiers.map((t) => "$".repeat(t)).join(" ")] : []),
+    ...(filters.radiusMi !== defaultFilters().radiusMi ? [`${filters.radiusMi} mi`] : []),
+  ];
 
   const hotels: HotelCardData[] = data ?? [];
   const open = (h: HotelCardData) => router.push(`/hotel/${h.google_place_id}`);
@@ -82,18 +107,53 @@ export default function SearchScreen() {
           {isFetching && <ActivityIndicator size="small" color={colors.textMuted} />}
         </View>
 
-        <View style={styles.toggle}>
-          {(["list", "map"] as ViewMode[]).map((m) => (
-            <Text
-              key={m}
-              onPress={() => setMode(m)}
-              style={[styles.toggleItem, mode === m && styles.toggleItemOn]}
-            >
-              {m === "list" ? "List" : "Map"}
+        <View style={styles.controlRow}>
+          <View style={[styles.toggle, { flex: 1 }]}>
+            {(["list", "map"] as ViewMode[]).map((m) => (
+              <Text
+                key={m}
+                onPress={() => setMode(m)}
+                style={[styles.toggleItem, mode === m && styles.toggleItemOn]}
+              >
+                {m === "list" ? "List" : "Map"}
+              </Text>
+            ))}
+          </View>
+          <Pressable
+            onPress={() => setFiltersOpen(true)}
+            style={[styles.filterBtn, filterCount > 0 && styles.filterBtnActive]}
+          >
+            <Ionicons
+              name="options-outline"
+              size={18}
+              color={filterCount > 0 ? colors.onPrimary : colors.text}
+            />
+            <Text style={[styles.filterBtnText, filterCount > 0 && styles.filterBtnTextActive]}>
+              Filters{filterCount > 0 ? ` ${filterCount}` : ""}
             </Text>
-          ))}
+          </Pressable>
         </View>
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.summaryRow}
+          contentContainerStyle={styles.summaryContent}
+        >
+          {summaryChips.map((c, i) => (
+            <Pressable key={`${c}-${i}`} onPress={() => setFiltersOpen(true)} style={styles.summaryChip}>
+              <Text style={styles.summaryChipText}>{c}</Text>
+            </Pressable>
+          ))}
+        </ScrollView>
       </View>
+
+      <FiltersSheet
+        visible={filtersOpen}
+        initial={filters}
+        onClose={() => setFiltersOpen(false)}
+        onApply={setFilters}
+      />
 
       {isLoading ? (
         <View style={styles.center}>
@@ -110,7 +170,11 @@ export default function SearchScreen() {
         </View>
       ) : hotels.length === 0 ? (
         <View style={styles.center}>
-          <Text style={styles.muted}>No hotels found here. Try a different place.</Text>
+          <Text style={styles.muted}>
+            {filterCount > 0
+              ? "No matches with these filters. Tap Filters to loosen them."
+              : "No hotels found here. Try a different place."}
+          </Text>
         </View>
       ) : mode === "list" ? (
         <FlatList
@@ -175,6 +239,12 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
   locText: { color: colors.textMuted, fontSize: 13 },
+  controlRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
   toggle: {
     flexDirection: "row",
     backgroundColor: colors.surfaceAlt,
@@ -182,7 +252,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius.md,
     padding: 3,
-    marginTop: spacing.md,
   },
   toggleItem: {
     flex: 1,
@@ -194,6 +263,31 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   toggleItemOn: { backgroundColor: colors.primary, color: colors.onPrimary },
+  filterBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: spacing.md,
+    height: 38,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  filterBtnActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  filterBtnText: { color: colors.text, fontSize: 14, fontWeight: "700" },
+  filterBtnTextActive: { color: colors.onPrimary },
+  summaryRow: { marginTop: spacing.sm, flexGrow: 0 },
+  summaryContent: { gap: spacing.sm, paddingRight: spacing.md },
+  summaryChip: {
+    backgroundColor: colors.surfaceAlt,
+    borderColor: colors.border,
+    borderWidth: 1,
+    borderRadius: radius.pill,
+    paddingHorizontal: 11,
+    paddingVertical: 5,
+  },
+  summaryChipText: { color: colors.text, fontSize: 12, fontWeight: "600" },
   list: { padding: spacing.md, paddingBottom: spacing.xl },
   map: { flex: 1 },
   center: { flex: 1, alignItems: "center", justifyContent: "center", padding: spacing.lg, gap: spacing.sm },

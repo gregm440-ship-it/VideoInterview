@@ -29,7 +29,12 @@ export default function AddScreen() {
     return () => clearTimeout(t);
   }, [query]);
 
-  const { data, isLoading } = useHotelSearch(debounced, location, isAuthenticated);
+  const { data, isLoading } = useHotelSearch(
+    debounced,
+    location,
+    undefined,
+    isAuthenticated
+  );
   const hotels: HotelCardData[] = data ?? [];
 
   if (!isAuthenticated) {

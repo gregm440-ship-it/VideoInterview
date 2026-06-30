@@ -52,6 +52,9 @@ supabase/       schema.sql (tables + RLS + triggers + storage)
 - **Phase 0 — Foundation** ✅ project, env wiring, schema/RLS, auth, tabs.
 - **Phase 1 — Hotels & Search** ✅ Google Places, search + map, hotel detail.
 - **Phase 2 — Reviews & Travel Log** ✅ rating flow, My Log, aggregates, photos/tags.
+- **Phase 3 — Advanced filters & search** ✅ filter by gym/bar/overall score,
+  must-have tags, price tier, and distance; sort by nearest/best gym/best
+  bar/best overall/most reviewed.
 
 ## Non-negotiable UX rules
 

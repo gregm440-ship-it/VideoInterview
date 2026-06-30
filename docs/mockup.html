@@ -184,6 +184,32 @@
   .menu .mi{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--border);font-size:14px}
   .menu .mi .ar{margin-left:auto;color:var(--muted)}
   .signout{margin-top:18px;text-align:center;color:var(--danger);font-weight:700;font-size:14px;padding:12px}
+
+  /* filters */
+  .ctrlrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .ctrlrow .toggle{flex:1;margin:0}
+  .filterbtn{display:flex;align-items:center;gap:6px;padding:0 13px;height:38px;border-radius:12px;
+    border:1px solid var(--border);background:var(--primary);color:var(--onPrimary);font-size:13px;font-weight:700}
+  .summary{display:flex;gap:7px;overflow:hidden;margin-bottom:6px}
+  .summary .sc{background:var(--surfaceAlt);border:1px solid var(--border);border-radius:999px;
+    padding:5px 10px;font-size:11px;font-weight:600;white-space:nowrap;flex:0 0 auto}
+  .fsec{margin-bottom:16px}
+  .fseclabel{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+  .seg{display:flex;flex-wrap:wrap;gap:3px;background:var(--surfaceAlt);border:1px solid var(--border);border-radius:12px;padding:3px}
+  .seg .s{flex:1;text-align:center;padding:8px 6px;border-radius:8px;font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .seg .s.on{background:var(--primary);color:var(--onPrimary)}
+  .minrow{margin-bottom:11px}
+  .minrow .ml{font-size:14px;font-weight:700;margin-bottom:7px}
+  .minopts{display:flex;gap:7px}
+  .minopt{flex:1;text-align:center;padding:8px;border-radius:11px;border:1px solid var(--border);
+    background:var(--surface);font-size:13px;font-weight:700;color:var(--muted)}
+  .minopt.on{background:var(--primary-tint, rgba(20,136,219,.14));border-color:var(--primary);color:var(--text)}
+  .pricerow{display:flex;gap:7px}
+  .pchip{padding:8px 18px;border-radius:11px;border:1px solid var(--border);background:var(--surface);font-weight:700;color:var(--muted)}
+  .pchip.on{background:rgba(20,136,219,.14);border-color:var(--primary);color:var(--text)}
+  .ffooter{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
+  .clearbtn{flex:1;text-align:center;padding:13px;color:var(--muted);font-weight:700}
+  .applybtn{flex:2;text-align:center;padding:13px;border-radius:13px;background:var(--primary);color:var(--onPrimary);font-weight:800}
 </style>
 </head>
 <body>
@@ -264,7 +290,15 @@
               <div class="wm" style="font-size:21px">Rep <span class="amp">&amp;</span> Sip</div>
             </div>
             <div class="locbar">📍 <span>Near me · Austin, TX</span></div>
-            <div class="toggle"><div class="on">List</div><div>Map</div></div>
+            <div class="ctrlrow">
+              <div class="toggle"><div class="on">List</div><div>Map</div></div>
+              <div class="filterbtn">⚙ Filters 2</div>
+            </div>
+            <div class="summary">
+              <div class="sc">↕ Best gym</div>
+              <div class="sc">🏋️ ≥4</div>
+              <div class="sc">Squat rack</div>
+            </div>
 
             <div class="card">
               <div class="hero" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600')">
@@ -533,6 +567,60 @@
         </div>
       </div>
       <div class="frame-label"><b>Profile</b> · account, stats, sign out</div>
+    </div>
+
+    <!-- 7. FILTERS & SORT (Phase 3) -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen"><div class="body"><div class="scroll">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:6px 0 14px">
+            <h2 class="title" style="margin:0">Filters &amp; sort</h2><span class="muted" style="font-size:22px">✕</span>
+          </div>
+
+          <div class="fsec">
+            <div class="fseclabel">Sort by</div>
+            <div class="seg">
+              <div class="s">Nearest</div><div class="s on">Best gym</div><div class="s">Best bar</div><div class="s">Most reviewed</div>
+            </div>
+          </div>
+
+          <div class="fsec">
+            <div class="fseclabel">Minimum scores</div>
+            <div class="minrow"><div class="ml">🏋️ Gym</div>
+              <div class="minopts"><div class="minopt">Any</div><div class="minopt">≥3</div><div class="minopt on">≥4</div><div class="minopt">≥5</div></div></div>
+            <div class="minrow"><div class="ml">🍸 Bar</div>
+              <div class="minopts"><div class="minopt">Any</div><div class="minopt">≥3</div><div class="minopt on">≥4</div><div class="minopt">≥5</div></div></div>
+            <div class="minrow"><div class="ml">⭐ Overall</div>
+              <div class="minopts"><div class="minopt on">Any</div><div class="minopt">≥3</div><div class="minopt">≥4</div><div class="minopt">≥5</div></div></div>
+          </div>
+
+          <div class="fsec">
+            <div class="fseclabel">Must have tags</div>
+            <div class="chips">
+              <div class="chip" style="border-color:var(--accent);background:rgba(242,153,74,.16)">Squat rack</div>
+              <div class="chip">Heavy dumbbells</div>
+              <div class="chip">24-hour</div>
+              <div class="chip" style="border-color:var(--accent);background:rgba(242,153,74,.16)">Open past 11pm</div>
+              <div class="chip">Rooftop / view</div>
+            </div>
+          </div>
+
+          <div class="fsec">
+            <div class="fseclabel">Price</div>
+            <div class="pricerow"><div class="pchip">$</div><div class="pchip on">$$</div><div class="pchip on">$$$</div><div class="pchip">$$$$</div></div>
+          </div>
+
+          <div class="fsec">
+            <div class="fseclabel">Distance (near me)</div>
+            <div class="seg"><div class="s">1 mi</div><div class="s on">5 mi</div><div class="s">25 mi</div></div>
+          </div>
+
+          <div class="ffooter"><div class="clearbtn">Clear all</div><div class="applybtn">Apply (4)</div></div>
+        </div></div></div>
+      </div>
+      <div class="frame-label"><b>Filters &amp; sort</b> · score, tags, price, distance, sort</div>
     </div>
 
   </div>
