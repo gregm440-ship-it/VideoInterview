@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Button } from "../../components/Button";
 import { BigScores } from "../../components/BigScores";
 import { CommunityReviews } from "../../components/CommunityReviews";
+import { CheckPricesSheet } from "../../components/CheckPricesSheet";
 import { useAuth } from "../../hooks/useAuth";
 import { useHotelDetail } from "../../hooks/useHotels";
 import { saveToLog } from "../../lib/reviews";
@@ -23,6 +24,7 @@ import { colors, radius, spacing } from "../../lib/theme";
 export default function HotelDetailScreen() {
   const { placeId } = useLocalSearchParams<{ placeId: string }>();
   const { isAuthenticated } = useAuth();
+  const [showPrices, setShowPrices] = useState(false);
   const { data, isLoading, isError, error } = useHotelDetail(
     placeId ?? "",
     isAuthenticated
@@ -108,9 +110,16 @@ export default function HotelDetailScreen() {
             </MapView>
           )}
 
+          <Button
+            label="🏷  Check prices & book"
+            style={styles.checkPrices}
+            onPress={() => setShowPrices(true)}
+          />
+
           <View style={styles.cta}>
             <Button
               label="Rate this hotel"
+              variant="secondary"
               style={{ flex: 1 }}
               onPress={() => requireAuth(() => router.push(`/review/${placeId}`))}
             />
@@ -136,6 +145,12 @@ export default function HotelDetailScreen() {
           )}
         </View>
       </ScrollView>
+
+      <CheckPricesSheet
+        visible={showPrices}
+        hotel={place}
+        onClose={() => setShowPrices(false)}
+      />
     </View>
   );
 }
@@ -162,7 +177,8 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
     overflow: "hidden",
   },
-  cta: { flexDirection: "row", gap: spacing.sm, marginTop: spacing.lg },
+  checkPrices: { marginTop: spacing.lg },
+  cta: { flexDirection: "row", gap: spacing.sm, marginTop: spacing.sm },
   phase2: {
     marginTop: spacing.xl,
     padding: spacing.lg,

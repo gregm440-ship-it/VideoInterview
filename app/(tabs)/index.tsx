@@ -16,6 +16,7 @@ import { Screen } from "../../components/Screen";
 import { HotelCard } from "../../components/HotelCard";
 import { Logo } from "../../components/Logo";
 import { FiltersSheet } from "../../components/FiltersSheet";
+import { CheckPricesSheet } from "../../components/CheckPricesSheet";
 import { useLocation } from "../../hooks/useLocation";
 import { useHotelSearch } from "../../hooks/useHotels";
 import { useProfile } from "../../hooks/useProfile";
@@ -38,6 +39,7 @@ export default function SearchScreen() {
   const [mode, setMode] = useState<ViewMode>("list");
   const [filters, setFilters] = useState<SearchFilters>(defaultFilters());
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [priceHotel, setPriceHotel] = useState<HotelCardData | null>(null);
   const { profile } = useProfile();
 
   // Debounce typing so we don't fire a Places call per keystroke.
@@ -159,6 +161,12 @@ export default function SearchScreen() {
         onApply={setFilters}
       />
 
+      <CheckPricesSheet
+        visible={priceHotel != null}
+        hotel={priceHotel}
+        onClose={() => setPriceHotel(null)}
+      />
+
       {isLoading ? (
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
@@ -186,7 +194,11 @@ export default function SearchScreen() {
           keyExtractor={(h) => h.google_place_id}
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
-            <HotelCard hotel={item} onPress={() => open(item)} />
+            <HotelCard
+              hotel={item}
+              onPress={() => open(item)}
+              onCheckPrices={() => setPriceHotel(item)}
+            />
           )}
         />
       ) : (

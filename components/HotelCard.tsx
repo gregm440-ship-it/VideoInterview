@@ -1,5 +1,6 @@
 import { Image } from "expo-image";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { ScorePills } from "./ScorePills";
 import type { HotelCard as HotelCardData } from "../lib/hotels";
 import { formatDistance } from "../lib/distance";
@@ -9,9 +10,11 @@ import { colors, radius, spacing } from "../lib/theme";
 export function HotelCard({
   hotel,
   onPress,
+  onCheckPrices,
 }: {
   hotel: HotelCardData;
   onPress: () => void;
+  onCheckPrices?: () => void;
 }) {
   return (
     <Pressable
@@ -47,6 +50,17 @@ export function HotelCard({
           </Text>
         ) : null}
         <ScorePills aggregate={hotel.aggregate} />
+        {onCheckPrices && (
+          <Pressable
+            onPress={onCheckPrices}
+            style={({ pressed }) => [styles.priceLink, pressed && styles.priceLinkPressed]}
+            hitSlop={6}
+          >
+            <Ionicons name="pricetag-outline" size={14} color={colors.primary} />
+            <Text style={styles.priceLinkText}>Check Prices</Text>
+            <Ionicons name="chevron-forward" size={14} color={colors.primary} />
+          </Pressable>
+        )}
       </View>
     </Pressable>
   );
@@ -83,4 +97,16 @@ const styles = StyleSheet.create({
   info: { padding: spacing.md, gap: spacing.xs },
   name: { color: colors.text, fontSize: 16, fontWeight: "700" },
   address: { color: colors.textMuted, fontSize: 12, marginBottom: spacing.xs },
+  priceLink: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  priceLinkText: { color: colors.primary, fontSize: 13, fontWeight: "700", flex: 1 },
+  priceLinkPressed: { opacity: 0.6 },
 });
+

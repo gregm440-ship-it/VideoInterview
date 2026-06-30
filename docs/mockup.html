@@ -224,6 +224,34 @@
   .taopt{padding:13px;border-bottom:1px solid var(--border);font-size:14px}
   .taopt:last-child{border-bottom:none}
   .taopt b{color:var(--primary)}
+  /* check prices */
+  .cplink{display:flex;align-items:center;gap:5px;margin-top:9px;padding-top:9px;
+    border-top:1px solid var(--border);color:var(--primary);font-size:13px;font-weight:700}
+  .cplink .ar{margin-left:auto}
+  .daterow{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .datecell{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:7px 12px}
+  .datecell .dl{font-size:11px;color:var(--muted)}
+  .datecell .dv{font-size:16px;font-weight:700}
+  .nightlbl{margin-left:auto;color:var(--muted);font-size:13px;font-weight:600}
+  .calbox{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:12px}
+  .calhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-weight:700;font-size:15px}
+  .calweek,.calgrid{display:grid;grid-template-columns:repeat(7,1fr)}
+  .calweek{text-align:center;color:var(--muted);font-size:11px;margin-bottom:4px}
+  .calgrid{gap:2px}
+  .cald{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;border-radius:7px}
+  .cald.past{color:var(--inactive)}
+  .cald.range{background:rgba(20,136,219,.14)}
+  .cald.end{background:var(--primary);color:var(--onPrimary);font-weight:800}
+  .guestrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .stepper{display:flex;align-items:center;gap:14px}
+  .stepbtn{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface);
+    display:flex;align-items:center;justify-content:center;font-size:18px}
+  .pricebox{background:var(--surfaceAlt);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;margin-bottom:14px}
+  .pricebox .pf{font-size:27px;font-weight:800}
+  .pricebox .pf small{font-size:14px;color:var(--muted);font-weight:600}
+  .pricebox .pt{font-size:13px;font-weight:600;margin-top:2px}
+  .pricebox .pe{font-size:11px;color:var(--muted);margin-top:6px}
+  .bookbtn{text-align:center;padding:15px;border-radius:14px;background:var(--primary);color:var(--onPrimary);font-weight:800;font-size:16px}
 </style>
 </head>
 <body>
@@ -327,6 +355,7 @@
                   <div class="score">⭐ 4.7</div>
                   <div class="revcount">128 reviews</div>
                 </div>
+                <div class="cplink">🏷 Check Prices <span class="ar">›</span></div>
               </div>
             </div>
 
@@ -343,6 +372,7 @@
                   <div class="score">⭐ 4.5</div>
                   <div class="revcount">86 reviews</div>
                 </div>
+                <div class="cplink">🏷 Check Prices <span class="ar">›</span></div>
               </div>
             </div>
 
@@ -392,8 +422,9 @@
             </div>
             <div class="muted small" style="text-align:center">128 community reviews</div>
             <div class="minimap"><div class="roads"></div><div class="pin">📍</div></div>
+            <div class="btn primary" style="margin-bottom:10px">🏷 Check prices &amp; book</div>
             <div class="cta">
-              <div class="btn primary">Rate this hotel</div>
+              <div class="btn secondary">Rate this hotel</div>
               <div class="btn secondary">＋ My log</div>
             </div>
 
@@ -673,6 +704,56 @@
         </div></div></div>
       </div>
       <div class="frame-label"><b>Brand typeahead</b> · profile + search, prefix-ranked</div>
+    </div>
+
+    <!-- 9. CHECK PRICES (Phase 3) -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen"><div class="body"><div class="scroll">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin:6px 0 14px">
+            <div>
+              <div style="color:var(--primary);font-size:12px;font-weight:700;letter-spacing:.6px">CHECK PRICES</div>
+              <div class="title" style="margin:0;font-size:20px">The Driskill</div>
+            </div>
+            <span class="muted" style="font-size:22px">✕</span>
+          </div>
+
+          <div class="daterow">
+            <div class="datecell"><div class="dl">Check-in</div><div class="dv">Mar 8</div></div>
+            <span class="muted">→</span>
+            <div class="datecell"><div class="dl">Check-out</div><div class="dv">Mar 10</div></div>
+            <div class="nightlbl">2 nights</div>
+          </div>
+
+          <div class="calbox">
+            <div class="calhead"><span>‹</span><span>March 2026</span><span>›</span></div>
+            <div class="calweek"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div>
+            <div class="calgrid">
+              <div class="cald past">1</div><div class="cald past">2</div><div class="cald past">3</div><div class="cald past">4</div><div class="cald">5</div><div class="cald">6</div><div class="cald">7</div>
+              <div class="cald end">8</div><div class="cald range">9</div><div class="cald end">10</div><div class="cald">11</div><div class="cald">12</div><div class="cald">13</div><div class="cald">14</div>
+              <div class="cald">15</div><div class="cald">16</div><div class="cald">17</div><div class="cald">18</div><div class="cald">19</div><div class="cald">20</div><div class="cald">21</div>
+              <div class="cald">22</div><div class="cald">23</div><div class="cald">24</div><div class="cald">25</div><div class="cald">26</div><div class="cald">27</div><div class="cald">28</div>
+              <div class="cald">29</div><div class="cald">30</div><div class="cald">31</div>
+            </div>
+          </div>
+
+          <div class="guestrow">
+            <div style="font-weight:700;font-size:15px">Guests</div>
+            <div class="stepper"><div class="stepbtn">−</div><div style="font-weight:700;font-size:16px">2</div><div class="stepbtn">+</div></div>
+          </div>
+
+          <div class="pricebox">
+            <div class="pf">from $268 <small>/ night</small></div>
+            <div class="pt">$536 total · 2 nights</div>
+            <div class="pe">ⓘ Demo estimate — connect a price feed for live rates</div>
+          </div>
+
+          <div class="bookbtn">Book on Booking.com</div>
+        </div></div></div>
+      </div>
+      <div class="frame-label"><b>Check Prices</b> · dates → best price → affiliate book</div>
     </div>
 
   </div>
