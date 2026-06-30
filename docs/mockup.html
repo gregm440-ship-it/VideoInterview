@@ -252,6 +252,34 @@
   .pricebox .pt{font-size:13px;font-weight:600;margin-top:2px}
   .pricebox .pe{font-size:11px;color:var(--muted);margin-top:6px}
   .bookbtn{text-align:center;padding:15px;border-radius:14px;background:var(--primary);color:var(--onPrimary);font-weight:800;font-size:16px}
+  /* social */
+  .fstrip{display:flex;align-items:center;gap:9px;margin:12px 0;padding:8px 10px;border-radius:12px;
+    background:var(--surfaceAlt);border:1px solid var(--border)}
+  .favs{display:flex}
+  .fav{width:26px;height:26px;border-radius:999px;background:var(--accent);color:var(--onAccent);
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid var(--surfaceAlt)}
+  .fav+.fav{margin-left:-10px}
+  .fstrip .ft{flex:1;font-size:13px;font-weight:600}
+  .feedrow{display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}
+  .av{width:40px;height:40px;border-radius:999px;background:var(--accent);color:var(--onAccent);
+    display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 auto}
+  .feedrow .fb{flex:1}
+  .feedrow .fl{font-size:14px}.feedrow .fl b{font-weight:800}
+  .feedrow .fl .mt{color:var(--muted)}
+  .feedrow .fs{font-size:13px;font-weight:700;margin-top:2px}
+  .feedrow .fs .mt{color:var(--muted);font-weight:400}
+  .feedrow .fn{color:var(--muted);font-size:13px;font-style:italic;margin-top:2px}
+  .fthumb{width:54px;height:54px;border-radius:10px;background-size:cover;background-position:center;flex:0 0 auto}
+  .phead{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .phead .av{width:64px;height:64px;font-size:24px}
+  .phead .pnm{font-size:22px;font-weight:800}
+  .phead .psub{color:var(--muted);font-size:14px}
+  .followbtn{text-align:center;padding:13px;border-radius:13px;background:var(--primary);color:var(--onPrimary);font-weight:800;margin:6px 0 18px}
+  .followbtn.ing{background:var(--surfaceAlt);color:var(--text);border:1px solid var(--border)}
+  .preview{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px;margin-bottom:9px}
+  .preview .ph{font-weight:700;font-size:14px}
+  .preview .pm{color:var(--muted);font-size:12px}
+  .preview .psc{margin-left:auto;font-weight:700;font-size:13px}
 </style>
 </head>
 <body>
@@ -394,8 +422,9 @@
           </div></div>
           <div class="tabbar">
             <div class="tab active"><div class="ic">🔍</div>Search</div>
-            <div class="tab"><div class="ic">📖</div>My Log</div>
+            <div class="tab"><div class="ic">👥</div>Feed</div>
             <div class="addbtn">+</div>
+            <div class="tab"><div class="ic">📖</div>My Log</div>
             <div class="tab"><div class="ic">👤</div>Profile</div>
           </div>
         </div>
@@ -421,6 +450,11 @@
               <div class="bigscore"><div class="ic">⭐</div><div class="val">4.7<span>/5</span></div><div class="lab">Overall</div></div>
             </div>
             <div class="muted small" style="text-align:center">128 community reviews</div>
+            <div class="fstrip">
+              <div class="favs"><div class="fav">MK</div><div class="fav">JT</div><div class="fav">RP</div></div>
+              <div class="ft">3 people you follow rated this</div>
+              <span class="muted">›</span>
+            </div>
             <div class="minimap"><div class="roads"></div><div class="pin">📍</div></div>
             <div class="btn primary" style="margin-bottom:10px">🏷 Check prices &amp; book</div>
             <div class="cta">
@@ -562,8 +596,9 @@
           </div></div>
           <div class="tabbar">
             <div class="tab"><div class="ic">🔍</div>Search</div>
-            <div class="tab active"><div class="ic">📖</div>My Log</div>
+            <div class="tab"><div class="ic">👥</div>Feed</div>
             <div class="addbtn">+</div>
+            <div class="tab active"><div class="ic">📖</div>My Log</div>
             <div class="tab"><div class="ic">👤</div>Profile</div>
           </div>
         </div>
@@ -610,8 +645,9 @@
           </div></div>
           <div class="tabbar">
             <div class="tab"><div class="ic">🔍</div>Search</div>
-            <div class="tab"><div class="ic">📖</div>My Log</div>
+            <div class="tab"><div class="ic">👥</div>Feed</div>
             <div class="addbtn">+</div>
+            <div class="tab"><div class="ic">📖</div>My Log</div>
             <div class="tab active"><div class="ic">👤</div>Profile</div>
           </div>
         </div>
@@ -754,6 +790,93 @@
         </div></div></div>
       </div>
       <div class="frame-label"><b>Check Prices</b> · dates → best price → affiliate book</div>
+    </div>
+
+    <!-- 10. FEED (Social) -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen">
+          <div class="body"><div class="scroll">
+            <h2 class="title">Feed</h2>
+
+            <div class="feedrow">
+              <div class="av">MK</div>
+              <div class="fb">
+                <div class="fl"><b>Marcus K.</b> <span class="mt">rated</span> <b>The Driskill</b></div>
+                <div class="fs">🏋️5 🍸4 ⭐5 <span class="mt">· Austin · 2d</span></div>
+                <div class="fn">“Squat rack + 24h access. Proper Negroni at the bar.”</div>
+              </div>
+              <div class="fthumb" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200')"></div>
+            </div>
+
+            <div class="feedrow">
+              <div class="av">JT</div>
+              <div class="fb">
+                <div class="fl"><b>Jess T.</b> <span class="mt">rated</span> <b>Hotel Van Zandt</b></div>
+                <div class="fs">🏋️4 🍸5 ⭐5 <span class="mt">· Austin · 4d</span></div>
+                <div class="fn">“Rooftop bar is the move for client meetings.”</div>
+              </div>
+              <div class="fthumb" style="background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=200')"></div>
+            </div>
+
+            <div class="feedrow">
+              <div class="av">RP</div>
+              <div class="fb">
+                <div class="fl"><b>Ravi P.</b> <span class="mt">rated</span> <b>1 Hotel Brooklyn</b></div>
+                <div class="fs">🏋️3 🍸5 ⭐4 <span class="mt">· New York · 6d</span></div>
+                <div class="fn">“Bar &gt; gym here, but the view is unreal.”</div>
+              </div>
+              <div class="fthumb" style="background-image:url('https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=200')"></div>
+            </div>
+          </div></div>
+          <div class="tabbar">
+            <div class="tab"><div class="ic">🔍</div>Search</div>
+            <div class="tab active"><div class="ic">👥</div>Feed</div>
+            <div class="addbtn">+</div>
+            <div class="tab"><div class="ic">📖</div>My Log</div>
+            <div class="tab"><div class="ic">👤</div>Profile</div>
+          </div>
+        </div>
+      </div>
+      <div class="frame-label"><b>Feed</b> · reviews from people you follow</div>
+    </div>
+
+    <!-- 11. PUBLIC PROFILE (Social) -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen"><div class="body" style="padding-top:14px"><div class="scroll">
+          <div class="muted" style="font-size:22px;margin-bottom:8px">‹</div>
+          <div class="phead">
+            <div class="av">MK</div>
+            <div><div class="pnm">Marcus K.</div><div class="psub">Frequent flyer · Chicago</div></div>
+          </div>
+          <div class="statline">
+            <div class="stat"><div class="n">48</div><div class="l">Reviews</div></div>
+            <div class="stat"><div class="n">212</div><div class="l">Followers</div></div>
+            <div class="stat"><div class="n">96</div><div class="l">Following</div></div>
+          </div>
+          <div class="followbtn">＋ Follow</div>
+
+          <div class="section-h">Reviews</div>
+          <div class="preview">
+            <div><div class="ph">The Driskill</div><div class="pm">Austin</div></div>
+            <div class="psc">🏋️5 🍸4 ⭐5</div>
+          </div>
+          <div class="preview">
+            <div><div class="ph">Kimpton Gray</div><div class="pm">Chicago</div></div>
+            <div class="psc">🏋️4 🍸4 ⭐4</div>
+          </div>
+          <div class="preview">
+            <div><div class="ph">Fairmont Austin</div><div class="pm">Austin</div></div>
+            <div class="psc">🏋️5 🍸4 ⭐4</div>
+          </div>
+        </div></div></div>
+      </div>
+      <div class="frame-label"><b>Traveler profile</b> · follow + their reviews</div>
     </div>
 
   </div>

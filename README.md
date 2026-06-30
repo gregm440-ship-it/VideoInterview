@@ -55,6 +55,11 @@ supabase/       schema.sql (tables + RLS + triggers + storage)
 - **Phase 3 — Advanced filters & search** ✅ filter by gym/bar/overall score,
   must-have tags, price tier, and distance; sort by nearest/best gym/best
   bar/best overall/most reviewed.
+- **Phase 3 — Travel preferences & Check Prices** ✅ profile brand preferences
+  (airline/hotel/cruise) + hotel-brand search; date-range price check with
+  affiliate booking hand-off.
+- **Phase 3 — Social** ✅ follow travelers, a feed of their reviews, public
+  profiles, and "people you follow rated this" on hotel detail.
 
 ## Non-negotiable UX rules
 

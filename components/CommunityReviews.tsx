@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { router } from "expo-router";
+import { Avatar } from "./Avatar";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -185,13 +186,10 @@ function ReviewCard({
   voting: boolean;
 }) {
   const name = review.author?.display_name?.trim() || "Traveler";
-  const initials = name.slice(0, 2).toUpperCase();
   return (
     <View style={styles.card}>
-      <View style={styles.cardTop}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{initials}</Text>
-        </View>
+      <Pressable style={styles.cardTop} onPress={() => router.push(`/user/${review.userId}`)}>
+        <Avatar name={name} url={review.author?.avatar_url} size={28} />
         <Text style={styles.cardName}>{name}</Text>
         <Text style={styles.cardScores}>
           {ICONS.gym}
@@ -199,7 +197,7 @@ function ReviewCard({
           {review.bar_rating ?? "–"} {ICONS.overall}
           {review.overall_rating ?? "–"}
         </Text>
-      </View>
+      </Pressable>
       {review.note ? <Text style={styles.cardNote}>{review.note}</Text> : null}
       {review.tags.length > 0 && (
         <View style={styles.cardTags}>

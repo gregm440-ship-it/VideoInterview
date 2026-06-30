@@ -49,11 +49,11 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="log"
+        name="feed"
         options={{
-          title: "My Log",
+          title: "Feed",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book-outline" color={color} size={size} />
+            <Ionicons name="people-outline" color={color} size={size} />
           ),
         }}
       />
@@ -67,6 +67,15 @@ export default function TabsLayout() {
               onPress={props.onPress}
               accessibilityState={props.accessibilityState}
             />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="log"
+        options={{
+          title: "My Log",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="book-outline" color={color} size={size} />
           ),
         }}
       />

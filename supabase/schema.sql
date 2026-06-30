@@ -88,6 +88,18 @@ create table if not exists helpful_votes (
   unique (review_id, user_id)
 );
 
+-- Social graph: who follows whom.
+create table if not exists follows (
+  follower_id uuid not null references profiles(id) on delete cascade,
+  following_id uuid not null references profiles(id) on delete cascade,
+  created_at timestamptz default now(),
+  primary key (follower_id, following_id),
+  check (follower_id <> following_id)
+);
+
+create index if not exists idx_follows_follower on follows(follower_id);
+create index if not exists idx_follows_following on follows(following_id);
+
 create table if not exists hotel_aggregates (
   hotel_id uuid primary key references hotels(id) on delete cascade,
   avg_gym numeric(3,2) default 0,
@@ -182,6 +194,7 @@ alter table review_tags enable row level security;
 alter table review_photos enable row level security;
 alter table reports enable row level security;
 alter table helpful_votes enable row level security;
+alter table follows enable row level security;
 
 -- profiles: anyone authenticated reads; users write only their own row.
 drop policy if exists profiles_read on profiles;
@@ -321,6 +334,19 @@ drop trigger if exists trg_reports_hide on reports;
 create trigger trg_reports_hide
 after insert on reports
 for each row execute function apply_report_hide();
+
+-- follows: public read (counts/feeds); users manage only their own follows.
+drop policy if exists follows_read on follows;
+create policy follows_read on follows
+  for select to anon, authenticated using (true);
+
+drop policy if exists follows_insert_own on follows;
+create policy follows_insert_own on follows
+  for insert to authenticated with check (auth.uid() = follower_id);
+
+drop policy if exists follows_delete_own on follows;
+create policy follows_delete_own on follows
+  for delete to authenticated using (auth.uid() = follower_id);
 
 -- ---- Storage: review-photos bucket (public read) ---------------------------
 

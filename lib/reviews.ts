@@ -169,6 +169,7 @@ export async function getMyLog(): Promise<LogEntry[]> {
 
 export interface CommunityReview {
   id: string;
+  userId: string;
   gym_rating: number | null;
   bar_rating: number | null;
   overall_rating: number | null;
@@ -189,7 +190,7 @@ export async function getHotelReviews(hotelId: string): Promise<CommunityReview[
   const { data, error } = await supabase
     .from("reviews")
     .select(
-      "id, gym_rating, bar_rating, overall_rating, note, created_at, " +
+      "id, user_id, gym_rating, bar_rating, overall_rating, note, created_at, " +
         "profiles(display_name, avatar_url), " +
         "review_tags(tag_key, tag_type), " +
         "review_photos(*), " +
@@ -203,6 +204,7 @@ export async function getHotelReviews(hotelId: string): Promise<CommunityReview[
 
   type Row = {
     id: string;
+    user_id: string;
     gym_rating: number | null;
     bar_rating: number | null;
     overall_rating: number | null;
@@ -216,6 +218,7 @@ export async function getHotelReviews(hotelId: string): Promise<CommunityReview[
 
   return ((data as unknown as Row[]) ?? []).map((r) => ({
     id: r.id,
+    userId: r.user_id,
     gym_rating: r.gym_rating,
     bar_rating: r.bar_rating,
     overall_rating: r.overall_rating,

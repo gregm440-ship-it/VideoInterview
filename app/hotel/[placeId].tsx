@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,8 +17,11 @@ import { Button } from "../../components/Button";
 import { BigScores } from "../../components/BigScores";
 import { CommunityReviews } from "../../components/CommunityReviews";
 import { CheckPricesSheet } from "../../components/CheckPricesSheet";
+import { Avatar } from "../../components/Avatar";
 import { useAuth } from "../../hooks/useAuth";
 import { useHotelDetail } from "../../hooks/useHotels";
+import { useFollowedAtHotel } from "../../hooks/useSocial";
+import type { FeedAuthor } from "../../lib/social";
 import { saveToLog } from "../../lib/reviews";
 import { colors, radius, spacing } from "../../lib/theme";
 
@@ -39,6 +43,8 @@ export default function HotelDetailScreen() {
     onError: (e: unknown) =>
       Alert.alert("Couldn’t save", e instanceof Error ? e.message : "Try again."),
   });
+
+  const followed = useFollowedAtHotel(data?.hotelId ?? null);
 
   const requireAuth = (then: () => void) => {
     if (!isAuthenticated) {
@@ -98,6 +104,26 @@ export default function HotelDetailScreen() {
           <View style={styles.scores}>
             <BigScores aggregate={aggregate} />
           </View>
+
+          {followed.data && followed.data.length > 0 && (
+            <Pressable
+              style={styles.followedStrip}
+              onPress={() => router.push(`/user/${followed.data![0].id}`)}
+            >
+              <View style={styles.avatars}>
+                {followed.data.slice(0, 3).map((a: FeedAuthor, i: number) => (
+                  <View key={a.id} style={[styles.avatarWrap, i > 0 && { marginLeft: -10 }]}>
+                    <Avatar name={a.display_name} url={a.avatar_url} size={26} />
+                  </View>
+                ))}
+              </View>
+              <Text style={styles.followedText}>
+                {followed.data.length} {followed.data.length === 1 ? "person" : "people"} you follow
+                rated this
+              </Text>
+              <Ionicons name="chevron-forward" size={16} color={colors.textMuted} />
+            </Pressable>
+          )}
 
           {region && (
             <MapView
@@ -171,6 +197,20 @@ const styles = StyleSheet.create({
   name: { color: colors.text, fontSize: 24, fontWeight: "800" },
   address: { color: colors.textMuted, fontSize: 14, marginTop: 2 },
   scores: { marginTop: spacing.lg },
+  followedStrip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.sm,
+    marginTop: spacing.md,
+    padding: spacing.sm,
+    borderRadius: radius.md,
+    backgroundColor: colors.surfaceAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  avatars: { flexDirection: "row" },
+  avatarWrap: { borderWidth: 2, borderColor: colors.surfaceAlt, borderRadius: 999 },
+  followedText: { flex: 1, color: colors.text, fontSize: 13, fontWeight: "600" },
   map: {
     height: 130,
     borderRadius: radius.md,

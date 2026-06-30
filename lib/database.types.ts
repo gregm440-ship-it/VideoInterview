@@ -78,6 +78,12 @@ export interface HelpfulVote {
   created_at: string;
 }
 
+export interface Follow {
+  follower_id: string;
+  following_id: string;
+  created_at: string;
+}
+
 export interface HotelAggregate {
   hotel_id: string;
   avg_gym: number;
