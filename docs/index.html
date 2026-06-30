@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rep & Sip — Hotels with a great gym and a great bar</title>
+<meta name="description" content="Rep & Sip rates hotels on the two things business travelers actually care about — the gym and the bar — in under 30 seconds." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#1488DB; --blue-d:#0E76C9; --sky:#3FB0EE; --ink:#15273B; --muted:#5E6E82;
+    --bg:#F1F6FB; --surface:#FFFFFF; --surfaceAlt:#E8F1FA; --border:#D6E3F0;
+    --amber:#F2994A; --onblue:#FFFFFF; --good:#1FA39A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--surface);line-height:1.55}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+  .brandfont{font-family:Righteous,Inter,sans-serif;letter-spacing:.5px}
+  .amp{color:var(--amber)}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+  .navin{display:flex;align-items:center;gap:14px;height:64px}
+  .navin .logo{display:flex;align-items:center;gap:10px}
+  .navin .wm{font-size:22px;font-weight:800}
+  .navlinks{margin-left:auto;display:flex;gap:26px;align-items:center}
+  .navlinks a{color:var(--muted);font-weight:600;font-size:15px}
+  .navlinks a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-family:inherit;
+    font-weight:700;border-radius:12px;padding:11px 18px;font-size:15px}
+  .btn.primary{background:var(--blue);color:#fff}
+  .btn.primary:hover{background:var(--blue-d)}
+  .btn.ghost{background:var(--surfaceAlt);color:var(--ink)}
+  @media(max-width:780px){.navlinks a:not(.btn){display:none}}
+
+  /* hero */
+  .hero{background:linear-gradient(180deg,#EAF4FD,var(--surface));padding:64px 0 40px}
+  .heroin{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--surfaceAlt);color:var(--blue-d);
+    font-weight:700;font-size:13px;padding:6px 12px;border-radius:999px;margin-bottom:18px}
+  h1{font-size:50px;line-height:1.05;font-weight:800;letter-spacing:-1px}
+  h1 .hl{color:var(--blue)}
+  .sub{font-size:19px;color:var(--muted);margin:20px 0 28px;max-width:30em}
+  .heroCtas{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .stat-row{display:flex;gap:26px;margin-top:30px}
+  .stat-row .s b{font-size:22px;font-weight:800;display:block}
+  .stat-row .s span{color:var(--muted);font-size:13px}
+  @media(max-width:880px){.heroin{grid-template-columns:1fr;text-align:center}.heroin .demoCol{justify-self:center}h1{font-size:38px}.sub{margin-left:auto;margin-right:auto}.heroCtas,.stat-row{justify-content:center}}
+
+  /* phone demo */
+  .demoCol{display:flex;flex-direction:column;align-items:center;gap:12px}
+  .phone{width:312px;height:650px;background:var(--bg);border-radius:44px;border:10px solid #1d2733;
+    position:relative;overflow:hidden;box-shadow:0 30px 70px rgba(20,40,70,.28);display:flex;flex-direction:column}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:24px;background:#1d2733;border-radius:0 0 16px 16px;z-index:30}
+  .sbar{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;font-weight:600;flex:0 0 auto}
+  .scrn{flex:1;overflow:hidden;position:relative}
+  .screen{position:absolute;inset:0;padding:6px 16px 0;overflow:auto;display:none}
+  .screen.on{display:block}
+  .screen::-webkit-scrollbar{display:none}
+  .demohint{color:var(--muted);font-size:13px}
+  .demohint b{color:var(--blue-d)}
+
+  .h2row{display:flex;align-items:center;justify-content:space-between;margin:6px 0 12px}
+  .stitle{font-size:22px;font-weight:800}
+  .lock{display:flex;align-items:center;gap:8px;margin:4px 0 12px}
+  .wm-sm{font-size:19px;font-weight:800}
+
+  .locbar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 13px;font-size:14px;margin-bottom:10px}
+  .seg{display:flex;background:var(--surfaceAlt);border:1px solid var(--border);border-radius:11px;padding:3px;margin-bottom:12px;font-size:13px;font-weight:700}
+  .seg div{flex:1;text-align:center;padding:7px;border-radius:8px;color:var(--muted);cursor:pointer}
+  .seg div.on{background:var(--blue);color:#fff}
+
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:15px;overflow:hidden;margin-bottom:12px}
+  .card .img{height:92px;background-size:cover;background-position:center;position:relative}
+  .card .dist{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:3px 8px;border-radius:999px}
+  .card .in{padding:11px 13px 12px}
+  .card .nm{font-weight:700;font-size:15px}
+  .card .ad{color:var(--muted);font-size:11px;margin-bottom:8px}
+  .scores{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .pill{display:flex;align-items:center;gap:4px;background:var(--surfaceAlt);border:1px solid var(--border);border-radius:999px;padding:3px 9px;font-size:12px;font-weight:700}
+  .rev{margin-left:auto;color:var(--muted);font-size:11px}
+  .cp{display:flex;align-items:center;gap:5px;margin-top:9px;padding-top:9px;border-top:1px solid var(--border);
+    color:var(--blue);font-size:13px;font-weight:700;cursor:pointer}
+  .cp .ar{margin-left:auto}
+
+  /* rate screen */
+  .rate .lbl{display:flex;align-items:center;justify-content:space-between;font-weight:700;font-size:15px;margin:16px 0 8px}
+  .rate .lbl .hint{color:var(--muted);font-size:12px;font-weight:600}
+  .iconrow{display:flex;gap:7px}
+  .pip{flex:1;height:50px;border-radius:12px;background:var(--surface);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:.1s;user-select:none}
+  .pip:hover{border-color:var(--sky)}
+  .pip.off{filter:grayscale(1);opacity:.32}
+  .pip.on{background:rgba(20,136,219,.14);border-color:var(--blue)}
+  .expander{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:13px 14px;margin-top:12px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;color:var(--muted)}
+  .expander .pl{margin-left:auto}
+  .submit{margin-top:16px;text-align:center;padding:15px;border-radius:14px;font-weight:800;font-size:16px;background:var(--border);color:#9fb0c4;cursor:not-allowed;transition:.15s}
+  .submit.ready{background:var(--blue);color:#fff;cursor:pointer;box-shadow:0 8px 20px rgba(20,136,219,.35)}
+  .timer{text-align:center;color:var(--good);font-size:12px;margin-top:9px}
+  .done{text-align:center;padding:30px 10px}
+  .done .big{font-size:46px}
+  .done .t{font-weight:800;font-size:20px;margin-top:8px}
+  .done .s{color:var(--muted);font-size:14px;margin-top:4px}
+
+  /* prices screen */
+  .pricebox{background:var(--surfaceAlt);border:1px solid var(--border);border-radius:13px;padding:16px;text-align:center;margin:12px 0}
+  .pricebox .pf{font-size:27px;font-weight:800}.pricebox .pf small{font-size:14px;color:var(--muted);font-weight:600}
+  .pricebox .pt{font-size:13px;font-weight:600}.pricebox .pe{font-size:11px;color:var(--muted);margin-top:6px}
+  .datechips{display:flex;gap:8px;margin-bottom:8px}
+  .datechip{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:8px 10px}
+  .datechip .dl{font-size:11px;color:var(--muted)}.datechip .dv{font-size:15px;font-weight:700}
+  .book{text-align:center;padding:14px;border-radius:13px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer}
+  .backlink{color:var(--blue);font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;gap:4px;align-items:center;margin-bottom:8px}
+
+  /* feed */
+  .feedrow{display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:11px;margin-bottom:9px}
+  .av{width:38px;height:38px;border-radius:999px;background:var(--good);color:#06241f;display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 auto;font-size:13px}
+  .feedrow .fl{font-size:14px}.feedrow .fl b{font-weight:800}.feedrow .fl .mt{color:var(--muted)}
+  .feedrow .fs{font-size:13px;font-weight:700;margin-top:2px}
+  .feedrow .fn{color:var(--muted);font-size:12px;font-style:italic;margin-top:2px}
+  .trophy{display:inline-flex;align-items:center;gap:5px;background:var(--blue);color:#fff;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;cursor:pointer}
+
+  /* profile */
+  .tierpill{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--blue);color:var(--blue);border-radius:999px;padding:5px 12px;font-weight:800;font-size:14px}
+  .bg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+  .badge{border:1px solid var(--border);border-radius:12px;padding:11px 4px;text-align:center;background:var(--surface)}
+  .badge.off{background:var(--surfaceAlt)}.badge.off .be{opacity:.35}
+  .badge .be{font-size:22px}.badge .bl{font-size:11px;font-weight:700;margin-top:2px}.badge .bs{font-size:10px;color:var(--muted)}
+
+  /* bottom tabs */
+  .tabs{height:58px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;flex:0 0 auto}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:var(--muted);cursor:pointer;flex:1}
+  .tab.on{color:var(--blue)}
+  .tab .ic{font-size:18px}
+  .addbtn{width:50px;height:50px;border-radius:999px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;margin-top:-22px;box-shadow:0 6px 16px rgba(20,136,219,.45);cursor:pointer}
+
+  /* sections */
+  section{padding:72px 0}
+  .center{text-align:center;max-width:680px;margin:0 auto 44px}
+  .kicker{color:var(--blue);font-weight:800;letter-spacing:1px;text-transform:uppercase;font-size:13px}
+  h2{font-size:34px;font-weight:800;letter-spacing:-.5px;margin:8px 0}
+  .lede{color:var(--muted);font-size:18px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:820px){.grid3{grid-template-columns:1fr}}
+  .feature{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px}
+  .feature .ico{width:48px;height:48px;border-radius:13px;background:var(--surfaceAlt);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px}
+  .feature h3{font-size:19px;font-weight:800;margin-bottom:6px}
+  .feature p{color:var(--muted);font-size:15px}
+
+  .steps{background:var(--bg);border-radius:24px;padding:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  @media(max-width:820px){.steps{grid-template-columns:1fr}}
+  .step .n{width:38px;height:38px;border-radius:999px;background:var(--blue);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .step h3{font-size:18px;font-weight:800;margin-bottom:4px}
+  .step p{color:var(--muted);font-size:15px}
+
+  .cta{background:linear-gradient(135deg,var(--sky),var(--blue-d));border-radius:26px;padding:54px;text-align:center;color:#fff}
+  .cta h2{color:#fff;font-size:34px}
+  .cta p{color:rgba(255,255,255,.9);font-size:18px;margin:10px auto 24px;max-width:34em}
+  .cta .btn.primary{background:#fff;color:var(--blue-d)}
+  .cta .btn.ghost{background:rgba(255,255,255,.16);color:#fff}
+
+  footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font-size:14px}
+  .footin{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .footin .links{margin-left:auto;display:flex;gap:20px}
+  .badgeStore{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:11px;padding:9px 14px;font-weight:600;font-size:13px}
+  .badgeStore small{display:block;font-size:10px;opacity:.7;font-weight:500}
+  .disc{color:var(--muted);font-size:12px;margin-top:10px}
+</style>
+</head>
+<body>
+
+<!-- shared logo symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 1024 1024">
+    <defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
+      <stop offset="0" stop-color="#3FB0EE"/><stop offset="1" stop-color="#0E76C9"/></linearGradient></defs>
+    <rect x="8" y="8" width="1008" height="1008" rx="232" fill="url(#mg)"/>
+    <path d="M512 248 C602 248 676 320 676 410 C676 502 562 602 512 676 C462 602 348 502 348 410 C348 320 422 248 512 248 Z" fill="#fff"/>
+    <path d="M450 356 L574 356 L512 434 Z" fill="url(#mg)"/>
+    <rect x="505" y="430" width="14" height="48" fill="url(#mg)"/><rect x="474" y="476" width="76" height="15" rx="7" fill="url(#mg)"/>
+    <g fill="#fff"><rect x="402" y="732" width="220" height="18" rx="9"/>
+      <rect x="388" y="712" width="26" height="58" rx="7"/><rect x="610" y="712" width="26" height="58" rx="7"/>
+      <rect x="358" y="724" width="20" height="36" rx="6"/><rect x="646" y="724" width="20" height="36" rx="6"/></g>
+  </symbol>
+</svg>
+
+<nav>
+  <div class="wrap navin">
+    <a class="logo" href="#top">
+      <svg width="34" height="34" style="border-radius:9px"><use href="#mark"/></svg>
+      <span class="wm brandfont">Rep <span class="amp">&amp;</span> Sip</span>
+    </a>
+    <div class="navlinks">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#demo">Demo</a>
+      <a href="mockup.html">Screens</a>
+      <a href="#get" class="btn primary">Get early access</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap heroin">
+    <div>
+      <div class="eyebrow">🏋️ Gym · 🍸 Bar · ⭐ Overall</div>
+      <h1>Hotels with a <span class="hl">great gym</span> and a <span class="hl">great bar</span>.</h1>
+      <p class="sub">Rep &amp; Sip rates hotels on the two things business travelers actually care about — and rating one takes <b>under 30 seconds</b>.</p>
+      <div class="heroCtas">
+        <a href="#get" class="btn primary">Get early access</a>
+        <a href="#demo" class="btn ghost">▶ Try the demo</a>
+      </div>
+      <div class="stat-row">
+        <div class="s"><b>3 taps</b><span>to a full rating</span></div>
+        <div class="s"><b>&lt;30s</b><span>per hotel</span></div>
+        <div class="s"><b>Free</b><span>to browse, no account</span></div>
+      </div>
+    </div>
+    <div class="demoCol" id="demo">
+      <!-- INTERACTIVE PHONE -->
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="scrn">
+
+          <!-- SEARCH -->
+          <div class="screen on" data-screen="search">
+            <div class="lock">
+              <svg width="28" height="28" style="border-radius:7px"><use href="#mark"/></svg>
+              <span class="wm-sm brandfont">Rep <span class="amp">&amp;</span> Sip</span>
+            </div>
+            <div class="locbar">📍 Near me · Austin, TX</div>
+            <div class="seg"><div class="on">List</div><div>Map</div></div>
+            <div class="card">
+              <div class="img" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600')"><div class="dist">0.4 mi</div></div>
+              <div class="in">
+                <div class="nm">The Driskill</div><div class="ad">604 Brazos St · Austin</div>
+                <div class="scores"><div class="pill">🏋️ 4.6</div><div class="pill">🍸 4.8</div><div class="pill">⭐ 4.7</div><div class="rev">128</div></div>
+                <div class="cp" data-go="prices">🏷 Check Prices <span class="ar">›</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="img" style="background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600')"><div class="dist">1.3 mi</div></div>
+              <div class="in">
+                <div class="nm">Hotel Van Zandt</div><div class="ad">605 Davis St · Austin</div>
+                <div class="scores"><div class="pill">🏋️ 3.8</div><div class="pill">🍸 4.9</div><div class="pill">⭐ 4.4</div><div class="rev">203</div></div>
+                <div class="cp" data-go="prices">🏷 Check Prices <span class="ar">›</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RATE (interactive) -->
+          <div class="screen rate" data-screen="rate">
+            <div class="stitle" style="margin:6px 0 2px">Rate The Driskill</div>
+            <div class="demohint" style="margin-bottom:6px">Tap to score — three taps and you’re done.</div>
+            <div class="ratingblock" data-rate="gym">
+              <div class="lbl"><span>🏋️ Gym</span><span class="hint">tap to rate</span></div>
+              <div class="iconrow"></div>
+            </div>
+            <div class="ratingblock" data-rate="bar">
+              <div class="lbl"><span>🍸 Bar</span><span class="hint">tap to rate</span></div>
+              <div class="iconrow"></div>
+            </div>
+            <div class="ratingblock" data-rate="overall">
+              <div class="lbl"><span>⭐ Overall</span><span class="hint">tap to rate</span></div>
+              <div class="iconrow"></div>
+            </div>
+            <div class="expander">📝 Add details <span class="pl">＋</span></div>
+            <div class="expander">📷 Add photos <span class="pl">＋</span></div>
+            <div class="submit" id="submitBtn">Submit</div>
+            <div class="timer" id="rateTimer">Set gym, bar &amp; overall to submit</div>
+          </div>
+
+          <!-- PRICES -->
+          <div class="screen" data-screen="prices">
+            <div class="backlink" data-go="search">‹ Back</div>
+            <div class="stitle">The Driskill</div>
+            <div class="demohint" style="margin-bottom:6px">Pick dates, see the best price, book.</div>
+            <div class="datechips">
+              <div class="datechip"><div class="dl">Check-in</div><div class="dv">Mar 8</div></div>
+              <div class="datechip"><div class="dl">Check-out</div><div class="dv">Mar 10</div></div>
+              <div class="datechip"><div class="dl">Guests</div><div class="dv">2</div></div>
+            </div>
+            <div class="pricebox">
+              <div class="pf">from $268 <small>/ night</small></div>
+              <div class="pt">$536 total · 2 nights</div>
+              <div class="pe">ⓘ Best price across booking partners</div>
+            </div>
+            <div class="book" data-toast="Opening Booking.com…">Book on Booking.com</div>
+          </div>
+
+          <!-- FEED -->
+          <div class="screen" data-screen="feed">
+            <div class="h2row"><div class="stitle">Feed</div><div class="trophy" data-toast="🏆 Leaderboard">🏆 Leaderboard</div></div>
+            <div class="feedrow"><div class="av">MK</div><div>
+              <div class="fl"><b>Marcus K.</b> <span class="mt">rated</span> <b>The Driskill</b></div>
+              <div class="fs">🏋️5 🍸4 ⭐5 <span class="mt">· 2d</span></div>
+              <div class="fn">“Squat rack + 24h access. Proper Negroni.”</div></div></div>
+            <div class="feedrow"><div class="av">JT</div><div>
+              <div class="fl"><b>Jess T.</b> <span class="mt">rated</span> <b>Hotel Van Zandt</b></div>
+              <div class="fs">🏋️4 🍸5 ⭐5 <span class="mt">· 4d</span></div>
+              <div class="fn">“Rooftop bar is the move for client meetings.”</div></div></div>
+            <div class="feedrow"><div class="av">RP</div><div>
+              <div class="fl"><b>Ravi P.</b> <span class="mt">rated</span> <b>1 Hotel Brooklyn</b></div>
+              <div class="fs">🏋️3 🍸5 ⭐4 <span class="mt">· 6d</span></div>
+              <div class="fn">“Bar &gt; gym, but the view is unreal.”</div></div></div>
+          </div>
+
+          <!-- PROFILE -->
+          <div class="screen" data-screen="profile">
+            <div class="stitle" style="margin:6px 0 12px">Your profile</div>
+            <div style="margin-bottom:12px"><span class="tierpill">🥇 Gold</span></div>
+            <div class="demohint">Earn badges by rating, adding photos, and being helpful.</div>
+            <div class="bg">
+              <div class="badge"><div class="be">✅</div><div class="bl">First Rep</div><div class="bs">Earned</div></div>
+              <div class="badge"><div class="be">📸</div><div class="bl">Shutterbug</div><div class="bs">Earned</div></div>
+              <div class="badge"><div class="be">🏋️</div><div class="bl">Gym Rat</div><div class="bs">Earned</div></div>
+              <div class="badge off"><div class="be">🧳</div><div class="bl">Road Warrior</div><div class="bs">23/25</div></div>
+              <div class="badge off"><div class="be">🌍</div><div class="bl">Globetrotter</div><div class="bs">4/5</div></div>
+              <div class="badge off"><div class="be">⭐</div><div class="bl">Influencer</div><div class="bs">18/25</div></div>
+            </div>
+          </div>
+
+        </div>
+        <div class="tabs">
+          <div class="tab on" data-go="search"><div class="ic">🔍</div>Search</div>
+          <div class="tab" data-go="feed"><div class="ic">👥</div>Feed</div>
+          <div class="addbtn" data-go="rate">+</div>
+          <div class="tab" data-go="profile"><div class="ic">👤</div>Profile</div>
+        </div>
+      </div>
+      <div class="demohint">👆 It’s live — tap the tabs, set a rating, or check a price.</div>
+    </div>
+  </div>
+</header>
+
+<!-- toast -->
+<div id="toast" style="position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:99"></div>
+
+<section id="features">
+  <div class="wrap">
+    <div class="center">
+      <div class="kicker">Why Rep &amp; Sip</div>
+      <h2>Two scores that actually matter on the road</h2>
+      <p class="lede">Star ratings don’t tell you if the gym has a squat rack or the bar makes a real Negroni. We do.</p>
+    </div>
+    <div class="grid3">
+      <div class="feature"><div class="ico">🏋️🍸</div><h3>Gym &amp; bar, rated</h3><p>Every hotel scored 1–5 on the gym and the bar, plus an overall — the things that make or break a work trip.</p></div>
+      <div class="feature"><div class="ico">⚡</div><h3>Rate in 3 taps</h3><p>Tappable rows of icons. Tap the 4th barbell = 4/5. No typing, under 30 seconds, notes always optional.</p></div>
+      <div class="feature"><div class="ico">📍</div><h3>Near-me search + filters</h3><p>Defaults to “near me,” then filter by gym/bar score, tags like “squat rack” or “open late,” hotel brand, price, and distance.</p></div>
+      <div class="feature"><div class="ico">🏷️</div><h3>Check prices &amp; book</h3><p>Pick your dates, see the best price across partners, and book in a tap — right from the hotel.</p></div>
+      <div class="feature"><div class="ico">👥</div><h3>Follow travelers</h3><p>A feed of reviews from people you follow, public profiles, and “people you follow rated this” on every hotel.</p></div>
+      <div class="feature"><div class="ico">🏆</div><h3>Badges &amp; leaderboards</h3><p>Climb contributor tiers, earn badges, and see the top-rated hotels and top reviewers.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="padding-top:0">
+  <div class="wrap">
+    <div class="center">
+      <div class="kicker">How it works</div>
+      <h2>Find it. Rate it. Book it.</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Search near you</h3><p>Open the app and see hotels nearby with both scores at a glance. Browse freely — no account needed.</p></div>
+      <div class="step"><div class="n">2</div><h3>Rate in seconds</h3><p>Tap the gym, the bar, and overall. Add a note or photos if you want. Done in three taps.</p></div>
+      <div class="step"><div class="n">3</div><h3>Check prices &amp; book</h3><p>Like a hotel? Pick your dates, see the best price, and book through our partners.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="cta" id="get">
+      <h2>Be first to Rep &amp; Sip</h2>
+      <p>We’re rolling out to business travelers now. Drop your email and we’ll send you an invite.</p>
+      <form class="heroCtas" style="justify-content:center" onsubmit="event.preventDefault();showToast('Thanks! You’re on the list 🎉');this.reset();">
+        <input type="email" required placeholder="you@email.com" style="padding:13px 16px;border-radius:12px;border:none;font-family:inherit;font-size:15px;min-width:240px" />
+        <button class="btn primary" type="submit">Get early access</button>
+      </form>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap">
+        <span class="badgeStore"> <span><small>Download on the</small> App Store</span></span>
+        <span class="badgeStore">▶ <span><small>Get it on</small> Google Play</span></span>
+      </div>
+      <div class="disc">iOS &amp; Android coming soon. Store badges shown for illustration.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footin">
+    <a class="logo" href="#top" style="display:flex;align-items:center;gap:9px">
+      <svg width="26" height="26" style="border-radius:7px"><use href="#mark"/></svg>
+      <span class="wm brandfont" style="font-size:18px">Rep <span class="amp">&amp;</span> Sip</span>
+    </a>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#demo">Demo</a>
+      <a href="mockup.html">All screens</a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:14px;color:var(--muted);font-size:13px">© 2026 Rep &amp; Sip · Find a hotel near you with a good gym and a good bar.</div>
+</footer>
+
+<script>
+  // ---- Tab / screen switching ----
+  const screens = document.querySelectorAll('.screen');
+  const tabs = document.querySelectorAll('.tab');
+  function go(name){
+    screens.forEach(s => s.classList.toggle('on', s.dataset.screen === name));
+    tabs.forEach(t => t.classList.toggle('on', t.dataset.go === name));
+    if(name === 'rate') startTimer();
+  }
+  document.querySelectorAll('[data-go]').forEach(el => el.addEventListener('click', () => go(el.dataset.go)));
+
+  // ---- Toast ----
+  const toast = document.getElementById('toast');
+  let toastT;
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.style.opacity = 1; toast.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(toastT);
+    toastT = setTimeout(() => { toast.style.opacity = 0; toast.style.transform = 'translateX(-50%) translateY(20px)'; }, 1800);
+  }
+  document.querySelectorAll('[data-toast]').forEach(el => el.addEventListener('click', () => showToast(el.dataset.toast)));
+
+  // ---- Interactive rating ----
+  const ICONS = { gym:'🏋️', bar:'🍸', overall:'⭐' };
+  const ratings = { gym:0, bar:0, overall:0 };
+  document.querySelectorAll('.ratingblock').forEach(block => {
+    const kind = block.dataset.rate;
+    const row = block.querySelector('.iconrow');
+    for(let i=1;i<=5;i++){
+      const pip = document.createElement('div');
+      pip.className = 'pip off'; pip.textContent = ICONS[kind];
+      pip.addEventListener('click', () => setRating(kind, i));
+      row.appendChild(pip);
+    }
+  });
+  function setRating(kind, val){
+    ratings[kind] = val;
+    const block = document.querySelector(`.ratingblock[data-rate="${kind}"]`);
+    block.querySelectorAll('.pip').forEach((p,idx) => {
+      const on = idx < val;
+      p.classList.toggle('on', on); p.classList.toggle('off', !on);
+    });
+    block.querySelector('.hint').textContent = val + '/5';
+    updateSubmit();
+  }
+  const submitBtn = document.getElementById('submitBtn');
+  const rateTimer = document.getElementById('rateTimer');
+  let startMs = 0, ticking = null;
+  function startTimer(){
+    if(submitBtn.dataset.done) return;
+    startMs = performance.now();
+    clearInterval(ticking);
+    ticking = setInterval(() => {
+      if(allSet()){ clearInterval(ticking); return; }
+    }, 200);
+  }
+  function allSet(){ return ratings.gym && ratings.bar && ratings.overall; }
+  function updateSubmit(){
+    if(allSet()){
+      submitBtn.classList.add('ready');
+      const secs = Math.max(1, Math.round((performance.now()-startMs)/1000));
+      rateTimer.textContent = `Ready in ${secs}s · details are optional`;
+    } else {
+      submitBtn.classList.remove('ready');
+      rateTimer.textContent = 'Set gym, bar & overall to submit';
+    }
+  }
+  submitBtn.addEventListener('click', () => {
+    if(!allSet()) return;
+    const secs = Math.max(1, Math.round((performance.now()-startMs)/1000));
+    submitBtn.dataset.done = 1;
+    document.querySelector('.screen.rate').innerHTML =
+      `<div class="done"><div class="big">🎉</div><div class="t">Rated in ${secs} seconds</div>`
+      + `<div class="s">🏋️ ${ratings.gym} · 🍸 ${ratings.bar} · ⭐ ${ratings.overall} — added to your log and the community average.</div>`
+      + `<div class="book" style="margin-top:22px;max-width:200px;margin-left:auto;margin-right:auto" data-go2="search">Rate another</div></div>`;
+    const again = document.querySelector('[data-go2="search"]');
+    again.addEventListener('click', () => location.reload());
+    showToast('Review submitted ✓');
+  });
+</script>
+</body>
+</html>
