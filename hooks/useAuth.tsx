@@ -14,8 +14,14 @@ import * as Linking from "expo-linking";
 import { makeRedirectUri } from "expo-auth-session";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
+import { DEMO_MODE, DEMO_USER } from "../lib/demo";
 
 WebBrowser.maybeCompleteAuthSession();
+
+// In demo mode we stand in a fake signed-in user so every gated feature works.
+const DEMO_SESSION = {
+  user: { id: DEMO_USER.id, email: DEMO_USER.email },
+} as unknown as Session;
 
 type AuthContextValue = {
   session: Session | null;
@@ -64,6 +70,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   // Restore + subscribe to auth state.
   useEffect(() => {
+    if (DEMO_MODE) {
+      setSession(DEMO_SESSION); // start signed in as the demo user
+      setLoading(false);
+      return;
+    }
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoading(false);
@@ -86,6 +97,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const continueAsGuest = useCallback(() => setIsGuest(true), []);
 
   const signInWithApple = useCallback(async () => {
+    if (DEMO_MODE) return setSession(DEMO_SESSION);
     if (Platform.OS !== "ios") {
       throw new Error("Sign in with Apple is available on iOS.");
     }
@@ -106,6 +118,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   const signInWithGoogle = useCallback(async () => {
+    if (DEMO_MODE) return setSession(DEMO_SESSION);
     // Browser-based OAuth via Supabase. Configure the Google provider in the
     // Supabase dashboard and add `redirectTo` to the allowed redirect URLs.
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -122,6 +135,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   const signInWithEmail = useCallback(async (email: string) => {
+    if (DEMO_MODE) return setSession(DEMO_SESSION);
     const { error } = await supabase.auth.signInWithOtp({
       email: email.trim(),
       options: { emailRedirectTo: redirectTo },
@@ -130,7 +144,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }, []);
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut();
+    if (!DEMO_MODE) await supabase.auth.signOut();
+    setSession(null);
     setIsGuest(false);
   }, []);
 

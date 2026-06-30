@@ -2,6 +2,8 @@
 // details. Users never free-type a hotel name — they pick from these results,
 // and we upsert the chosen place into Supabase keyed by google_place_id.
 
+import { DEMO_MODE, demoSearchPlaces, demoPlaceDetails } from "./demo";
+
 const PLACES_KEY = process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY ?? "";
 
 const BASE = "https://places.googleapis.com/v1";
@@ -128,6 +130,12 @@ export async function searchHotelsByText(
   query: string,
   near?: LatLng
 ): Promise<PlaceResult[]> {
+  if (DEMO_MODE) {
+    const q = query.trim().toLowerCase();
+    return demoSearchPlaces().filter(
+      (p) => !q || p.name.toLowerCase().includes(q) || (p.city ?? "").toLowerCase().includes(q)
+    );
+  }
   const body: Record<string, unknown> = {
     textQuery: query,
     includedType: "lodging",
@@ -150,6 +158,7 @@ export async function searchHotelsNearby(
   center: LatLng,
   radiusM = 5000
 ): Promise<PlaceResult[]> {
+  if (DEMO_MODE) return demoSearchPlaces();
   const body = {
     includedTypes: ["lodging"],
     maxResultCount: 20,
@@ -167,6 +176,7 @@ export async function searchHotelsNearby(
 
 /** Full details for one place (used when opening a hotel that isn't cached). */
 export async function getPlaceDetails(placeId: string): Promise<PlaceResult> {
+  if (DEMO_MODE) return demoPlaceDetails(placeId);
   assertKey();
   const res = await fetch(`${BASE}/places/${placeId}`, {
     headers: {

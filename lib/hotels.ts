@@ -1,6 +1,12 @@
 import { supabase } from "./supabase";
 import type { Hotel, HotelAggregate } from "./database.types";
 import type { PlaceResult } from "./places";
+import {
+  DEMO_MODE,
+  demoAttachAggregates,
+  demoTagsForHotels,
+  demoStoredHotel,
+} from "./demo";
 
 /** A hotel ready to render in a card: Places info + (maybe) our DB id + aggregate. */
 export interface HotelCard extends PlaceResult {
@@ -35,6 +41,7 @@ function oneAgg(value: HotelWithAgg["hotel_aggregates"]): HotelAggregate | null 
 export async function attachAggregates(
   places: PlaceResult[]
 ): Promise<HotelCard[]> {
+  if (DEMO_MODE) return demoAttachAggregates(places);
   if (places.length === 0) return [];
   const ids = places.map((p) => p.google_place_id);
 
@@ -64,6 +71,7 @@ export async function attachAggregates(
 export async function getTagsForHotels(
   hotelIds: string[]
 ): Promise<Map<string, Set<string>>> {
+  if (DEMO_MODE) return demoTagsForHotels();
   const map = new Map<string, Set<string>>();
   if (hotelIds.length === 0) return map;
 
@@ -91,6 +99,15 @@ export async function getTagsForHotels(
  * always from Places, so the dataset stays dedup-free). Returns the stored row.
  */
 export async function upsertHotel(place: PlaceResult): Promise<Hotel> {
+  if (DEMO_MODE) {
+    return {
+      id: `hid-${place.google_place_id}`, google_place_id: place.google_place_id,
+      name: place.name, brand: null, address: place.address, city: place.city,
+      country: place.country, lat: place.lat, lng: place.lng,
+      price_tier: place.price_tier, image_url: place.image_url,
+      created_at: new Date().toISOString(),
+    };
+  }
   const { data, error } = await supabase
     .from("hotels")
     .upsert(
@@ -117,6 +134,7 @@ export async function upsertHotel(place: PlaceResult): Promise<Hotel> {
 export async function getStoredHotel(
   placeId: string
 ): Promise<{ hotel: Hotel; aggregate: HotelAggregate } | null> {
+  if (DEMO_MODE) return demoStoredHotel(placeId);
   const { data, error } = await supabase
     .from("hotels")
     .select("*, hotel_aggregates(*)")

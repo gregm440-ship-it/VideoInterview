@@ -22,6 +22,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useHotelDetail } from "../../hooks/useHotels";
 import { useFollowedAtHotel } from "../../hooks/useSocial";
 import type { FeedAuthor } from "../../lib/social";
+import { DEMO_MODE } from "../../lib/demo";
 import { saveToLog } from "../../lib/reviews";
 import { colors, radius, spacing } from "../../lib/theme";
 
@@ -125,16 +126,24 @@ export default function HotelDetailScreen() {
             </Pressable>
           )}
 
-          {region && (
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              style={styles.map}
-              pointerEvents="none"
-              initialRegion={region}
-            >
-              <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
-            </MapView>
-          )}
+          {region &&
+            (DEMO_MODE ? (
+              <View style={[styles.map, styles.mapDemo]}>
+                <Text style={{ fontSize: 28 }}>📍</Text>
+                <Text style={styles.mapDemoText} numberOfLines={1}>
+                  {place.address ?? place.name}
+                </Text>
+              </View>
+            ) : (
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                style={styles.map}
+                pointerEvents="none"
+                initialRegion={region}
+              >
+                <Marker coordinate={{ latitude: region.latitude, longitude: region.longitude }} />
+              </MapView>
+            ))}
 
           <Button
             label="🏷  Check prices & book"
@@ -217,6 +226,15 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
     overflow: "hidden",
   },
+  mapDemo: {
+    backgroundColor: colors.surfaceAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+  },
+  mapDemoText: { color: colors.textMuted, fontSize: 12, paddingHorizontal: spacing.md },
   checkPrices: { marginTop: spacing.lg },
   cta: { flexDirection: "row", gap: spacing.sm, marginTop: spacing.sm },
   phase2: {

@@ -1,5 +1,6 @@
 import { supabase } from "./supabase";
 import type { Profile } from "./database.types";
+import { DEMO_MODE, demoProfile } from "./demo";
 
 export type ProfilePatch = Partial<
   Pick<
@@ -14,6 +15,7 @@ export type ProfilePatch = Partial<
 >;
 
 export async function getMyProfile(): Promise<Profile | null> {
+  if (DEMO_MODE) return demoProfile();
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -28,6 +30,7 @@ export async function getMyProfile(): Promise<Profile | null> {
 }
 
 export async function updateMyProfile(patch: ProfilePatch): Promise<Profile> {
+  if (DEMO_MODE) return { ...demoProfile(), ...patch };
   const {
     data: { user },
   } = await supabase.auth.getUser();

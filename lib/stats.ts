@@ -1,9 +1,11 @@
 import { supabase } from "./supabase";
 import { getFollowCounts } from "./social";
 import type { UserStats } from "./badges";
+import { DEMO_MODE, demoUserStats } from "./demo";
 
 /** Aggregate a user's contributor stats (public content only) for badges/tier. */
 export async function getUserStats(userId: string): Promise<UserStats> {
+  if (DEMO_MODE) return demoUserStats(userId);
   const { data, error } = await supabase
     .from("reviews")
     .select("id, gym_rating, bar_rating, hotels(city)")

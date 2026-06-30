@@ -1,6 +1,14 @@
 import { supabase } from "./supabase";
 import { upsertHotel } from "./hotels";
 import { uploadReviewPhoto, type PendingPhoto } from "./photos";
+import {
+  DEMO_MODE,
+  demoReview,
+  demoMyLog,
+  demoHotelReviews,
+  demoHotelPhotos,
+  demoTagSummary,
+} from "./demo";
 import type { PlaceResult } from "./places";
 import type {
   Hotel,
@@ -40,6 +48,7 @@ export interface SubmitReviewInput {
  * plus any tags/photos. The aggregate trigger recomputes scores automatically.
  */
 export async function submitReview(input: SubmitReviewInput): Promise<Review> {
+  if (DEMO_MODE) return demoReview();
   const userId = await requireUserId();
   const hotel = await upsertHotel(input.place);
 
@@ -111,6 +120,7 @@ export async function submitReview(input: SubmitReviewInput): Promise<Review> {
 
 /** "Add to my log": save a hotel privately without rating it yet (Section 5.4). */
 export async function saveToLog(place: PlaceResult): Promise<void> {
+  if (DEMO_MODE) return;
   const userId = await requireUserId();
   const hotel = await upsertHotel(place);
   const { data: existing } = await supabase
@@ -128,6 +138,7 @@ export async function saveToLog(place: PlaceResult): Promise<void> {
 
 /** The signed-in user's existing review for a place, for prefill (or null). */
 export async function getMyReviewForPlace(placeId: string): Promise<Review | null> {
+  if (DEMO_MODE) return null;
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -152,6 +163,7 @@ export interface LogEntry {
 }
 
 export async function getMyLog(): Promise<LogEntry[]> {
+  if (DEMO_MODE) return demoMyLog();
   const userId = await requireUserId();
   const { data, error } = await supabase
     .from("reviews")
@@ -183,6 +195,7 @@ export interface CommunityReview {
 }
 
 export async function getHotelReviews(hotelId: string): Promise<CommunityReview[]> {
+  if (DEMO_MODE) return demoHotelReviews(hotelId);
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -237,6 +250,7 @@ export async function getHotelReviews(hotelId: string): Promise<CommunityReview[
 export async function getHotelPhotos(
   hotelId: string
 ): Promise<{ gym: ReviewPhoto[]; bar: ReviewPhoto[] }> {
+  if (DEMO_MODE) return demoHotelPhotos(hotelId);
   const { data, error } = await supabase
     .from("review_photos")
     .select("*, reviews!inner(is_private_log, is_hidden)")
@@ -264,6 +278,7 @@ export async function getHotelTagSummary(
   hotelId: string,
   topPerType = 4
 ): Promise<{ gym: TagCount[]; bar: TagCount[] }> {
+  if (DEMO_MODE) return demoTagSummary(hotelId);
   const { data, error } = await supabase
     .from("review_tags")
     .select("tag_key, tag_type, reviews!inner(hotel_id, is_private_log, is_hidden)")
@@ -290,6 +305,7 @@ export async function getHotelTagSummary(
 // ---- Helpful + report ------------------------------------------------------
 
 export async function toggleHelpful(reviewId: string): Promise<boolean> {
+  if (DEMO_MODE) return true;
   const userId = await requireUserId();
   const { data: existing } = await supabase
     .from("helpful_votes")
@@ -315,6 +331,7 @@ export async function reportContent(opts: {
   photoId?: string;
   reason?: string;
 }): Promise<void> {
+  if (DEMO_MODE) return;
   const userId = await requireUserId();
   const { error } = await supabase.from("reports").insert({
     reporter_id: userId,

@@ -28,6 +28,7 @@ import {
   type SearchFilters,
 } from "../../lib/filters";
 import { tagLabel } from "../../lib/tags";
+import { DEMO_MODE } from "../../lib/demo";
 import { colors, radius, spacing, TAP_TARGET } from "../../lib/theme";
 
 type ViewMode = "list" | "map";
@@ -201,6 +202,14 @@ export default function SearchScreen() {
             />
           )}
         />
+      ) : DEMO_MODE ? (
+        <View style={[styles.map, styles.mapDemo]}>
+          <Text style={{ fontSize: 34 }}>🗺️</Text>
+          <Text style={styles.mapDemoText}>
+            Map view needs a Google Maps key. Switch to List to browse the demo
+            hotels.
+          </Text>
+        </View>
       ) : (
         <MapView
           provider={PROVIDER_GOOGLE}
@@ -306,6 +315,8 @@ const styles = StyleSheet.create({
   summaryChipText: { color: colors.text, fontSize: 12, fontWeight: "600" },
   list: { padding: spacing.md, paddingBottom: spacing.xl },
   map: { flex: 1 },
+  mapDemo: { alignItems: "center", justifyContent: "center", gap: spacing.sm, padding: spacing.xl },
+  mapDemoText: { color: colors.textMuted, fontSize: 14, textAlign: "center", maxWidth: 260 },
   center: { flex: 1, alignItems: "center", justifyContent: "center", padding: spacing.lg, gap: spacing.sm },
   muted: { color: colors.textMuted, textAlign: "center" },
   errorText: { color: colors.danger, textAlign: "center" },

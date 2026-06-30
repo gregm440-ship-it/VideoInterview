@@ -1,5 +1,12 @@
 import { supabase } from "./supabase";
 import type { Hotel, Profile, Review, TagType } from "./database.types";
+import {
+  DEMO_MODE,
+  demoFeed,
+  demoFollowCounts,
+  demoFollowedAtHotel,
+  demoPublicProfile,
+} from "./demo";
 
 async function requireUserId(): Promise<string> {
   const {
@@ -19,6 +26,7 @@ async function currentUserId(): Promise<string | null> {
 // ---- Follow graph ----------------------------------------------------------
 
 export async function getFollowingIds(userId: string): Promise<string[]> {
+  if (DEMO_MODE) return ["u-marcus", "u-jess", "u-ravi"];
   const { data, error } = await supabase
     .from("follows")
     .select("following_id")
@@ -28,6 +36,7 @@ export async function getFollowingIds(userId: string): Promise<string[]> {
 }
 
 export async function isFollowing(targetId: string): Promise<boolean> {
+  if (DEMO_MODE) return false;
   const me = await currentUserId();
   if (!me) return false;
   const { data, error } = await supabase
@@ -41,6 +50,7 @@ export async function isFollowing(targetId: string): Promise<boolean> {
 }
 
 export async function followUser(targetId: string): Promise<void> {
+  if (DEMO_MODE) return;
   const me = await requireUserId();
   if (me === targetId) return;
   const { error } = await supabase
@@ -50,6 +60,7 @@ export async function followUser(targetId: string): Promise<void> {
 }
 
 export async function unfollowUser(targetId: string): Promise<void> {
+  if (DEMO_MODE) return;
   const me = await requireUserId();
   const { error } = await supabase
     .from("follows")
@@ -65,6 +76,7 @@ export interface FollowCounts {
 }
 
 export async function getFollowCounts(userId: string): Promise<FollowCounts> {
+  if (DEMO_MODE) return demoFollowCounts(userId);
   const [followers, following] = await Promise.all([
     supabase.from("follows").select("*", { count: "exact", head: true }).eq("following_id", userId),
     supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
@@ -103,6 +115,7 @@ export interface FeedItem {
 
 /** Recent public reviews from the people the current user follows. */
 export async function getFeed(): Promise<FeedItem[]> {
+  if (DEMO_MODE) return demoFeed();
   const me = await requireUserId();
   const ids = await getFollowingIds(me);
   if (ids.length === 0) return [];
@@ -165,6 +178,7 @@ export interface PublicProfile {
 }
 
 export async function getPublicProfile(userId: string): Promise<PublicProfile> {
+  if (DEMO_MODE) return demoPublicProfile(userId);
   const [profileRes, reviewsRes, counts] = await Promise.all([
     supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
     supabase
@@ -194,6 +208,7 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile> {
 export async function getFollowedReviewersAtHotel(
   hotelId: string
 ): Promise<FeedAuthor[]> {
+  if (DEMO_MODE) return demoFollowedAtHotel();
   const me = await currentUserId();
   if (!me) return [];
   const ids = await getFollowingIds(me);
