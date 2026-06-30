@@ -13,11 +13,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   orientation: "portrait",
   userInterfaceStyle: "light",
   icon: "./assets/icon.png",
-  backgroundColor: "#F7F5F0",
+  backgroundColor: "#F1F6FB",
   splash: {
     image: "./assets/splash-icon.png",
     resizeMode: "contain",
-    backgroundColor: "#F7F5F0",
+    backgroundColor: "#F1F6FB",
   },
   newArchEnabled: true,
   ios: {
@@ -36,7 +36,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     package: "io.emep.repandsip",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: "#E0A92E",
+      backgroundColor: "#1488DB",
     },
     permissions: ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
     config: {

@@ -1,22 +1,22 @@
-// Design tokens. Light, warm, airy — one screen = one job, big tap targets.
+// Design tokens. Deep-sky-blue travel palette — light, airy, big tap targets.
 export const colors = {
-  bg: "#F7F5F0", // warm paper
+  bg: "#F1F6FB", // cool light sky-tinted paper
   surface: "#FFFFFF",
-  surfaceAlt: "#F0EDE6",
-  border: "#E5E1D8",
-  text: "#1C2533", // deep slate
-  textMuted: "#6E7683",
-  primary: "#E0A92E", // warm "sip" gold
-  onPrimary: "#2A1F00", // dark ink that reads on gold
-  accent: "#1FA39A", // cool "rep" teal
-  onAccent: "#06241F",
-  danger: "#D64045",
+  surfaceAlt: "#E8F1FA",
+  border: "#D6E3F0",
+  text: "#15273B", // deep navy slate
+  textMuted: "#5E6E82",
+  primary: "#1488DB", // deep sky blue
+  onPrimary: "#FFFFFF", // white reads on the saturated blue
+  accent: "#F2994A", // warm amber — sip warmth, complements the blue
+  onAccent: "#2A1600",
+  danger: "#E5484D",
   // Soft tints for selected/active states on a light background.
-  primaryTint: "rgba(224,169,46,0.18)",
-  accentTint: "rgba(31,163,154,0.14)",
-  ratingActive: "#E0A92E",
-  ratingInactive: "#D9D4C8",
-  shadow: "#1C2533",
+  primaryTint: "rgba(20,136,219,0.14)",
+  accentTint: "rgba(242,153,74,0.16)",
+  ratingActive: "#1488DB",
+  ratingInactive: "#CBD8E6",
+  shadow: "#15273B",
 } as const;
 
 export const spacing = {

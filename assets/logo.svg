@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Rep & Sip app icon: a travel pin (destination) with a martini cut-out
+  <!-- Rep & Sip app icon: a deep-sky-blue travel pin (destination) with a martini cut-out
        (sip), planted above a barbell (rep). Gradient stays in user space so the
        martini "hole" matches the background seamlessly. -->
   <defs>
     <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
-      <stop offset="0" stop-color="#F4C44E"/>
-      <stop offset="1" stop-color="#DB9824"/>
+      <stop offset="0" stop-color="#3FB0EE"/>
+      <stop offset="1" stop-color="#0E76C9"/>
     </linearGradient>
   </defs>
   <rect width="1024" height="1024" fill="url(#g)"/>

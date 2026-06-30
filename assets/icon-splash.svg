@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Splash mark: a rounded gold badge with the white mark, transparent
+  <!-- Splash mark: a rounded blue badge with the white mark, transparent
        outside the badge so it sits cleanly on the light splash background. -->
   <defs>
     <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
-      <stop offset="0" stop-color="#F4C44E"/>
-      <stop offset="1" stop-color="#DB9824"/>
+      <stop offset="0" stop-color="#3FB0EE"/>
+      <stop offset="1" stop-color="#0E76C9"/>
     </linearGradient>
   </defs>
   <rect x="96" y="96" width="832" height="832" rx="200" fill="url(#g)"/>

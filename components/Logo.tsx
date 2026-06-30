@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, View, type ViewStyle } from "react-native";
-import { APP_NAME } from "../lib/constants";
+import { APP_NAME, BRAND_FONT } from "../lib/constants";
 import { colors } from "../lib/theme";
 
 // Transparent-corner gold badge mark (pin + martini + barbell).
@@ -84,9 +84,9 @@ const styles = StyleSheet.create({
   },
   word: {
     color: colors.text,
-    fontWeight: "800",
-    letterSpacing: -0.5,
+    fontFamily: BRAND_FONT,
+    letterSpacing: 0.5,
   },
-  amp: { color: colors.primary },
+  amp: { color: colors.accent },
   tagline: { color: colors.textMuted, marginTop: 2 },
 });

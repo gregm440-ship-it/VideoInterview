@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Brand mark for in-app lockups: rounded gold badge filling the canvas
+  <!-- Brand mark for in-app lockups: rounded blue badge filling the canvas
        (transparent corners), with the travel pin + martini cut-out + barbell. -->
   <defs>
     <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
-      <stop offset="0" stop-color="#F4C44E"/><stop offset="1" stop-color="#DB9824"/>
+      <stop offset="0" stop-color="#3FB0EE"/><stop offset="1" stop-color="#0E76C9"/>
     </linearGradient>
   </defs>
   <rect x="8" y="8" width="1008" height="1008" rx="232" fill="url(#g)"/>

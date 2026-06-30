@@ -2,6 +2,9 @@
 // Swap to "Rep, Sip, Trip" with this one edit.
 export const APP_NAME = "Rep & Sip";
 
+// Distinctive display typeface for the wordmark (loaded in app/_layout.tsx).
+export const BRAND_FONT = "Righteous";
+
 // ---- Feature flags (Section 8) ---------------------------------------------
 // All three ship ON for MVP, but stay behind flags so they can be toggled.
 
