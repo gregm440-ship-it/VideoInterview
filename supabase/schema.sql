@@ -13,8 +13,16 @@ create table if not exists profiles (
   avatar_url text,
   home_city text,
   traveler_type text,
+  preferred_airline text,
+  preferred_hotel_brand text,
+  preferred_cruise_line text,
   created_at timestamptz default now()
 );
+
+-- Travel preferences (added after launch) — idempotent for existing databases.
+alter table profiles add column if not exists preferred_airline text;
+alter table profiles add column if not exists preferred_hotel_brand text;
+alter table profiles add column if not exists preferred_cruise_line text;
 
 create table if not exists hotels (
   id uuid primary key default gen_random_uuid(),

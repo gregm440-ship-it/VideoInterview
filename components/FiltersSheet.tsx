@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "./Button";
 import { TagToggles } from "./TagToggles";
+import { BrandPicker } from "./BrandPicker";
 import {
   activeFilterCount,
   defaultFilters,
@@ -28,11 +29,14 @@ const SORT_KEYS = Object.keys(SORT_LABELS) as SortKey[];
 export function FiltersSheet({
   visible,
   initial,
+  myHotelBrand,
   onClose,
   onApply,
 }: {
   visible: boolean;
   initial: SearchFilters;
+  /** The signed-in user's preferred hotel brand, for a one-tap shortcut. */
+  myHotelBrand?: string | null;
   onClose: () => void;
   onApply: (f: SearchFilters) => void;
 }) {
@@ -114,6 +118,26 @@ export function FiltersSheet({
                 selected={new Set(draft.tags)}
                 onToggle={toggleTag}
               />
+            </Section>
+
+            <Section label="Hotel brand">
+              <BrandPicker
+                label="Brand"
+                icon="bed-outline"
+                category="hotel"
+                placeholder="Any brand"
+                value={draft.hotelBrand}
+                onChange={(v) => set("hotelBrand", v)}
+              />
+              {myHotelBrand && draft.hotelBrand !== myHotelBrand ? (
+                <Pressable
+                  style={styles.usePref}
+                  onPress={() => set("hotelBrand", myHotelBrand)}
+                >
+                  <Ionicons name="star" size={13} color={colors.primary} />
+                  <Text style={styles.usePrefText}>Use my preferred · {myHotelBrand}</Text>
+                </Pressable>
+              ) : null}
             </Section>
 
             <Section label="Price">
@@ -293,6 +317,14 @@ const styles = StyleSheet.create({
   minChipOn: { backgroundColor: colors.primaryTint, borderColor: colors.primary },
   minChipText: { color: colors.textMuted, fontSize: 14, fontWeight: "700" },
   minChipTextOn: { color: colors.text },
+  usePref: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginTop: spacing.sm,
+    paddingVertical: 4,
+  },
+  usePrefText: { color: colors.primary, fontSize: 13, fontWeight: "700" },
   rowWrap: { flexDirection: "row", gap: spacing.sm },
   chip: {
     paddingHorizontal: 18,

@@ -10,6 +10,9 @@ export interface Profile {
   avatar_url: string | null;
   home_city: string | null;
   traveler_type: string | null;
+  preferred_airline: string | null;
+  preferred_hotel_brand: string | null;
+  preferred_cruise_line: string | null;
   created_at: string;
 }
 

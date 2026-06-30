@@ -18,6 +18,7 @@ import { Logo } from "../../components/Logo";
 import { FiltersSheet } from "../../components/FiltersSheet";
 import { useLocation } from "../../hooks/useLocation";
 import { useHotelSearch } from "../../hooks/useHotels";
+import { useProfile } from "../../hooks/useProfile";
 import type { HotelCard as HotelCardData } from "../../lib/hotels";
 import {
   activeFilterCount,
@@ -37,6 +38,7 @@ export default function SearchScreen() {
   const [mode, setMode] = useState<ViewMode>("list");
   const [filters, setFilters] = useState<SearchFilters>(defaultFilters());
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const { profile } = useProfile();
 
   // Debounce typing so we don't fire a Places call per keystroke.
   useEffect(() => {
@@ -58,6 +60,7 @@ export default function SearchScreen() {
     ...(filters.minBar ? [`🍸 ≥${filters.minBar}`] : []),
     ...(filters.minOverall ? [`⭐ ≥${filters.minOverall}`] : []),
     ...filters.tags.map((t) => tagLabel(t)),
+    ...(filters.hotelBrand ? [`🏨 ${filters.hotelBrand}`] : []),
     ...(filters.priceTiers.length ? [filters.priceTiers.map((t) => "$".repeat(t)).join(" ")] : []),
     ...(filters.radiusMi !== defaultFilters().radiusMi ? [`${filters.radiusMi} mi`] : []),
   ];
@@ -151,6 +154,7 @@ export default function SearchScreen() {
       <FiltersSheet
         visible={filtersOpen}
         initial={filters}
+        myHotelBrand={profile?.preferred_hotel_brand ?? null}
         onClose={() => setFiltersOpen(false)}
         onApply={setFilters}
       />

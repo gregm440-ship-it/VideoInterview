@@ -24,6 +24,9 @@ export interface SearchFilters {
   priceTiers: number[]; // selected price tiers (1–4); empty = any
   radiusMi: number; // near-me search radius + label
   sort: SortKey;
+  // Hotel brand narrows hotel results (matched against the hotel name/brand).
+  // Airline & cruise line live on the profile only (future use), not here.
+  hotelBrand: string | null;
 }
 
 export const DEFAULT_RADIUS_MI = 5;
@@ -41,6 +44,7 @@ export function defaultFilters(): SearchFilters {
     priceTiers: [],
     radiusMi: DEFAULT_RADIUS_MI,
     sort: "nearest",
+    hotelBrand: null,
   };
 }
 
@@ -53,6 +57,7 @@ export function activeFilterCount(f: SearchFilters): number {
   n += f.tags.length;
   if (f.priceTiers.length) n += 1;
   if (f.radiusMi !== DEFAULT_RADIUS_MI) n += 1;
+  if (f.hotelBrand) n += 1;
   return n;
 }
 
@@ -100,6 +105,11 @@ export function applyFilters(cards: HotelCard[], f: SearchFilters): HotelCard[] 
     if (f.minOverall && !(agg && agg.avg_overall >= f.minOverall)) return false;
     if (f.priceTiers.length && !(c.price_tier != null && f.priceTiers.includes(c.price_tier)))
       return false;
+    if (f.hotelBrand) {
+      // Places doesn't expose a brand field, but the hotel name almost always
+      // carries it (e.g. "Marriott Marquis", "Hilton Austin").
+      if (!c.name.toLowerCase().includes(f.hotelBrand.toLowerCase())) return false;
+    }
     if (f.tags.length) {
       const have = new Set(c.tagKeys ?? []);
       if (!f.tags.every((t) => have.has(t))) return false;

@@ -210,6 +210,20 @@
   .ffooter{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
   .clearbtn{flex:1;text-align:center;padding:13px;color:var(--muted);font-weight:700}
   .applybtn{flex:2;text-align:center;padding:13px;border-radius:13px;background:var(--primary);color:var(--onPrimary);font-weight:800}
+  /* brand prefs + typeahead */
+  .pref{display:flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:12px 13px;margin-bottom:9px;font-size:14px}
+  .pref .pl{font-weight:600}
+  .pref .pv{margin-left:auto;color:var(--text)}
+  .pref .pv.none{color:var(--muted)}
+  .pref .x{color:var(--muted);font-size:12px;margin-left:8px}
+  .tabar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:12px 13px;color:var(--text);font-size:14px;margin-bottom:8px}
+  .tabar .cur{color:var(--muted)}
+  .tahead{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .taopt{padding:13px;border-bottom:1px solid var(--border);font-size:14px}
+  .taopt:last-child{border-bottom:none}
+  .taopt b{color:var(--primary)}
 </style>
 </head>
 <body>
@@ -549,9 +563,14 @@
               <div class="stat"><div class="n">31</div><div class="l">Hotels logged</div></div>
               <div class="stat"><div class="n">142</div><div class="l">Helpful votes</div></div>
             </div>
-            <div class="menu">
-              <div class="mi">🏠 Home city · Austin <span class="ar">›</span></div>
-              <div class="mi">✈️ Traveler type · Frequent flyer <span class="ar">›</span></div>
+
+            <div class="section-h" style="margin-top:6px">Travel preferences</div>
+            <div class="muted small" style="margin-bottom:10px">Optional · set your go-to brands</div>
+            <div class="pref">✈️ <span class="pl">Airline</span><span class="pv">Delta Air Lines</span><span class="x">✕</span></div>
+            <div class="pref">🛏 <span class="pl">Hotel brand</span><span class="pv">Marriott</span><span class="x">✕</span></div>
+            <div class="pref">🛳 <span class="pl">Cruise line</span><span class="pv">Royal Caribbean</span><span class="x">✕</span></div>
+
+            <div class="menu" style="margin-top:6px">
               <div class="mi">🔒 Privacy defaults <span class="ar">›</span></div>
               <div class="mi">🚩 Reported content <span class="ar">›</span></div>
               <div class="mi">❓ Help & feedback <span class="ar">›</span></div>
@@ -608,6 +627,12 @@
           </div>
 
           <div class="fsec">
+            <div class="fseclabel">Hotel brand</div>
+            <div class="pref" style="margin:0">🛏 <span class="pl">Brand</span><span class="pv">Marriott</span><span class="x">✕</span></div>
+            <div style="display:flex;align-items:center;gap:6px;margin-top:8px;color:var(--primary);font-size:13px;font-weight:700">★ Use my preferred · Marriott</div>
+          </div>
+
+          <div class="fsec">
             <div class="fseclabel">Price</div>
             <div class="pricerow"><div class="pchip">$</div><div class="pchip on">$$</div><div class="pchip on">$$$</div><div class="pchip">$$$$</div></div>
           </div>
@@ -617,10 +642,37 @@
             <div class="seg"><div class="s">1 mi</div><div class="s on">5 mi</div><div class="s">25 mi</div></div>
           </div>
 
-          <div class="ffooter"><div class="clearbtn">Clear all</div><div class="applybtn">Apply (4)</div></div>
+          <div class="ffooter"><div class="clearbtn">Clear all</div><div class="applybtn">Apply (5)</div></div>
         </div></div></div>
       </div>
-      <div class="frame-label"><b>Filters &amp; sort</b> · score, tags, price, distance, sort</div>
+      <div class="frame-label"><b>Filters &amp; sort</b> · score, tags, <b>hotel brand</b>, price, distance</div>
+    </div>
+
+    <!-- 8. BRAND TYPEAHEAD (Phase 3) -->
+    <div class="frame-wrap">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+        <div class="screen"><div class="body"><div class="scroll">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:6px 0 14px">
+            <h2 class="title" style="margin:0">Hotel brand</h2><span class="muted" style="font-size:22px">✕</span>
+          </div>
+          <div class="tabar">🔍 <span>Mar</span><span class="cur">|</span></div>
+          <div class="tahead">
+            <div class="taopt"><b>Mar</b>riott</div>
+            <div class="taopt">JW <b>Mar</b>riott</div>
+            <div class="taopt"><b>Mar</b>riott · Autograph Collection</div>
+            <div class="taopt">Court­yard by <b>Mar</b>riott</div>
+            <div class="taopt">Residence Inn by <b>Mar</b>riott</div>
+            <div class="taopt">Fairfield by <b>Mar</b>riott</div>
+            <div class="taopt" style="color:var(--primary)">＋ Use “Mar”</div>
+          </div>
+          <div class="muted small" style="margin-top:14px;text-align:center">
+            Type the first few letters — the most likely brands surface first.
+          </div>
+        </div></div></div>
+      </div>
+      <div class="frame-label"><b>Brand typeahead</b> · profile + search, prefix-ranked</div>
     </div>
 
   </div>
