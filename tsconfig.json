@@ -2,6 +2,10 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    // Tests import "../lib/x.ts" because Node's --experimental-strip-types
+    // runner needs explicit extensions. Metro/Babel do the real emitting.
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
     "paths": {
       "@/*": ["./*"]
     }

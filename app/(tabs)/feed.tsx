@@ -15,6 +15,7 @@ import { Avatar } from "../../components/Avatar";
 import { useAuth } from "../../hooks/useAuth";
 import { useFeed } from "../../hooks/useSocial";
 import type { FeedItem } from "../../lib/social";
+import { displayImageUrl } from "../../lib/places";
 import { ICONS } from "../../lib/constants";
 import { formatShort } from "../../lib/dates";
 import { colors, radius, spacing } from "../../lib/theme";
@@ -116,7 +117,7 @@ function FeedRow({ item }: { item: FeedItem }) {
       </Pressable>
       {item.hotel.image_url ? (
         <Pressable onPress={() => router.push(`/hotel/${item.hotel.google_place_id}`)}>
-          <Image source={{ uri: item.hotel.image_url }} style={styles.thumb} contentFit="cover" />
+          <Image source={{ uri: displayImageUrl(item.hotel.image_url)! }} style={styles.thumb} contentFit="cover" />
         </Pressable>
       ) : null}
     </View>

@@ -95,8 +95,10 @@ export async function getTagsForHotels(
 }
 
 /**
- * Upsert a viewed hotel keyed by google_place_id (Section 5.2 — never free-typed,
- * always from Places, so the dataset stays dedup-free). Returns the stored row.
+ * Persist a viewed hotel keyed by google_place_id (Section 5.2 — never
+ * free-typed, always from Places, so the dataset stays dedup-free).
+ * Insert-once: clients have no hotels UPDATE policy (vandalism guard), so an
+ * existing row wins the conflict and we read it back instead.
  */
 export async function upsertHotel(place: PlaceResult): Promise<Hotel> {
   if (DEMO_MODE) {
@@ -122,12 +124,21 @@ export async function upsertHotel(place: PlaceResult): Promise<Hotel> {
         price_tier: place.price_tier,
         image_url: place.image_url,
       },
-      { onConflict: "google_place_id" }
+      { onConflict: "google_place_id", ignoreDuplicates: true }
     )
     .select()
-    .single();
+    .maybeSingle();
   if (error) throw error;
-  return data as Hotel;
+  if (data) return data as Hotel;
+
+  // Conflict: the hotel already exists — return the stored row.
+  const { data: existing, error: readError } = await supabase
+    .from("hotels")
+    .select("*")
+    .eq("google_place_id", place.google_place_id)
+    .single();
+  if (readError) throw readError;
+  return existing as Hotel;
 }
 
 /** Read a stored hotel + its aggregate by google_place_id (null if unseen). */

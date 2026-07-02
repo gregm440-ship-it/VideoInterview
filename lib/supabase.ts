@@ -22,5 +22,9 @@ export const supabase = createClient(supabaseUrl ?? "", supabaseAnonKey ?? "", {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
+    // PKCE so magic-link/OAuth redirects carry ?code=, which the deep-link
+    // handler exchanges via exchangeCodeForSession. The default implicit flow
+    // returns tokens in the URL hash, which native deep links don't surface.
+    flowType: "pkce",
   },
 });

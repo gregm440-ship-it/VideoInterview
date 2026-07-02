@@ -15,16 +15,26 @@ export interface TopHotel {
   aggregate: HotelAggregate;
 }
 
+// Bayesian-style shrinkage: pull small samples toward a prior so one lone
+// 5.0 review can't outrank a hotel with a hundred reviews at 4.7.
+const PRIOR_WEIGHT = 5;
+const PRIOR_MEAN = 3.5;
+
+export function weightedScore(avg: number, reviewCount: number): number {
+  return (reviewCount * avg + PRIOR_WEIGHT * PRIOR_MEAN) / (reviewCount + PRIOR_WEIGHT);
+}
+
 /** Highest-rated hotels by a metric (public reviews only, via the trigger). */
 export async function getTopHotels(metric: HotelMetric, limit = 25): Promise<TopHotel[]> {
   if (DEMO_MODE) return demoTopHotels(metric);
+  // Over-fetch by raw average, then rank by the shrunk score client-side.
   const { data, error } = await supabase
     .from("hotel_aggregates")
     .select("*, hotels(*)")
     .gte("review_count", 1)
     .order(metric, { ascending: false })
     .order("review_count", { ascending: false })
-    .limit(limit);
+    .limit(limit * 4);
   if (error) throw error;
 
   type Row = HotelAggregate & { hotels: Hotel | null };
@@ -33,7 +43,13 @@ export async function getTopHotels(metric: HotelMetric, limit = 25): Promise<Top
     .map((r) => {
       const { hotels, ...aggregate } = r;
       return { hotel: hotels as Hotel, aggregate: aggregate as HotelAggregate };
-    });
+    })
+    .sort(
+      (a, b) =>
+        weightedScore(Number(b.aggregate[metric]), b.aggregate.review_count) -
+        weightedScore(Number(a.aggregate[metric]), a.aggregate.review_count)
+    )
+    .slice(0, limit);
 }
 
 export interface TopReviewer {

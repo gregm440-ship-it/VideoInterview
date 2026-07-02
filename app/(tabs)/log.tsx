@@ -16,6 +16,7 @@ import { Screen } from "../../components/Screen";
 import { Button } from "../../components/Button";
 import { useAuth } from "../../hooks/useAuth";
 import { getMyLog, type LogEntry } from "../../lib/reviews";
+import { displayImageUrl } from "../../lib/places";
 import { ICONS } from "../../lib/constants";
 import { colors, radius, spacing, TAP_TARGET } from "../../lib/theme";
 
@@ -108,7 +109,7 @@ function LogRow({ entry }: { entry: LogEntry }) {
       onPress={() => router.push(`/hotel/${hotel.google_place_id}`)}
     >
       {hotel.image_url ? (
-        <Image source={{ uri: hotel.image_url }} style={styles.thumb} contentFit="cover" />
+        <Image source={{ uri: displayImageUrl(hotel.image_url)! }} style={styles.thumb} contentFit="cover" />
       ) : (
         <View style={[styles.thumb, styles.thumbFallback]}>
           <Text style={{ fontSize: 22 }}>🏨</Text>

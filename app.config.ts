@@ -53,7 +53,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     "expo-router",
     "expo-apple-authentication",
-    "expo-secure-store",
     [
       "expo-location",
       {

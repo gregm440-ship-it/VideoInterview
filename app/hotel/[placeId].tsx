@@ -24,6 +24,7 @@ import { useFollowedAtHotel } from "../../hooks/useSocial";
 import type { FeedAuthor } from "../../lib/social";
 import { DEMO_MODE } from "../../lib/demo";
 import { saveToLog } from "../../lib/reviews";
+import { displayImageUrl } from "../../lib/places";
 import { colors, radius, spacing } from "../../lib/theme";
 
 export default function HotelDetailScreen() {
@@ -90,7 +91,7 @@ export default function HotelDetailScreen() {
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.heroWrap}>
           {place.image_url ? (
-            <Image source={{ uri: place.image_url }} style={styles.hero} contentFit="cover" />
+            <Image source={{ uri: displayImageUrl(place.image_url)! }} style={styles.hero} contentFit="cover" />
           ) : (
             <View style={[styles.hero, styles.heroFallback]}>
               <Text style={{ fontSize: 48 }}>🏨</Text>

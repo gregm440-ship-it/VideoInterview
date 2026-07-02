@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   searchHotelsByText,
@@ -43,7 +44,12 @@ function withDistance(cards: HotelCard[], from: LatLng): HotelCard[] {
 
 const PLACES_MAX_RADIUS_M = 50000;
 
-/** Search hotels: empty query => "near me", otherwise text search biased nearby. */
+/**
+ * Search hotels: empty query => "near me", otherwise text search biased nearby.
+ * The billable Places fetch is keyed only by what changes the fetch (query,
+ * location, near-me radius); score/tag/price/brand/sort filters are applied
+ * client-side so tweaking them is instant and free.
+ */
 export function useHotelSearch(
   query: string,
   near: LatLng,
@@ -52,8 +58,14 @@ export function useHotelSearch(
 ) {
   const trimmed = query.trim();
   const mode = trimmed.length > 0 ? "text" : "near";
-  return useQuery({
-    queryKey: ["hotelSearch", mode, mode === "text" ? trimmed : near, filters],
+
+  const fetchQuery = useQuery({
+    queryKey: [
+      "hotelSearch",
+      mode,
+      mode === "text" ? trimmed : near,
+      mode === "near" ? filters.radiusMi : 0,
+    ],
     enabled,
     queryFn: async () => {
       const radiusM = Math.min(filters.radiusMi * 1609.34, PLACES_MAX_RADIUS_M);
@@ -64,19 +76,25 @@ export function useHotelSearch(
 
       let cards = withDistance(await attachAggregates(places), near);
 
-      // Only pay for the tag query when a tag filter is actually set.
-      if (filters.tags.length > 0) {
-        const ids = cards.map((c) => c.id).filter((id): id is string => Boolean(id));
-        const tagMap = await getTagsForHotels(ids);
-        cards = cards.map((c) => ({
-          ...c,
-          tagKeys: c.id ? [...(tagMap.get(c.id) ?? [])] : [],
-        }));
-      }
+      // Attach tag keys for hotels we know (one cheap query against our own
+      // DB) so tag filters work without refetching Places.
+      const ids = cards.map((c) => c.id).filter((id): id is string => Boolean(id));
+      const tagMap = await getTagsForHotels(ids);
+      cards = cards.map((c) => ({
+        ...c,
+        tagKeys: c.id ? [...(tagMap.get(c.id) ?? [])] : [],
+      }));
 
-      return applyFilters(cards, filters);
+      return cards;
     },
   });
+
+  const data = useMemo(
+    () => (fetchQuery.data ? applyFilters(fetchQuery.data, filters) : undefined),
+    [fetchQuery.data, filters]
+  );
+
+  return { ...fetchQuery, data };
 }
 
 export interface HotelDetailData {

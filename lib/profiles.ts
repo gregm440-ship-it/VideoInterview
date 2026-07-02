@@ -29,6 +29,17 @@ export async function getMyProfile(): Promise<Profile | null> {
   return (data as Profile | null) ?? null;
 }
 
+/**
+ * Permanently delete the signed-in user's account (App Store 5.1.1(v)).
+ * The delete_account RPC removes the auth user; FK cascades take the profile,
+ * reviews, photos, votes, and follows with it. Caller should signOut() after.
+ */
+export async function deleteMyAccount(): Promise<void> {
+  if (DEMO_MODE) return;
+  const { error } = await supabase.rpc("delete_account");
+  if (error) throw error;
+}
+
 export async function updateMyProfile(patch: ProfilePatch): Promise<Profile> {
   if (DEMO_MODE) return { ...demoProfile(), ...patch };
   const {

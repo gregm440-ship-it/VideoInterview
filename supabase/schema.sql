@@ -118,8 +118,11 @@ create index if not exists idx_helpful_votes_review on helpful_votes(review_id);
 
 -- ---- Aggregate trigger (public reviews only) -------------------------------
 
+-- SECURITY DEFINER is required: this runs from a trigger as the requesting
+-- user, and hotel_aggregates has RLS with no client write policy. Without
+-- definer rights the aggregate upsert is denied and the review write aborts.
 create or replace function recompute_hotel_aggregates(target_hotel uuid)
-returns void language sql as $$
+returns void language sql security definer set search_path = public as $$
   insert into hotel_aggregates (hotel_id, avg_gym, avg_bar, avg_overall, review_count, updated_at)
   select target_hotel,
          coalesce(avg(gym_rating),0),
@@ -214,16 +217,16 @@ drop policy if exists hotels_public_read on hotels;
 create policy hotels_public_read on hotels
   for select to anon, authenticated using (true);
 
--- Authenticated users may upsert hotels they view (Places-backed, dedup by
--- google_place_id). This keeps Phase 1's "upsert every viewed hotel" working
--- without a service role on the client. Tighten to service-role if abused.
+-- Authenticated users may insert hotels they view (Places-backed, dedup by
+-- google_place_id) — but NOT update them. Clients write a hotel once via
+-- ON CONFLICT DO NOTHING; there is deliberately no update policy, so a signed-
+-- in user can't rewrite another hotel's name/image/coords. Refreshing stale
+-- Places data is a service-role job.
 drop policy if exists hotels_insert_auth on hotels;
 create policy hotels_insert_auth on hotels
   for insert to authenticated with check (true);
 
 drop policy if exists hotels_update_auth on hotels;
-create policy hotels_update_auth on hotels
-  for update to authenticated using (true) with check (true);
 
 drop policy if exists aggregates_public_read on hotel_aggregates;
 create policy aggregates_public_read on hotel_aggregates
@@ -317,6 +320,33 @@ create policy helpful_votes_delete_own on helpful_votes
 -- ---- Moderation safety valve: a report hides its target (Section 8.2) ------
 -- Runs as definer so any reporter can hide content pending review, without
 -- granting them update rights on other people's rows.
+-- Abuse guards: one report per user per target, and a cap on open reports per
+-- reporter so a single account can't mass-hide the catalog. resolve_report()
+-- (service-role only) is the admin path to unhide or remove.
+
+alter table reports add column if not exists resolved boolean not null default false;
+
+create unique index if not exists uq_report_reporter_review
+  on reports(reporter_id, review_id) where review_id is not null;
+create unique index if not exists uq_report_reporter_photo
+  on reports(reporter_id, photo_id) where photo_id is not null;
+
+create or replace function enforce_report_limits()
+returns trigger language plpgsql security definer set search_path = public as $$
+declare open_count int;
+begin
+  select count(*) into open_count
+  from reports where reporter_id = new.reporter_id and resolved = false;
+  if open_count >= 10 then
+    raise exception 'Too many open reports — please wait for moderation review.';
+  end if;
+  return new;
+end; $$;
+
+drop trigger if exists trg_reports_limit on reports;
+create trigger trg_reports_limit
+before insert on reports
+for each row execute function enforce_report_limits();
 
 create or replace function apply_report_hide()
 returns trigger language plpgsql security definer set search_path = public as $$
@@ -334,6 +364,70 @@ drop trigger if exists trg_reports_hide on reports;
 create trigger trg_reports_hide
 after insert on reports
 for each row execute function apply_report_hide();
+
+-- Admin resolution (run with the service role / SQL editor):
+--   action 'unhide'  -> restore the content, close matching reports
+--   action 'remove'  -> delete the content (review cascade cleans children;
+--                       Storage objects for removed photos still need cleanup
+--                       via the dashboard or an edge function)
+create or replace function resolve_report(target_report uuid, action text)
+returns void language plpgsql security definer set search_path = public as $$
+declare r reports;
+begin
+  select * into r from reports where id = target_report;
+  if r.id is null then raise exception 'Report % not found', target_report; end if;
+
+  if action = 'unhide' then
+    if r.review_id is not null then update reviews set is_hidden = false where id = r.review_id; end if;
+    if r.photo_id is not null then update review_photos set is_hidden = false where id = r.photo_id; end if;
+  elsif action = 'remove' then
+    if r.review_id is not null then delete from reviews where id = r.review_id; end if;
+    if r.photo_id is not null then delete from review_photos where id = r.photo_id; end if;
+  else
+    raise exception 'Unknown action %, expected unhide|remove', action;
+  end if;
+
+  update reports set resolved = true
+  where (r.review_id is not null and review_id = r.review_id)
+     or (r.photo_id is not null and photo_id = r.photo_id);
+end; $$;
+
+-- Functions default to EXECUTE for PUBLIC — lock this one to admins.
+revoke execute on function resolve_report(uuid, text) from public, anon, authenticated;
+grant execute on function resolve_report(uuid, text) to service_role;
+
+-- ---- Account deletion (App Store guideline 5.1.1(v)) ------------------------
+-- Deletes the caller's auth user; FK cascades remove the profile, reviews,
+-- tags, photos, votes, follows, and reports. Uploaded Storage objects are not
+-- auto-removed (clean up via dashboard/edge function). If your project's
+-- postgres role lacks delete rights on auth.users, move this into an edge
+-- function using the service-role admin API.
+create or replace function delete_account()
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  if auth.uid() is null then
+    raise exception 'Not signed in.';
+  end if;
+  delete from auth.users where id = auth.uid();
+end; $$;
+
+revoke execute on function delete_account() from public, anon;
+grant execute on function delete_account() to authenticated;
+
+-- ---- Enforce the 3-photos-per-review limit server-side ----------------------
+create or replace function enforce_photo_limit()
+returns trigger language plpgsql security definer set search_path = public as $$
+begin
+  if (select count(*) from review_photos where review_id = new.review_id) >= 3 then
+    raise exception 'Photo limit reached (3 per review).';
+  end if;
+  return new;
+end; $$;
+
+drop trigger if exists trg_photo_limit on review_photos;
+create trigger trg_photo_limit
+before insert on review_photos
+for each row execute function enforce_photo_limit();
 
 -- follows: public read (counts/feeds); users manage only their own follows.
 drop policy if exists follows_read on follows;

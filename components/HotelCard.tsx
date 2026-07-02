@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ScorePills } from "./ScorePills";
 import type { HotelCard as HotelCardData } from "../lib/hotels";
+import { displayImageUrl } from "../lib/places";
 import { formatDistance } from "../lib/distance";
 import { colors, radius, spacing } from "../lib/theme";
 
@@ -24,7 +25,7 @@ export function HotelCard({
       <View style={styles.heroWrap}>
         {hotel.image_url ? (
           <Image
-            source={{ uri: hotel.image_url }}
+            source={{ uri: displayImageUrl(hotel.image_url)! }}
             style={styles.hero}
             contentFit="cover"
             transition={150}

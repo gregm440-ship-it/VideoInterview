@@ -64,9 +64,24 @@ const PRICE_LEVELS: Record<string, number> = {
   PRICE_LEVEL_VERY_EXPENSIVE: 4,
 };
 
-/** Build a directly-loadable photo URL from a Places photo resource name. */
+/**
+ * Photo URL from a Places photo resource name — deliberately WITHOUT the API
+ * key. These URLs get persisted to the (publicly readable) hotels table, so
+ * baking the key in would leak it to anyone reading the DB and would go stale
+ * on key rotation. Append the key at render time via displayImageUrl().
+ */
 export function placePhotoUrl(photoName: string, maxWidthPx = 800): string {
-  return `${BASE}/${photoName}/media?maxWidthPx=${maxWidthPx}&key=${PLACES_KEY}`;
+  return `${BASE}/${photoName}/media?maxWidthPx=${maxWidthPx}`;
+}
+
+/** Make a stored image URL loadable: adds the API key to key-less Places
+ * media URLs; passes every other URL (e.g. demo/Unsplash) through untouched. */
+export function displayImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  if (url.startsWith(BASE) && !url.includes("key=")) {
+    return `${url}${url.includes("?") ? "&" : "?"}key=${PLACES_KEY}`;
+  }
+  return url;
 }
 
 function pickComponent(

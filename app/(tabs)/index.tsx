@@ -17,7 +17,7 @@ import { HotelCard } from "../../components/HotelCard";
 import { Logo } from "../../components/Logo";
 import { FiltersSheet } from "../../components/FiltersSheet";
 import { CheckPricesSheet } from "../../components/CheckPricesSheet";
-import { useLocation } from "../../hooks/useLocation";
+import { useLocation, FALLBACK_LABEL } from "../../hooks/useLocation";
 import { useHotelSearch } from "../../hooks/useHotels";
 import { useProfile } from "../../hooks/useProfile";
 import type { HotelCard as HotelCardData } from "../../lib/hotels";
@@ -72,9 +72,10 @@ export default function SearchScreen() {
   const open = (h: HotelCardData) => router.push(`/hotel/${h.google_place_id}`);
 
   const locationLabel = useMemo(() => {
-    if (status === "denied") return "Location off · tap to enable";
     if (debounced.trim()) return `Results for “${debounced.trim()}”`;
-    return hasFix ? "Near me" : "Near me (approx.)";
+    if (status === "denied")
+      return `Location off — showing ${FALLBACK_LABEL} · tap to enable`;
+    return hasFix ? "Near me" : `Near ${FALLBACK_LABEL} (default)`;
   }, [status, debounced, hasFix]);
 
   return (

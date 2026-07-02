@@ -4,8 +4,10 @@ import type { LatLng } from "../lib/places";
 
 type Status = "idle" | "loading" | "granted" | "denied" | "error";
 
-// Sensible default so the app is useful even before a fix / on denial (Austin).
+// Sensible default so the app is useful even before a fix / on denial —
+// always label results honestly with FALLBACK_LABEL when this is in use.
 export const FALLBACK_LOCATION: LatLng = { lat: 30.2672, lng: -97.7431 };
+export const FALLBACK_LABEL = "Austin, TX";
 
 export function useLocation() {
   const [location, setLocation] = useState<LatLng | null>(null);

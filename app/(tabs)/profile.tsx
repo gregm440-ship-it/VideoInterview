@@ -1,4 +1,4 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Screen } from "../../components/Screen";
 import { Button } from "../../components/Button";
@@ -9,12 +9,38 @@ import { useAuth } from "../../hooks/useAuth";
 import { useProfile } from "../../hooks/useProfile";
 import { useUserStats } from "../../hooks/useStats";
 import { EMPTY_STATS } from "../../lib/badges";
+import { deleteMyAccount } from "../../lib/profiles";
 import { colors, spacing } from "../../lib/theme";
 
 export default function ProfileScreen() {
   const { user, isGuest, isAuthenticated, loading, signOut } = useAuth();
   const { profile, update } = useProfile();
   const stats = useUserStats(user?.id ?? "");
+
+  const confirmDelete = () => {
+    Alert.alert(
+      "Delete account?",
+      "This permanently removes your account, reviews, photos, and follows. It cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete forever",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deleteMyAccount();
+              await signOut();
+            } catch (e: unknown) {
+              Alert.alert(
+                "Couldn’t delete account",
+                e instanceof Error ? e.message : "Please try again."
+              );
+            }
+          },
+        },
+      ]
+    );
+  };
 
   if (loading) {
     return (
@@ -96,6 +122,12 @@ export default function ProfileScreen() {
           onPress={signOut}
           style={styles.signOut}
         />
+        <Button
+          label="Delete account"
+          variant="ghost"
+          onPress={confirmDelete}
+          style={styles.deleteBtn}
+        />
       </ScrollView>
     </Screen>
   );
@@ -114,4 +146,5 @@ const styles = StyleSheet.create({
   sectionHint: { color: colors.textMuted, fontSize: 13, marginTop: 2, marginBottom: spacing.md },
   fields: { gap: spacing.sm },
   signOut: { marginTop: spacing.xl },
+  deleteBtn: { marginTop: spacing.xs },
 });
