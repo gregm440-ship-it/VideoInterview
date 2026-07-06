@@ -1,26 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Rep & Sip app icon: a deep-sky-blue travel pin (destination) with a martini cut-out
-       (sip), planted above a barbell (rep). Gradient stays in user space so the
-       martini "hole" matches the background seamlessly. -->
-  <defs>
-    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
-      <stop offset="0" stop-color="#3FB0EE"/>
-      <stop offset="1" stop-color="#0E76C9"/>
-    </linearGradient>
-  </defs>
-  <rect width="1024" height="1024" fill="url(#g)"/>
-  <!-- pin -->
-  <path d="M512 248 C602 248 676 320 676 410 C676 502 562 602 512 676 C462 602 348 502 348 410 C348 320 422 248 512 248 Z" fill="#FFFFFF"/>
-  <!-- martini cut-out (same gradient as bg => seamless hole) -->
-  <path d="M450 356 L574 356 L512 434 Z" fill="url(#g)"/>
-  <rect x="505" y="430" width="14" height="48" fill="url(#g)"/>
-  <rect x="474" y="476" width="76" height="15" rx="7" fill="url(#g)"/>
-  <!-- barbell -->
-  <g fill="#FFFFFF">
-    <rect x="402" y="732" width="220" height="18" rx="9"/>
-    <rect x="388" y="712" width="26" height="58" rx="7"/>
-    <rect x="610" y="712" width="26" height="58" rx="7"/>
-    <rect x="358" y="724" width="20" height="36" rx="6"/>
-    <rect x="646" y="724" width="20" height="36" rx="6"/>
+  <!-- Bench & Bar app icon (Sky & Sun): martini-barbell fusion glyph on deep
+       navy. Bowl = sun; stem + barbell base = sky (dark-tile two-color spec). -->
+  <rect width="1024" height="1024" fill="#10233F"/>
+  <g>
+    <path d="M152 147 L872 147 L512 547 Z" fill="#FF8A3D"/>
+    <rect x="467" y="547" width="90" height="240" fill="#2B8CD6"/>
+    <rect x="282" y="787" width="460" height="90" rx="30" fill="#2B8CD6"/>
   </g>
 </svg>

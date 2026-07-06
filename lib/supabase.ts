@@ -9,7 +9,7 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 if (!isSupabaseConfigured) {
   console.warn(
-    "[Rep & Sip] Supabase is not configured. Set EXPO_PUBLIC_SUPABASE_URL and " +
+    "[Bench & Bar] Supabase is not configured. Set EXPO_PUBLIC_SUPABASE_URL and " +
       "EXPO_PUBLIC_SUPABASE_ANON_KEY in your .env file."
   );
 }

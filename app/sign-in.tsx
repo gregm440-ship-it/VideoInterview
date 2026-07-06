@@ -12,6 +12,7 @@ import { router } from "expo-router";
 import { Screen } from "../components/Screen";
 import { Button } from "../components/Button";
 import { Logo } from "../components/Logo";
+import { TAGLINE } from "../lib/constants";
 import { useAuth } from "../hooks/useAuth";
 import { colors, radius, spacing, TAP_TARGET } from "../lib/theme";
 
@@ -43,9 +44,7 @@ export default function SignInScreen() {
     <Screen>
       <View style={styles.header}>
         <Logo size="lg" layout="stacked" />
-        <Text style={styles.tagline}>
-          Rate the gym. Rate the bar. Help the next traveler.
-        </Text>
+        <Text style={styles.tagline}>{TAGLINE}</Text>
       </View>
 
       <View style={styles.actions}>

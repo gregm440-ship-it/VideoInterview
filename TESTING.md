@@ -1,4 +1,4 @@
-# Testing Rep & Sip
+# Testing Bench & Bar
 
 Two ways to use the app yourself.
 

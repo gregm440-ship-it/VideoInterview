@@ -28,7 +28,7 @@ export const DEMO_MODE = process.env.EXPO_PUBLIC_DEMO_MODE === "1";
 
 export const DEMO_USER = {
   id: "demo-you",
-  email: "you@repandsip.app",
+  email: "you@benchandbar.travel",
   display_name: "You",
 };
 

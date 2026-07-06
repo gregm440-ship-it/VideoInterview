@@ -14,7 +14,7 @@ export default function RootLayout() {
   // Bundle the brand typeface. Render once it's ready (or if it fails, fall
   // back to the system font rather than blocking the app).
   const [fontsLoaded, fontError] = useFonts({
-    [BRAND_FONT]: require("../assets/fonts/Righteous-Regular.ttf"),
+    [BRAND_FONT]: require("../assets/fonts/Archivo-ExtraBold.ttf"),
   });
   if (!fontsLoaded && !fontError) return null;
 

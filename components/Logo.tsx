@@ -1,21 +1,22 @@
 import { Image, StyleSheet, Text, View, type ViewStyle } from "react-native";
-import { APP_NAME, BRAND_FONT } from "../lib/constants";
+import { APP_NAME, BRAND_FONT, TAGLINE } from "../lib/constants";
 import { colors } from "../lib/theme";
 
-// Transparent-corner gold badge mark (pin + martini + barbell).
+// Navy tile mark: martini-barbell fusion glyph (sun bowl, sky stem/base).
 const mark = require("../assets/mark.png");
 
 const SIZES = {
-  sm: { mark: 30, font: 19, gap: 9, tagline: 0 },
-  md: { mark: 42, font: 25, gap: 11, tagline: 13 },
-  lg: { mark: 76, font: 34, gap: 14, tagline: 15 },
+  sm: { mark: 30, font: 18, gap: 9, tagline: 0 },
+  md: { mark: 42, font: 24, gap: 11, tagline: 13 },
+  lg: { mark: 76, font: 32, gap: 14, tagline: 14 },
 } as const;
 
 type Size = keyof typeof SIZES;
 
 /**
- * Rep & Sip brand lockup: the badge mark + the wordmark, with the ampersand
- * tinted gold. Reads APP_NAME so the one-constant rename still flows through.
+ * Bench & Bar brand lockup: the navy tile mark + the BENCH&BAR wordmark in
+ * Archivo 800 with the ampersand in sun. Reads APP_NAME so a rename still
+ * flows through from the one constant.
  */
 export function Logo({
   size = "md",
@@ -25,6 +26,7 @@ export function Logo({
 }: {
   size?: Size;
   layout?: "horizontal" | "stacked";
+  /** Pass a string to show a tagline (or true-ish default via TAGLINE). */
   tagline?: string;
   style?: ViewStyle;
 }) {
@@ -53,20 +55,23 @@ export function Logo({
   );
 }
 
+export { TAGLINE };
+
 function Wordmark({ fontSize, center }: { fontSize: number; center?: boolean }) {
-  const tokens = APP_NAME.split(" ");
+  // Brand wordmark is tight uppercase with a sun ampersand: BENCH&BAR.
+  const upper = APP_NAME.toUpperCase();
+  const ampIndex = upper.indexOf("&");
+  const pre = ampIndex >= 0 ? upper.slice(0, ampIndex).trim() : upper;
+  const post = ampIndex >= 0 ? upper.slice(ampIndex + 1).trim() : "";
   return (
     <Text
       style={[styles.word, { fontSize }, center && { textAlign: "center" }]}
       numberOfLines={1}
       allowFontScaling={false}
     >
-      {tokens.map((t, i) => (
-        <Text key={i} style={t === "&" ? styles.amp : undefined}>
-          {t}
-          {i < tokens.length - 1 ? " " : ""}
-        </Text>
-      ))}
+      {pre}
+      {ampIndex >= 0 && <Text style={styles.amp}>&</Text>}
+      {post}
     </Text>
   );
 }
@@ -76,17 +81,18 @@ const styles = StyleSheet.create({
   stacked: { alignItems: "center" },
   center: { alignItems: "center" },
   mark: {
-    // Soft lift so the badge reads as a brand mark on light surfaces.
+    borderRadius: 10,
+    // Soft lift so the navy tile reads as a badge on light surfaces.
     shadowColor: colors.shadow,
-    shadowOpacity: 0.18,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 4 },
   },
   word: {
     color: colors.text,
     fontFamily: BRAND_FONT,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
-  amp: { color: colors.accent },
-  tagline: { color: colors.textMuted, marginTop: 2 },
+  amp: { color: colors.primary },
+  tagline: { color: colors.textMuted, marginTop: 3 },
 });

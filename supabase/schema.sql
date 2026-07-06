@@ -1,5 +1,5 @@
 -- ============================================================================
--- Rep & Sip — database schema (Section 7)
+-- Bench & Bar — database schema (Section 7)
 -- Run in the Supabase SQL editor (or `supabase db push`) on a fresh project.
 -- Order: tables -> aggregate trigger -> profile auto-create -> RLS -> storage.
 -- ============================================================================

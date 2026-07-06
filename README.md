@@ -1,4 +1,6 @@
-# Rep & Sip
+# Bench & Bar (BenchandBar.Travel)
+
+**Hotels. Ranked by the best bars and gyms.**
 
 A hotel app for business travelers that rates hotels on the two things that
 actually matter on the road:
@@ -9,8 +11,9 @@ actually matter on the road:
 
 **Core job:** _"Find me a hotel near [place] with a good gym and a good bar."_
 
-> Display name lives in one constant — `APP_NAME` in `lib/constants.ts` — so it
-> can be swapped to "Rep, Sip, Trip" with a single edit.
+> Brand: "Sky & Sun" — sun `#FF8A3D` + sky `#2B8CD6` on deep navy `#10233F`,
+> Archivo display type. Display name lives in `APP_NAME` (`lib/constants.ts`);
+> theme tokens in `lib/theme.ts`.
 
 ## Stack
 

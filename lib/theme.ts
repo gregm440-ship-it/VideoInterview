@@ -1,22 +1,30 @@
-// Design tokens. Deep-sky-blue travel palette — light, airy, big tap targets.
+// Design tokens — BenchandBar.Travel "Sky & Sun" brand system.
+// Sun #FF8A3D (primary/bar/CTAs) · Sky #2B8CD6 (secondary/gym/links) on a
+// light "cloud" UI; deep navy #10233F is ink and the icon-tile ground.
 export const colors = {
-  bg: "#F1F6FB", // cool light sky-tinted paper
+  bg: "#EEF4FA", // cloud
   surface: "#FFFFFF",
-  surfaceAlt: "#E8F1FA",
-  border: "#D6E3F0",
-  text: "#15273B", // deep navy slate
-  textMuted: "#5E6E82",
-  primary: "#1488DB", // deep sky blue
-  onPrimary: "#FFFFFF", // white reads on the saturated blue
-  accent: "#F2994A", // warm amber — sip warmth, complements the blue
-  onAccent: "#2A1600",
+  surfaceAlt: "#E2ECF6",
+  border: "#DCE7F1", // hairline (light)
+  text: "#10233F", // ink
+  textMuted: "#5B6E88",
+  primary: "#FF8A3D", // sun — CTAs, bar score
+  onPrimary: "#FFFFFF",
+  accent: "#2B8CD6", // sky — links, gym score
+  onAccent: "#FFFFFF",
   danger: "#E5484D",
-  // Soft tints for selected/active states on a light background.
-  primaryTint: "rgba(20,136,219,0.14)",
-  accentTint: "rgba(242,153,74,0.16)",
-  ratingActive: "#1488DB",
-  ratingInactive: "#CBD8E6",
-  shadow: "#15273B",
+  // Soft tints for selected/active states on the light background.
+  primaryTint: "rgba(255,138,61,0.16)",
+  accentTint: "rgba(43,140,214,0.14)",
+  // Per-scale rating colors (brand: martini = sun, barbell = sky).
+  ratingBar: "#FF8A3D",
+  ratingGym: "#2B8CD6",
+  ratingActive: "#FF8A3D",
+  ratingInactive: "#C9D8E6",
+  // Navy grounds (icon tile, dark accents).
+  ink: "#10233F",
+  inkSurface: "#1B3050",
+  shadow: "#0A192D",
 } as const;
 
 export const spacing = {

@@ -1,9 +1,13 @@
-// Single source of truth for the display name.
-// Swap to "Rep, Sip, Trip" with this one edit.
-export const APP_NAME = "Rep & Sip";
+// Single source of truth for the display name (BenchandBar.Travel brand,
+// direction "Sky & Sun"). The wordmark renders as BENCH&BAR with a sun `&`.
+export const APP_NAME = "Bench & Bar";
 
-// Distinctive display typeface for the wordmark (loaded in app/_layout.tsx).
-export const BRAND_FONT = "Righteous";
+// Brand tagline (Sky & Sun handoff).
+export const TAGLINE = "Hotels. Ranked by the best bars and gyms.";
+
+// Display typeface for the wordmark/headlines (loaded in app/_layout.tsx).
+// Archivo 800 per the brand spec; body copy stays on the system font.
+export const BRAND_FONT = "Archivo-ExtraBold";
 
 // ---- Feature flags (Section 8) ---------------------------------------------
 // All three ship ON for MVP, but stay behind flags so they can be toggled.

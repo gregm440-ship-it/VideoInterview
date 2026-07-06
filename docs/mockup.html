@@ -3,25 +3,26 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Rep & Sip — Mockup</title>
+<title>Bench & Bar — Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@800&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+  
   :root{
-    --bg:#F1F6FB; --surface:#FFFFFF; --surfaceAlt:#E8F1FA; --border:#D6E3F0;
-    --text:#15273B; --muted:#5E6E82; --primary:#1488DB; --onPrimary:#FFFFFF;
-    --accent:#F2994A; --danger:#E5484D; --inactive:#CBD8E6;
-    --brand-font:'Righteous',-apple-system,BlinkMacSystemFont,sans-serif;
+    --bg:#EEF4FA; --surface:#FFFFFF; --surfaceAlt:#E2ECF6; --border:#DCE7F1;
+    --text:#10233F; --muted:#5B6E88; --primary:#FF8A3D; --onPrimary:#FFFFFF;
+    --accent:#2B8CD6; --danger:#E5484D; --inactive:#C9D8E6;
+    --brand-font:'Archivo',-apple-system,BlinkMacSystemFont,sans-serif;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   body{
     margin:0;background:#D5DEE8;color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-family:Manrope,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     padding:32px 16px 64px;
   }
   .page-head{max-width:1200px;margin:0 auto 28px;text-align:center}
   .brand-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:6px}
   .logo{border-radius:14px;box-shadow:0 6px 16px rgba(28,37,51,.18)}
-  .amp{color:var(--accent)}
+  .amp{color:var(--primary)}
   .lock{display:flex;align-items:center;gap:9px}
   .lock.stacked{flex-direction:column;gap:12px}
   .lock .mk{display:block;filter:drop-shadow(0 4px 8px rgba(28,37,51,.18))}
@@ -62,7 +63,7 @@
   .tab .ic{font-size:19px;line-height:1}
   .addbtn{width:54px;height:54px;border-radius:999px;background:var(--primary);color:var(--onPrimary);
     display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:300;
-    margin-top:-26px;box-shadow:0 6px 16px rgba(20,136,219,.45)}
+    margin-top:-26px;box-shadow:0 6px 16px rgba(255,138,61,.5)}
 
   /* search */
   .locbar{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);
@@ -117,7 +118,7 @@
   .photostrip .ph{width:78px;height:60px;border-radius:10px;background-size:cover;background-position:center;flex:0 0 auto}
   .review{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}
   .review .top{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-  .avatar{width:26px;height:26px;border-radius:999px;background:var(--accent);color:#2A1600;
+  .avatar{width:26px;height:26px;border-radius:999px;background:var(--accent);color:#fff;
     display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
   .review .rname{font-size:13px;font-weight:700}
   .review .rscores{margin-left:auto;font-size:12px;font-weight:700}
@@ -132,7 +133,7 @@
   .iconrow{display:flex;justify-content:space-between;gap:6px}
   .iconrow .pip{flex:1;height:50px;border-radius:12px;background:var(--surface);border:1px solid var(--border);
     display:flex;align-items:center;justify-content:center;font-size:24px}
-  .iconrow .pip.on{background:rgba(20,136,219,.16);border-color:var(--primary)}
+  .iconrow .pip.on{background:rgba(255,138,61,.14);border-color:var(--primary)}
   .iconrow .pip.off{filter:grayscale(1);opacity:.35}
   .expander{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;
     margin-top:12px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
@@ -142,7 +143,7 @@
     background:var(--surface);color:var(--muted)}
   .privacy .opt.sel{border-color:var(--accent);background:rgba(242,153,74,.12);color:var(--text);font-weight:700}
   .submit{margin-top:16px;background:var(--primary);color:var(--onPrimary);text-align:center;padding:15px;
-    border-radius:16px;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(20,136,219,.35)}
+    border-radius:16px;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(255,138,61,.4)}
   .timer{text-align:center;font-size:11px;color:var(--accent);margin-top:9px}
 
   /* sign in */
@@ -173,7 +174,7 @@
   .logrow .priv{font-size:10px;color:var(--accent);border:1px solid var(--border);border-radius:999px;
     padding:2px 7px;display:inline-block}
   .prof-head{display:flex;align-items:center;gap:13px;margin:6px 0 22px}
-  .prof-head .pa{width:58px;height:58px;border-radius:999px;background:var(--accent);color:#2A1600;
+  .prof-head .pa{width:58px;height:58px;border-radius:999px;background:var(--accent);color:#fff;
     display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800}
   .prof-head .pn{font-size:19px;font-weight:800}
   .prof-head .pe{font-size:13px;color:var(--muted)}
@@ -203,10 +204,10 @@
   .minopts{display:flex;gap:7px}
   .minopt{flex:1;text-align:center;padding:8px;border-radius:11px;border:1px solid var(--border);
     background:var(--surface);font-size:13px;font-weight:700;color:var(--muted)}
-  .minopt.on{background:var(--primary-tint, rgba(20,136,219,.14));border-color:var(--primary);color:var(--text)}
+  .minopt.on{background:var(--primary-tint, rgba(255,138,61,.14));border-color:var(--primary);color:var(--text)}
   .pricerow{display:flex;gap:7px}
   .pchip{padding:8px 18px;border-radius:11px;border:1px solid var(--border);background:var(--surface);font-weight:700;color:var(--muted)}
-  .pchip.on{background:rgba(20,136,219,.14);border-color:var(--primary);color:var(--text)}
+  .pchip.on{background:rgba(255,138,61,.14);border-color:var(--primary);color:var(--text)}
   .ffooter{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
   .clearbtn{flex:1;text-align:center;padding:13px;color:var(--muted);font-weight:700}
   .applybtn{flex:2;text-align:center;padding:13px;border-radius:13px;background:var(--primary);color:var(--onPrimary);font-weight:800}
@@ -240,7 +241,7 @@
   .calgrid{gap:2px}
   .cald{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;border-radius:7px}
   .cald.past{color:var(--inactive)}
-  .cald.range{background:rgba(20,136,219,.14)}
+  .cald.range{background:rgba(255,138,61,.14)}
   .cald.end{background:var(--primary);color:var(--onPrimary);font-weight:800}
   .guestrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
   .stepper{display:flex;align-items:center;gap:14px}
@@ -256,12 +257,12 @@
   .fstrip{display:flex;align-items:center;gap:9px;margin:12px 0;padding:8px 10px;border-radius:12px;
     background:var(--surfaceAlt);border:1px solid var(--border)}
   .favs{display:flex}
-  .fav{width:26px;height:26px;border-radius:999px;background:var(--accent);color:var(--onAccent);
+  .fav{width:26px;height:26px;border-radius:999px;background:var(--accent);color:#fff;
     display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid var(--surfaceAlt)}
   .fav+.fav{margin-left:-10px}
   .fstrip .ft{flex:1;font-size:13px;font-weight:600}
   .feedrow{display:flex;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}
-  .av{width:40px;height:40px;border-radius:999px;background:var(--accent);color:var(--onAccent);
+  .av{width:40px;height:40px;border-radius:999px;background:var(--accent);color:#fff;
     display:flex;align-items:center;justify-content:center;font-weight:800;flex:0 0 auto}
   .feedrow .fb{flex:1}
   .feedrow .fl{font-size:14px}.feedrow .fl b{font-weight:800}
@@ -302,36 +303,21 @@
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="mark" viewBox="0 0 1024 1024">
-      <defs><linearGradient id="mg" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
-        <stop offset="0" stop-color="#3FB0EE"/><stop offset="1" stop-color="#0E76C9"/></linearGradient></defs>
-      <rect x="8" y="8" width="1008" height="1008" rx="232" fill="url(#mg)"/>
-      <path d="M512 248 C602 248 676 320 676 410 C676 502 562 602 512 676 C462 602 348 502 348 410 C348 320 422 248 512 248 Z" fill="#fff"/>
-      <path d="M450 356 L574 356 L512 434 Z" fill="url(#mg)"/>
-      <rect x="505" y="430" width="14" height="48" fill="url(#mg)"/>
-      <rect x="474" y="476" width="76" height="15" rx="7" fill="url(#mg)"/>
-      <g fill="#fff"><rect x="402" y="732" width="220" height="18" rx="9"/>
-        <rect x="388" y="712" width="26" height="58" rx="7"/><rect x="610" y="712" width="26" height="58" rx="7"/>
-        <rect x="358" y="724" width="20" height="36" rx="6"/><rect x="646" y="724" width="20" height="36" rx="6"/></g>
+      <rect x="8" y="8" width="1008" height="1008" rx="232" fill="#10233F"/>
+      <g transform="translate(512 512) scale(0.74) translate(-512 -512)">
+        <path d="M152 147 L872 147 L512 547 Z" fill="#FF8A3D"/>
+        <rect x="467" y="547" width="90" height="240" fill="#2B8CD6"/>
+        <rect x="282" y="787" width="460" height="90" rx="30" fill="#2B8CD6"/>
+      </g>
     </symbol>
   </svg>
 
   <div class="page-head">
     <div class="brand-row">
-      <svg class="logo" viewBox="0 0 1024 1024" width="58" height="58" aria-label="Rep & Sip logo">
-        <defs><linearGradient id="lg" gradientUnits="userSpaceOnUse" x1="512" y1="0" x2="512" y2="1024">
-          <stop offset="0" stop-color="#3FB0EE"/><stop offset="1" stop-color="#0E76C9"/></linearGradient></defs>
-        <rect width="1024" height="1024" rx="190" fill="url(#lg)"/>
-        <path d="M512 248 C602 248 676 320 676 410 C676 502 562 602 512 676 C462 602 348 502 348 410 C348 320 422 248 512 248 Z" fill="#fff"/>
-        <path d="M450 356 L574 356 L512 434 Z" fill="url(#lg)"/>
-        <rect x="505" y="430" width="14" height="48" fill="url(#lg)"/>
-        <rect x="474" y="476" width="76" height="15" rx="7" fill="url(#lg)"/>
-        <g fill="#fff"><rect x="402" y="732" width="220" height="18" rx="9"/>
-          <rect x="388" y="712" width="26" height="58" rx="7"/><rect x="610" y="712" width="26" height="58" rx="7"/>
-          <rect x="358" y="724" width="20" height="36" rx="6"/><rect x="646" y="724" width="20" height="36" rx="6"/></g>
-      </svg>
-      <h1>Rep <span class="amp">&amp;</span> Sip</h1>
+      <svg class="logo" width="58" height="58" aria-label="Bench & Bar logo"><use href="#mark"/></svg>
+      <h1>BENCH<span class="amp">&amp;</span>BAR</h1>
     </div>
-    <div class="sub">Find a hotel near you with a good gym and a good bar.</div>
+    <div class="sub">Hotels. Ranked by the best bars and gyms.</div>
     <div class="legend">
       <span>🏋️ Gym (1–5)</span><span>🍸 Bar (1–5)</span><span>⭐ Overall</span>
       <span>· Rate in &lt;30s, ≤3 taps · Browse without an account</span>
@@ -348,9 +334,9 @@
         <div class="screen"><div class="body"><div class="scroll si">
           <div class="lock stacked" style="margin-bottom:18px">
             <svg class="mk" width="74" height="74"><use href="#mark"/></svg>
-            <div class="wm" style="font-size:32px">Rep <span class="amp">&amp;</span> Sip</div>
+            <div class="wm" style="font-size:32px">BENCH<span class="amp">&amp;</span>BAR</div>
           </div>
-          <div class="tag" style="text-align:center">Rate the gym. Rate the bar.<br/>Help the next traveler.</div>
+          <div class="tag" style="text-align:center">Hotels. Ranked by the best<br/>bars and gyms.</div>
           <div class="authbtn apple"> Sign in with Apple</div>
           <div class="authbtn google">G&nbsp; Continue with Google</div>
           <div class="or"><div class="line"></div>or<div class="line"></div></div>
@@ -374,7 +360,7 @@
           <div class="body"><div class="scroll">
             <div class="lock" style="margin:6px 0 14px">
               <svg class="mk" width="30" height="30"><use href="#mark"/></svg>
-              <div class="wm" style="font-size:21px">Rep <span class="amp">&amp;</span> Sip</div>
+              <div class="wm" style="font-size:21px">BENCH<span class="amp">&amp;</span>BAR</div>
             </div>
             <div class="locbar">📍 <span>Near me · Austin, TX</span></div>
             <div class="ctrlrow">
@@ -632,7 +618,7 @@
           <div class="body"><div class="scroll">
             <div class="lock" style="margin:6px 0 18px">
               <svg class="mk" width="30" height="30"><use href="#mark"/></svg>
-              <div class="wm" style="font-size:21px">Rep <span class="amp">&amp;</span> Sip</div>
+              <div class="wm" style="font-size:21px">BENCH<span class="amp">&amp;</span>BAR</div>
             </div>
             <div class="prof-head">
               <div class="pa">G</div>
@@ -714,10 +700,10 @@
           <div class="fsec">
             <div class="fseclabel">Must have tags</div>
             <div class="chips">
-              <div class="chip" style="border-color:var(--accent);background:rgba(242,153,74,.16)">Squat rack</div>
+              <div class="chip" style="border-color:var(--accent);background:rgba(43,140,214,.14)">Squat rack</div>
               <div class="chip">Heavy dumbbells</div>
               <div class="chip">24-hour</div>
-              <div class="chip" style="border-color:var(--accent);background:rgba(242,153,74,.16)">Open past 11pm</div>
+              <div class="chip" style="border-color:var(--accent);background:rgba(43,140,214,.14)">Open past 11pm</div>
               <div class="chip">Rooftop / view</div>
             </div>
           </div>

@@ -43,7 +43,7 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 // Redirect target for OAuth + magic-link deep links back into the app.
-const redirectTo = makeRedirectUri({ scheme: "repandsip" });
+const redirectTo = makeRedirectUri({ scheme: "benchandbar" });
 
 /** Exchange the `code`/tokens carried on a returned deep link for a session. */
 async function createSessionFromUrl(url: string) {

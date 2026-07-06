@@ -1,22 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <!-- Android adaptive foreground: white mark only, scaled into the safe zone,
-       on a transparent canvas. The martini is punched out via mask so the gold
-       adaptive background (set in app.config.ts) shows through. -->
-  <defs>
-    <mask id="m">
-      <rect width="1024" height="1024" fill="black"/>
-      <g transform="translate(512 512) scale(0.72) translate(-512 -509)">
-        <path d="M512 248 C602 248 676 320 676 410 C676 502 562 602 512 676 C462 602 348 502 348 410 C348 320 422 248 512 248 Z" fill="white"/>
-        <path d="M450 356 L574 356 L512 434 Z" fill="black"/>
-        <rect x="505" y="430" width="14" height="48" fill="black"/>
-        <rect x="474" y="476" width="76" height="15" rx="7" fill="black"/>
-        <rect x="402" y="732" width="220" height="18" rx="9" fill="white"/>
-        <rect x="388" y="712" width="26" height="58" rx="7" fill="white"/>
-        <rect x="610" y="712" width="26" height="58" rx="7" fill="white"/>
-        <rect x="358" y="724" width="20" height="36" rx="6" fill="white"/>
-        <rect x="646" y="724" width="20" height="36" rx="6" fill="white"/>
-      </g>
-    </mask>
-  </defs>
-  <rect width="1024" height="1024" fill="white" mask="url(#m)"/>
+  <!-- Android adaptive foreground: the glyph alone on transparency, scaled
+       into the safe zone. The navy tile ground comes from app.config
+       adaptiveIcon.backgroundColor (#10233F). -->
+  <g transform="translate(512 512) scale(0.62) translate(-512 -512)">
+    <path d="M152 147 L872 147 L512 547 Z" fill="#FF8A3D"/>
+    <rect x="467" y="547" width="90" height="240" fill="#2B8CD6"/>
+    <rect x="282" y="787" width="460" height="90" rx="30" fill="#2B8CD6"/>
+  </g>
 </svg>

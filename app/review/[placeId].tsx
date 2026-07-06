@@ -138,9 +138,9 @@ export default function ReviewScreen() {
       <Text style={styles.sub}>Tap to score. Three taps and you’re done.</Text>
 
       {/* Fast path */}
-      <RatingRow icon={ICONS.gym} label="Gym" value={gym} onChange={setGym} />
-      <RatingRow icon={ICONS.bar} label="Bar" value={bar} onChange={setBar} />
-      <RatingRow icon={ICONS.overall} label="Overall" value={overall} onChange={setOverall} />
+      <RatingRow kind="gym" label="Gym" value={gym} onChange={setGym} />
+      <RatingRow kind="bar" label="Bar" value={bar} onChange={setBar} />
+      <RatingRow kind="overall" label="Overall" value={overall} onChange={setOverall} />
 
       {/* Add details expander */}
       {ENABLE_TAGS && (

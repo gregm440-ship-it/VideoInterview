@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import type { HotelAggregate } from "../lib/database.types";
-import { ICONS } from "../lib/constants";
+import { RatingGlyph, type RatingKind } from "./RatingIcons";
 import { colors, radius, spacing } from "../lib/theme";
 
-function Box({ icon, value, label, count }: { icon: string; value: number; label: string; count: number }) {
+function Box({ kind, value, label, count }: { kind: RatingKind; value: number; label: string; count: number }) {
   return (
     <View style={styles.box}>
-      <Text style={styles.icon}>{icon}</Text>
+      <View style={styles.icon}>
+        <RatingGlyph kind={kind} size={22} filled />
+      </View>
       <Text style={styles.value}>
         {count > 0 ? value.toFixed(1) : "—"}
         {count > 0 && <Text style={styles.outOf}>/5</Text>}
@@ -22,9 +24,9 @@ export function BigScores({ aggregate }: { aggregate: HotelAggregate }) {
   return (
     <View>
       <View style={styles.row}>
-        <Box icon={ICONS.gym} value={aggregate.avg_gym} label="Gym" count={count} />
-        <Box icon={ICONS.bar} value={aggregate.avg_bar} label="Bar" count={count} />
-        <Box icon={ICONS.overall} value={aggregate.avg_overall} label="Overall" count={count} />
+        <Box kind="gym" value={aggregate.avg_gym} label="Gym" count={count} />
+        <Box kind="bar" value={aggregate.avg_bar} label="Bar" count={count} />
+        <Box kind="overall" value={aggregate.avg_overall} label="Overall" count={count} />
       </View>
       <Text style={styles.caption}>
         {count > 0
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md,
     alignItems: "center",
   },
-  icon: { fontSize: 24 },
+  icon: { height: 26, justifyContent: "center" },
   value: { color: colors.text, fontSize: 24, fontWeight: "800", marginTop: 2 },
   outOf: { color: colors.textMuted, fontSize: 13, fontWeight: "600" },
   label: { color: colors.textMuted, fontSize: 11, textTransform: "uppercase", letterSpacing: 0.6, marginTop: 1 },

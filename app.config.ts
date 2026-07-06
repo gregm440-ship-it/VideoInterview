@@ -6,37 +6,37 @@ const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY ?? "";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "Rep & Sip",
-  slug: "rep-and-sip",
-  scheme: "repandsip",
+  name: "Bench & Bar",
+  slug: "bench-and-bar",
+  scheme: "benchandbar",
   version: "0.1.0",
   orientation: "portrait",
   userInterfaceStyle: "light",
   icon: "./assets/icon.png",
-  backgroundColor: "#F1F6FB",
+  backgroundColor: "#EEF4FA",
   splash: {
     image: "./assets/splash-icon.png",
     resizeMode: "contain",
-    backgroundColor: "#F1F6FB",
+    backgroundColor: "#EEF4FA",
   },
   newArchEnabled: true,
   ios: {
     supportsTablet: true,
-    bundleIdentifier: "io.emep.repandsip",
+    bundleIdentifier: "travel.benchandbar.app",
     usesAppleSignIn: true,
     infoPlist: {
       NSLocationWhenInUseUsageDescription:
-        "Rep & Sip uses your location to find hotels near you.",
+        "Bench & Bar uses your location to find hotels near you.",
     },
     config: {
       googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     },
   },
   android: {
-    package: "io.emep.repandsip",
+    package: "travel.benchandbar.app",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
-      backgroundColor: "#1488DB",
+      backgroundColor: "#10233F",
     },
     permissions: ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
     config: {
@@ -57,16 +57,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "expo-location",
       {
         locationWhenInUsePermission:
-          "Rep & Sip uses your location to find hotels near you.",
+          "Bench & Bar uses your location to find hotels near you.",
       },
     ],
     [
       "expo-image-picker",
       {
         photosPermission:
-          "Rep & Sip needs access to your photos so you can add gym and bar shots to a review.",
+          "Bench & Bar needs access to your photos so you can add gym and bar shots to a review.",
         cameraPermission:
-          "Rep & Sip needs camera access so you can snap gym and bar photos for a review.",
+          "Bench & Bar needs camera access so you can snap gym and bar photos for a review.",
       },
     ],
   ],
